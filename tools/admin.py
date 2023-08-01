@@ -90,4 +90,4 @@ class PriemAdmin(ExportActionMixin, admin.ModelAdmin):
 admin.site.register(Tools, ToolsAdmin)
 admin.site.register(Priem, PriemAdmin)
 admin.site.register(Toolsonwarehouse, ToolsonwarehouseAdmin)
-admin.site.register(Rec_Tools, Rec_ToolsAdmin)
+#admin.site.register(Rec_Tools, Rec_ToolsAdmin)

@@ -16,11 +16,11 @@ from django.db.models import Q
 
 
 class Toolsonwarehouse(models.Model):
-    title = models.CharField(max_length=200, verbose_name="Обозначение" )#Наименование инструмента
+    title = models.CharField(max_length=200, verbose_name="Обозначение" )#Наименование детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата получения на склад" )#Дата получения на склад
-    count = models.IntegerField(blank=True, null=True, verbose_name="Количество на складе" ) # Количество инструмента на складе
-    min_count = models.IntegerField(blank=True, null=True,verbose_name="Минимальное количество")  # Минимальное количество инструмента на складе
+    count = models.IntegerField(blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
+    min_count = models.IntegerField(blank=True, null=True,verbose_name="Минимальное количество")  # Минимальное количество деталей на складе
     need_count = models.IntegerField(blank=True, null=True,verbose_name="Дефицит")
     #ordered = models.ManyToManyField()
     LONGPLAY = 'LGP'
@@ -51,17 +51,17 @@ class Toolsonwarehouse(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'Инструмент'
-        verbose_name_plural = 'Инструмент на складе'
+        verbose_name = 'Детали'
+        verbose_name_plural = 'Детали на складе'
 
 
 class Tools(models.Model):
 
-    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник")#Работник, который получил инструмент
-    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Инструмент" )  # Работник, который получил инструмент
+    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник")#Работник, который получил детали
+    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Деталь" )  # Работник, который получил детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     #created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )#Дата получения на склад
-    count = models.IntegerField(null=True, verbose_name="Кол-во" ) # Количество инструмента на складе
+    count = models.IntegerField(null=True, verbose_name="Кол-во" ) # Количество деталей на складе
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )
 
 
@@ -101,15 +101,15 @@ class Tools(models.Model):
     get_period.short_description = "Срок экспл."
     class Meta:
         verbose_name = 'Выдача'
-        verbose_name_plural = 'Выдача инструмента'
+        verbose_name_plural = 'Выдача деталей'
 
 
 class Rec_Tools(models.Model):
-    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник")#Работник, который получил инструмент
-    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Инструмент" )  # Работник, который получил инструмент
+    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник")#Работник, который получил 
+    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Деталь" )  # Работник, который получил 
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     #created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )#Дата получения на склад
-    count = models.IntegerField(null=True, verbose_name="Кол-во" ) # Количество инструмента на складе
+    count = models.IntegerField(null=True, verbose_name="Кол-во" ) # Количество на складе
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата сдачи" )
 
 
@@ -128,10 +128,10 @@ class Rec_Tools(models.Model):
 
     get_period.short_description = "Срок экспл."
     class Meta:
-        verbose_name = 'Сдача'
-        verbose_name_plural = 'Сдача отработанного инструмента'
+        verbose_name = 'Брак'
+        verbose_name_plural = 'Отбракованные детали'
 class Priem(models.Model):
-    tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Инструмент")
+    tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Детали")
     count = models.IntegerField(null=True, verbose_name="Кол-во")
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата приема")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание")  # Описание
@@ -164,4 +164,4 @@ class Priem(models.Model):
         return self.tool.title
     class Meta:
         verbose_name = 'прием'
-        verbose_name_plural = 'прием инструмента на склад'
+        verbose_name_plural = 'прием деталей на склад'

@@ -95,6 +95,6 @@ class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'action_time'
 admin.site.register(LogEntry, LogEntryAdmin)
 
-admin.site.register(Firm, FirmAdmin)
+#admin.site.register(Firm, FirmAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(Orderformed, OrderformedAdmin)
+#admin.site.register(Orderformed, OrderformedAdmin)
