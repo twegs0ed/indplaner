@@ -45,7 +45,7 @@ class ToolsonwarehouseAdmin(ExportActionMixin, admin.ModelAdmin):
     search_fields = ['title']
     ordering = ['title']
     actions = [order_it]
-    list_editable = ['title']
+    list_editable = ['count']
 
     def count_deficite(self, obj):
         i = Order.get_count_ordered(obj)
