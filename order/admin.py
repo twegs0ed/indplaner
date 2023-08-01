@@ -55,7 +55,7 @@ class OrderResource(resources.ModelResource):
     class Meta:
         model = Order
 
-        fields = ('tool__title', 'count', 'worker__bio', 'worker__workplace__name')
+        fields = ('tool__title', 'count', 'worker__bio')
         export_order = ('tool__title', 'count')
 class OrderformedResource(resources.ModelResource):
 

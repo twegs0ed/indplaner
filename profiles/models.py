@@ -24,12 +24,12 @@ class Profile(models.Model):
         verbose_name="Должность"
     )
 
-    workplace = models.ForeignKey(
-        Workplace,
-        on_delete=models.CASCADE,
-        verbose_name="рабочее место",
-        null = True
-    )
+    #workplace = models.ForeignKey(
+        #Workplace,
+        #on_delete=models.CASCADE,
+       # verbose_name="рабочее место",
+       # null = True
+   # )
 
 
     def __str__(self):

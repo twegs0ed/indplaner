@@ -30,7 +30,7 @@ order_it.short_description = "В заявку"
 
 class ToolsResource(resources.ModelResource):
 
-    period = Field(attribute='get_period',column_name='period')
+   
 
     class Meta:
         model = Tools
@@ -40,8 +40,8 @@ class ToolsResource(resources.ModelResource):
 
 class ToolsonwarehouseAdmin(ExportActionMixin, admin.ModelAdmin):
     #autocomplete_fields = ['tool']
-    readonly_fields = ('need_count',)
-    list_display = ('id', 'title', 'count', 'min_count', 'need_count', 'count_deficite')
+    #readonly_fields = ('need_count',)
+    list_display = ('id', 'title', 'count')
     search_fields = ['title']
     ordering = ['title']
     actions = [order_it]
@@ -59,11 +59,11 @@ class ToolsonwarehouseAdmin(ExportActionMixin, admin.ModelAdmin):
     count_deficite.short_description = "заказано(не хватает)"
 
 class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
-    #raw_id_fields = ('worker', 'tool')
-    autocomplete_fields = ['worker', 'tool']
+    raw_id_fields = ('worker', 'tool')
+    autocomplete_fields = ['tool','worker']
     resource_class = ToolsResource
-    list_display = ('worker', 'tool', 'count', 'giveout_date', 'get_period')
-    list_filter = (('giveout_date', DateRangeFilter), 'worker')
+    list_display = ('tool', 'worker', 'count', 'giveout_date')
+    list_filter = (('giveout_date', DateRangeFilter), 'worker','tool')
     search_fields = ['tool__title', 'worker__bio']
     ordering = ['-giveout_date']
 
@@ -72,8 +72,8 @@ class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     #raw_id_fields = ('worker', 'tool')
     autocomplete_fields = ['worker', 'tool']
     resource_class = ToolsResource
-    list_display = ('worker', 'tool', 'count', 'giveout_date', 'get_period')
-    list_filter = (('giveout_date', DateRangeFilter), 'worker')
+    list_display = ('worker', 'tool', 'count', 'giveout_date')
+    list_filter = (('giveout_date', DateRangeFilter), 'worker', 'tool')
     search_fields = ['tool__title', 'worker__bio']
     ordering = ['-giveout_date']
     pass
@@ -81,7 +81,7 @@ class ToolsdeficiteAdmin(admin.ModelAdmin):
     pass
 
 class PriemAdmin(ExportActionMixin, admin.ModelAdmin):
-    autocomplete_fields = ['tool']
+    autocomplete_fields = ['tool', 'place','worker']
     list_display = ('tool', 'count', 'giveout_date')
     #list_filter = (('giveout_date', DateRangeFilter))
     search_fields = ['tool__title']

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from profiles.models import Profile
+from workplace.models import Workplace
 import order
 from django.db.models import Q
 
@@ -19,22 +20,11 @@ class Toolsonwarehouse(models.Model):
     title = models.CharField(max_length=200, verbose_name="Обозначение" )#Наименование детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата получения на склад" )#Дата получения на склад
-    count = models.IntegerField(blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
-    min_count = models.IntegerField(blank=True, null=True,verbose_name="Минимальное количество")  # Минимальное количество деталей на складе
-    need_count = models.IntegerField(blank=True, null=True,verbose_name="Дефицит")
+    count = models.IntegerField(default=0,blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
+    #min_count = models.IntegerField(blank=True, null=True,verbose_name="Минимальное количество")  # Минимальное количество деталей на складе
+    #need_count = models.IntegerField(blank=True, null=True,verbose_name="Дефицит")
     #ordered = models.ManyToManyField()
-    LONGPLAY = 'LGP'
-    SHORTPLAY = 'SHP'
-    PERIOD_CHOICES = [
-        (LONGPLAY, 'Долгий срок'),
-        (SHORTPLAY, 'Расходник'),
-    ]
-    period = models.CharField(
-        max_length=3,
-        choices=PERIOD_CHOICES,
-        default=SHORTPLAY,
-        verbose_name='Срок эксплуатации'
-    )
+    
 
 
     def publish(self):
@@ -42,9 +32,9 @@ class Toolsonwarehouse(models.Model):
         self.save()
 
 
-    def save(self):
-        self.need_count = int(self.min_count or 0)-int(self.count or 0)
-        super(Toolsonwarehouse, self).save()
+    #def save(self):
+        #self.need_count = int(self.min_count or 0)-int(self.count or 0)
+        #super(Toolsonwarehouse, self).save()
 
 
     def __str__(self):
@@ -61,7 +51,7 @@ class Tools(models.Model):
     tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Деталь" )  # Работник, который получил детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     #created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )#Дата получения на склад
-    count = models.IntegerField(null=True, verbose_name="Кол-во" ) # Количество деталей на складе
+    count = models.IntegerField(default=0, null=True, verbose_name="Кол-во" ) # Количество деталей на складе
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )
 
 
@@ -95,10 +85,10 @@ class Tools(models.Model):
 
     def worker_name(self):
         return self.worker.bio
-    def get_period(self):
-        return 'расходник' if self.tool.period == self.tool.SHORTPLAY else 'долгосрочный'
+    #def get_period(self):
+        #return 'расходник' if self.tool.period == self.tool.SHORTPLAY else 'долгосрочный'
 
-    get_period.short_description = "Срок экспл."
+    #get_period.short_description = "Срок экспл."
     class Meta:
         verbose_name = 'Выдача'
         verbose_name_plural = 'Выдача деталей'
@@ -131,8 +121,11 @@ class Rec_Tools(models.Model):
         verbose_name = 'Брак'
         verbose_name_plural = 'Отбракованные детали'
 class Priem(models.Model):
+    
     tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Детали")
+    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, от которого принята деталь",null=True)
     count = models.IntegerField(null=True, verbose_name="Кол-во")
+    place = models.ForeignKey(Workplace, on_delete=models.CASCADE, null=True, verbose_name="Место хранения")
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата приема")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание")  # Описание
     def save(self):
