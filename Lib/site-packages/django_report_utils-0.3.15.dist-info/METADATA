@@ -1,0 +1,22 @@
+Metadata-Version: 2.0
+Name: django-report-utils
+Version: 0.3.15
+Summary: Common report functions used by django-report-builder and django-report-scaffold.
+Home-page: https://github.com/burke-software/django-report-utils
+Author: David Burke
+Author-email: david@burkesoftware.com
+License: BSD
+Keywords: django report
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Programming Language :: Python
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: BSD License
+Requires-Dist: django
+Requires-Dist: six
+
+UNKNOWN
+
+

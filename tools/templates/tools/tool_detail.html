@@ -1,0 +1,15 @@
+{% extends 'tools/base.html' %}
+
+{% block content %}
+
+
+
+        <div class="post">
+            <div class="date">
+                {{ tool.created_date }}
+            </div>
+           <h4><a href="{% url 'tool_detail' pk=tool.pk %}">{{ tool.title }} - {{tool.count}} шт. на складе</a></h4>
+            <p>{{ tool.text|linebreaksbr }}</p>
+        </div>
+
+{% endblock %}
