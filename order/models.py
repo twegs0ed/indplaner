@@ -4,6 +4,7 @@ from django.utils import timezone
 from profiles.models import Profile
 from tools.models import Toolsonwarehouse
 from django.utils.html import format_html
+from django import forms
 
 
 
@@ -12,8 +13,9 @@ from django.utils.html import format_html
 
 
 class Firm(models.Model):
-    title = models.CharField(max_length=200, verbose_name="Название фирмы" )#Наименование инструмента
+    title = models.CharField(max_length=200, verbose_name="Изделие" )#Наименование инструмента
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
+    #tools = models.ManyToManyField(Toolsonwarehouse)
 
     def publish(self):
         self.published_date = timezone.now()
@@ -23,18 +25,19 @@ class Firm(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'Поставщики'
-        verbose_name_plural = 'Поставщики'
+        verbose_name = 'Изделия(заказы)'
+        verbose_name_plural = 'Изделия(заказы)'
 
 
 class Order(models.Model):
-    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, которому заказывается инструмент")#Работник, который получил инструмент
-    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Инструмент" )  # Работник, который получил инструмент
-    firm = models.ForeignKey(Firm,on_delete=models.CASCADE, blank=True ,null=True, verbose_name="Поставщик")
+    #worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, которому заказывается инструмент")#Работник, который получил инструмент
+    #tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Детали" )  # Работник, который получил инструмент
+    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE, blank=True ,null=True, verbose_name="Деталь")
+    firm = models.ForeignKey(Firm,on_delete=models.CASCADE, blank=True ,null=True, verbose_name="Изделие(заказ)")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     #created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )#Дата получения на склад
-    count = models.IntegerField(blank=True, null=True, verbose_name="Количество" ) # Количество инструмента на складе
-    order_date_worker = models.DateTimeField(default=timezone.now, verbose_name="Дата заказа" )
+    count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество инструмента на складе
+    order_date_worker = models.DateTimeField(default=timezone.now, verbose_name="Дата запуска" )
 
     ORDERED_BY_WORKER = 'OW'
     ORDERED = 'OR'
@@ -42,10 +45,10 @@ class Order(models.Model):
     COM = 'CM'
 
     ORDER_CHOICES = [
-        (ORDERED_BY_WORKER, 'Заявка'),
-        (ORDERED, 'Заказан'),
-        (PAYED, 'Оплачен'),
-        (COM, 'Получено'),
+        (ORDERED_BY_WORKER, 'В запуске'),
+        (ORDERED, 'запущено'),
+        (PAYED, 'на стороне'),
+        (COM, 'изготовлено'),
     ]
     status = models.CharField(
         max_length=2,
@@ -65,9 +68,9 @@ class Order(models.Model):
         return super(Tools, self).save()'''
 
 
-    def __str__(self):
+    #def __str__(self):
         #return self.worker.username
-        return self.tool.title
+        #return self.tool.title
 
     def worker_name(self):
         return self.worker.bio
@@ -79,8 +82,8 @@ class Order(models.Model):
         return i
 
     class Meta:
-        verbose_name = 'Заказ инструмента'
-        verbose_name_plural = 'Заказ инструмента'
+        verbose_name = 'Детали по изделиям'
+        verbose_name_plural = 'Детали по изделиям'
 
 class Orderformed(models.Model):
 

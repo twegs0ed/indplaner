@@ -9,25 +9,25 @@ from django.contrib.admin.models import LogEntry
 def make_ordered(modeladmin, request, queryset):
     count_minus(queryset)
     queryset.update(status= Order.ORDERED)
-make_ordered.short_description = "Статус заказано"
+make_ordered.short_description = "Статус запущено"#заказано
 
 #Меняем статус заказа на оплачен
 def make_payed(modeladmin, request, queryset):
     count_minus(queryset)
     queryset.update(status= Order.PAYED)
-make_payed.short_description = "Статус оплачено"
+make_payed.short_description = "Статус отдано на сторону"#оплачено
 
 #Меняем статус заказа на "получен"
 def make_com(modeladmin, request, queryset):
     count_plus(queryset)
     queryset.update(status= Order.COM)
-make_com.short_description = "Статус получено"
+make_com.short_description = "Статус изготовлено"#получено
 
 #Меняем статус заказа на закзаан рабочим
 def make_ordered_by_worker(modeladmin, request, queryset):
     count_minus(queryset)
     queryset.update(status= Order.ORDERED_BY_WORKER)
-make_ordered_by_worker.short_description = "Статус заявка от рабочего"
+make_ordered_by_worker.short_description = "Статус в запуске"#заяввка
 
 def count_minus(queryset):
     orderformed = Orderformed()
@@ -55,7 +55,7 @@ class OrderResource(resources.ModelResource):
     class Meta:
         model = Order
 
-        fields = ('tool__title', 'count', 'worker__bio')
+        fields = ('tool__title', 'count')
         export_order = ('tool__title', 'count')
 class OrderformedResource(resources.ModelResource):
 
@@ -72,13 +72,13 @@ class FirmAdmin(admin.ModelAdmin):
     ordering = ['title']
 class OrderAdmin(ExportActionMixin, admin.ModelAdmin):
     resource_class = OrderResource
-    list_display = ('tool', 'count', 'status', 'firm')
-    list_filter = ('firm', 'status', 'worker')
-    search_fields = ['tool__title', 'worker__bio']
-    ordering = ['-order_date_worker','tool__title']
-    autocomplete_fields = ['worker', 'tool']
+    list_display = ('tool','count', 'status', 'firm')
+    list_filter = ('firm', 'status')
+    search_fields = ['tool__title']
+    ordering = ['tool__title']
+    autocomplete_fields = [ 'tool']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
-    list_editable = ['firm', 'count']
+    list_editable = ['firm']
 
 class OrderformedAdmin( admin.ModelAdmin):
     resource_class = OrderformedResource
@@ -95,6 +95,6 @@ class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'action_time'
 admin.site.register(LogEntry, LogEntryAdmin)
 
-#admin.site.register(Firm, FirmAdmin)
+admin.site.register(Firm, FirmAdmin)
 admin.site.register(Order, OrderAdmin)
 #admin.site.register(Orderformed, OrderformedAdmin)
