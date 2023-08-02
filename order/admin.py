@@ -63,26 +63,19 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
 class OrderResource(resources.ModelResource):
     tool = Field(
         column_name='tool',
-        attribute='деталь',
+        attribute='tool',
         widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
     firm = Field(
         column_name='firm',
-        attribute='Изделие',
+        attribute='firm',
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
     class Meta:
         model = Order
 
-        fields = ('tool','tool__title', 'count')
-        export_order = ('tool__title', 'count')
+        fields = ('tool__title', 'count')
+        export_order = ('tool', 'count')
         exclude = ('id',)
         import_id_fields = ('tool', 'count', 'firm')
-class OrderformedResource(resources.ModelResource):
-
-    class Meta:
-        model = Order
-
-        fields = ('tools__title')
-        #export_order = ('tool__title', 'count')
 
 
 class FirmAdmin(admin.ModelAdmin):
@@ -100,13 +93,6 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_editable = ['firm', 'count']
     
 
-class OrderformedAdmin( admin.ModelAdmin):
-    resource_class = OrderformedResource
-    list_display = ('get_tools','bill', 'datetime')
-    list_display_links = ('datetime', )
-    #search_fields = ['title']
-    ordering = ['-datetime']
-    search_fields = ['tools__tool__title', 'bill']
 
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'action_time', 'user', 'content_type', 'object_repr', 'action_flag', 'change_message')
