@@ -1,9 +1,11 @@
 from django.contrib import admin
 from .models import Order, Firm, Orderformed
-from import_export.admin import ExportActionMixin, ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from tools.models import Toolsonwarehouse
 from django.contrib.admin.models import LogEntry
+from import_export.fields import Field
+from import_export.widgets import ForeignKeyWidget
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
@@ -49,14 +51,31 @@ def count_plus(queryset):
         tool.count = int(tool.count) + int(queryset.values()[0]['count'])#то количество инструмента на складе уменьшаем
         tool.save()
 
+class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
+
+    def clean(self, value, row=None, *args, **kwargs):
+        try:
+            return super(ForeignKeyWidgetWithCreation, self).clean(value, row, *args, **kwargs)
+        except:
+            return self.model.objects.create(**{self.field: value})
+    
 
 class OrderResource(resources.ModelResource):
-
+    tool = Field(
+        column_name='tool',
+        attribute='деталь',
+        widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
+    firm = Field(
+        column_name='firm',
+        attribute='Изделие',
+        widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
     class Meta:
         model = Order
 
-        fields = ('tool__title', 'count')
+        fields = ('tool','tool__title', 'count')
         export_order = ('tool__title', 'count')
+        exclude = ('id',)
+        import_id_fields = ('tool', 'count', 'firm')
 class OrderformedResource(resources.ModelResource):
 
     class Meta:
@@ -70,7 +89,7 @@ class FirmAdmin(admin.ModelAdmin):
     list_display = ('title', 'text')
     search_fields = ['title']
     ordering = ['title']
-class OrderAdmin(ExportActionMixin, admin.ModelAdmin):
+class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = OrderResource
     list_display = ('tool','count', 'status', 'firm')
     list_filter = ('firm', 'status')
@@ -78,7 +97,8 @@ class OrderAdmin(ExportActionMixin, admin.ModelAdmin):
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
-    list_editable = ['firm']
+    list_editable = ['firm', 'count']
+    
 
 class OrderformedAdmin( admin.ModelAdmin):
     resource_class = OrderformedResource

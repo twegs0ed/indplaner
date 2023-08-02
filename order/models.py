@@ -31,13 +31,15 @@ class Firm(models.Model):
 
 class Order(models.Model):
     #worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, которому заказывается инструмент")#Работник, который получил инструмент
-    #tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Детали" )  # Работник, который получил инструмент
-    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE, blank=True ,null=True, verbose_name="Деталь")
+    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Детали" )  # Работник, который получил инструмент
+    #tool = models.ManyToManyField(Toolsonwarehouse, verbose_name="Деталь")
     firm = models.ForeignKey(Firm,on_delete=models.CASCADE, blank=True ,null=True, verbose_name="Изделие(заказ)")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     #created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )#Дата получения на склад
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество инструмента на складе
     order_date_worker = models.DateTimeField(default=timezone.now, verbose_name="Дата запуска" )
+    #def get_tools(self):
+        #return "\n".join([p.title for p in self.tool.all()])
 
     ORDERED_BY_WORKER = 'OW'
     ORDERED = 'OR'
