@@ -59,7 +59,7 @@ class ToolsonwarehouseAdmin(ExportActionMixin, admin.ModelAdmin):
     count_deficite.short_description = "заказано(не хватает)"
 
 class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
-    raw_id_fields = ('worker', 'tool')
+    #raw_id_fields = ('worker', 'tool')
     autocomplete_fields = ['tool','worker']
     resource_class = ToolsResource
     list_display = ('tool', 'worker', 'count', 'giveout_date')
