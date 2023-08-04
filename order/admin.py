@@ -91,6 +91,15 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = [ 'tool']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count']
+    ordering = ['exp_date','tool']
+    
+    class Media:
+        css = {
+            'all': (
+                'css/fancy.css',
+            )
+        }
+        js = ('js/guarded_admin.js',)
     
 
 
