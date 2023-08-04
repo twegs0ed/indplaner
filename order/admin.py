@@ -72,10 +72,10 @@ class OrderResource(resources.ModelResource):
     class Meta:
         model = Order
 
-        fields = ('tool__title', 'count')
+        fields = ('tool', 'count','exp_date')
         export_order = ('tool', 'count')
         exclude = ('id',)
-        import_id_fields = ('tool', 'count', 'firm')
+        import_id_fields = ('tool', 'count', 'firm','exp_date')
 
 
 class FirmAdmin(admin.ModelAdmin):
@@ -84,7 +84,7 @@ class FirmAdmin(admin.ModelAdmin):
     ordering = ['title']
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm')
+    list_display = ('tool','count', 'status', 'firm','exp_date')
     list_filter = ('firm', 'status')
     search_fields = ['tool__title']
     ordering = ['tool__title']
