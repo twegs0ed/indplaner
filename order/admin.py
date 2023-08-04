@@ -6,6 +6,7 @@ from tools.models import Toolsonwarehouse
 from django.contrib.admin.models import LogEntry
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
+from rangefilter.filters import DateRangeFilter
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
@@ -85,7 +86,7 @@ class FirmAdmin(admin.ModelAdmin):
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = OrderResource
     list_display = ('tool','count', 'status', 'firm','exp_date')
-    list_filter = ('firm', 'status')
+    list_filter = (('exp_date', DateRangeFilter),'firm', 'status')
     search_fields = ['tool__title']
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool']
