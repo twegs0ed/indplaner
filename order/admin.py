@@ -90,7 +90,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
-    list_editable = ['firm', 'count']
+    list_editable = ['firm', 'count','exp_date']
     ordering = ['exp_date','tool']
     
     class Media:
