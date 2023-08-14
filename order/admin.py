@@ -89,7 +89,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_filter = (('exp_date', DateRangeFilter),'firm', 'status')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
-    autocomplete_fields = [ 'tool']
+    autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count','exp_date']
     ordering = ['exp_date','tool']
