@@ -64,9 +64,9 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ToolsonwarehouseResource
     #autocomplete_fields = ['tool']
     #readonly_fields = ('need_count',)
-    list_display = ('id', 'title', 'count', 'workplace')
+    list_display = ('title', 'count', 'workplace', 'text')
     search_fields = ['title']
-    ordering = ['title']
+    ordering = ['title', 'created_date']
     #actions = [order_it]
     list_editable = ['count','workplace']
 
@@ -85,7 +85,7 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     #raw_id_fields = ('worker', 'tool')
     autocomplete_fields = ['tool','worker']
     resource_class = ToolsResource
-    list_display = ('tool', 'worker', 'count', 'giveout_date')
+    list_display = ('tool', 'worker', 'count', 'giveout_date', 'text')
     list_filter = (('giveout_date', DateRangeFilter), 'worker','tool')
     search_fields = ['tool__title', 'worker__bio']
     ordering = ['-giveout_date']
@@ -105,7 +105,7 @@ class ToolsdeficiteAdmin(admin.ModelAdmin):
 
 class PriemAdmin(ExportActionMixin, admin.ModelAdmin):
     autocomplete_fields = ['tool', 'place','worker']
-    list_display = ('tool', 'count', 'giveout_date')
+    list_display = ('tool', 'count', 'giveout_date', 'text')
     #list_filter = (('giveout_date', DateRangeFilter))
     search_fields = ['tool__title']
     pass

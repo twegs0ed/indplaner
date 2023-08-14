@@ -85,7 +85,7 @@ class FirmAdmin(admin.ModelAdmin):
     ordering = ['title']
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm','exp_date')
+    list_display = ('tool','count', 'status', 'firm','exp_date','text')
     list_filter = (('exp_date', DateRangeFilter),'firm', 'status')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
