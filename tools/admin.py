@@ -8,6 +8,8 @@ from import_export import resources
 from import_export.fields import Field
 from django.utils.html import format_html
 from import_export.widgets import ForeignKeyWidget
+from django.db import models
+from django.forms import TextInput, Textarea
 
 
 def order_it(modeladmin, request, queryset):
@@ -49,6 +51,9 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
             return self.model.objects.create(**{self.field: value})
         
 class ToolsonwarehouseResource(resources.ModelResource):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }
     workplace = Field(
         column_name='workplace',
         attribute='workplace',
@@ -61,6 +66,9 @@ class ToolsonwarehouseResource(resources.ModelResource):
         import_id_fields = ('title', 'count','workplace')
         
 class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }
     resource_class = ToolsonwarehouseResource
     #autocomplete_fields = ['tool']
     #readonly_fields = ('need_count',)
@@ -68,7 +76,7 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['title']
     ordering = ['title', 'created_date']
     #actions = [order_it]
-    list_editable = ['count','workplace']
+    list_editable = ['text']
 
     #def count_deficite(self, obj):
         #i = Order.get_count_ordered(obj)
@@ -82,6 +90,9 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     #count_deficite.short_description = "заказано(не хватает)"
 
 class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }
     #raw_id_fields = ('worker', 'tool')
     autocomplete_fields = ['tool','worker']
     resource_class = ToolsResource
@@ -89,6 +100,7 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     list_filter = (('giveout_date', DateRangeFilter), 'worker','tool')
     search_fields = ['tool__title', 'worker__bio']
     ordering = ['-giveout_date']
+    list_editable = ['text']
 
     pass
 class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
@@ -104,10 +116,14 @@ class ToolsdeficiteAdmin(admin.ModelAdmin):
     pass
 
 class PriemAdmin(ExportActionMixin, admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }
     autocomplete_fields = ['tool', 'place','worker']
     list_display = ('tool', 'count', 'giveout_date', 'text')
     #list_filter = (('giveout_date', DateRangeFilter))
     search_fields = ['tool__title']
+    list_editable = ['text']
     pass
 
 admin.site.register(Tools, ToolsAdmin)

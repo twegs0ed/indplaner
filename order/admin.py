@@ -7,6 +7,8 @@ from django.contrib.admin.models import LogEntry
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 from rangefilter.filters import DateRangeFilter
+from django.forms import TextInput, Textarea
+from django.db import models
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
@@ -80,10 +82,16 @@ class OrderResource(resources.ModelResource):
 
 
 class FirmAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }
     list_display = ('title', 'text')
     search_fields = ['title']
     ordering = ['title']
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }
     resource_class = OrderResource
     list_display = ('tool','count', 'status', 'firm','exp_date','text')
     list_filter = (('exp_date', DateRangeFilter),'firm', 'status')
@@ -91,7 +99,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
-    list_editable = ['firm', 'count','exp_date']
+    list_editable = ['firm', 'count','exp_date', 'text', 'status']
     ordering = ['exp_date','tool']
     
     class Media:
