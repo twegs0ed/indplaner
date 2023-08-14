@@ -57,7 +57,7 @@ class Order(models.Model):
         choices=ORDER_CHOICES ,
         default=ORDERED_BY_WORKER,
         verbose_name = 'статус',
-        editable = False
+        editable = True
 
     )
 
