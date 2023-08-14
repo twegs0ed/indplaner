@@ -4,7 +4,7 @@ from django.utils import timezone
 from profiles.models import Profile
 from tools.models import Toolsonwarehouse
 from django.utils.html import format_html
-from django.forms import TextInput, Textarea
+
 
 
 
@@ -30,9 +30,7 @@ class Firm(models.Model):
 
 
 class Order(models.Model):
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows':1, 'cols':10})},
-    }
+    
     #worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, которому заказывается инструмент")#Работник, который получил инструмент
     tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Детали" )  # Работник, который получил инструмент
     #tool = models.ManyToManyField(Toolsonwarehouse, verbose_name="Деталь")

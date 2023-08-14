@@ -5,6 +5,7 @@ from profiles.models import Profile
 from workplace.models import Workplace
 import order
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 
 
@@ -60,6 +61,9 @@ class Tools(models.Model):
     def publish(self):
         self.published_date = timezone.now()
         self.save()
+    def clean(self):
+        if self.tool.count-self.count<0:
+            raise ValidationError("На складе недостаточно деталей для выдачи указанного количества")
     def save(self):
 
         if self.id is None:
@@ -75,6 +79,7 @@ class Tools(models.Model):
             #print(self.count)
 
             self.tool.count+=(count_cc-self.count)#новое значение = старое значение + (старое изменение - новое изменение
+        
         self.tool.save()
         return super(Tools, self).save()
 
