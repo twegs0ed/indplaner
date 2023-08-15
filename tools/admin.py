@@ -114,8 +114,25 @@ class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     pass
 class ToolsdeficiteAdmin(admin.ModelAdmin):
     pass
+class PriemResource(resources.ModelResource):
+    tool = Field(
+        column_name='tool',
+        attribute='tool',
+        widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
+    #firm = Field(
+        #column_name='firm',
+        #attribute='firm',
+        #widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    class Meta:
+        model = Priem
 
-class PriemAdmin(ExportActionMixin, admin.ModelAdmin):
+        fields = ('tool', 'count','place','giveout_date','text')
+        export_order = ('tool', 'count')
+        exclude = ('id',)
+        import_id_fields = ('tool', 'count')
+
+class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = PriemResource
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }

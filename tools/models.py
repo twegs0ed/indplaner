@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
+from django.utils import timezone, dateformat
 from profiles.models import Profile
 from workplace.models import Workplace
 import order
@@ -127,8 +127,51 @@ class Rec_Tools(models.Model):
     class Meta:
         verbose_name = 'Брак'
         verbose_name_plural = 'Отбракованные детали'
+
 class Priem(models.Model):
-    
+    def order_f(self):
+        order_cf = order.models.Order.objects.filter(tool=self.tool).filter(
+                Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by(
+                'order_date_worker').first()
+        if order_cf:
+            if self.count<order_cf.count:
+                order_cf.text=str(order_cf.text)+'\n'+dateformat.format(timezone.now(), 'd-m-Y')+" в запуске было "+str(order_cf.count)+"."
+                order_cf.count-=self.count
+                order_cf.status = order.models.Order.ORDERED
+                order_cf.save()
+            elif self.count==order_cf.count:
+                order_cf.count=0
+                order_cf.status = order.models.Order.COM  
+                order_cf.save()
+            else:
+                order_cf.text='\n'+'Изготовлено '+dateformat.format(timezone.now(), 'd-m-Y')+' '+str(order_cf.count)+' шт. '
+                diff=self.count-order_cf.count
+                firm=order_cf.firm
+                order_cf.count=0
+                order_cf.status = order.models.Order.COM
+                order_cf.save()
+
+                
+                order_cf=order.models.Order()
+                order_cf.count=diff
+                order_cf.tool=self.tool
+                order_cf.text='Принято больше чем запущено(излишки) '+dateformat.format(timezone.now(), 'd-m-Y')
+                order_cf.status = order.models.Order.COM
+                order_cf.exp_date=timezone.now()
+                order_cf.firm=firm
+                order_cf.save()
+                
+            
+        else:
+            order_cf=order.models.Order()
+            order_cf.count=self.count
+            order_cf.tool=self.tool
+            order_cf.text='Сформировано из "Приема"'
+            order_cf.status = order.models.Order.COM
+            order_cf.save()
+   
+        
+        
     tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Детали")
     worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, от которого принята деталь",null=True)
     count = models.IntegerField(null=True, verbose_name="Кол-во")
@@ -139,23 +182,17 @@ class Priem(models.Model):
 
         if self.id is None:
             self.tool.count=int(self.tool.count or 0) + int(self.count or 0)
-            order_c = order.models.Order.objects.filter(tool=self.tool).filter(
-                Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER)).order_by(
-                'order_date_worker').first()
-            if order_c:
-                order_c.status = order.models.Order.COM
-                order_c.save()
+            
+            Priem.order_f(self)
+            #order_c.save()
         else:
-            #print(self.count)  # что ввели
             count_c = self.count  # сохраняем что ввели
             del self.count
             self.count  # берем из базы
             count_cc = self.count  # сохраняем из базы
             self.count = count_c  # возвращаем то, что ввели
-            #print(count_cc)
-            #print(self.count)
-
-            self.tool.count += (self.count - count_cc)  # новое значение = старое значение + (старое изменение - новое изменение
+            diff_count=self.count - count_cc# то, что ввели минус то, что в базе
+            self.tool.count += diff_count  # новое значение = старое значение + (старое изменение - новое изменение///// то, что ввели - то, что в базе
         self.tool.save()
        
         return super(Priem, self).save()
