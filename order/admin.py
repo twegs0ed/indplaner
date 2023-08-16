@@ -100,7 +100,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
-    ordering = ['exp_date','tool']
+    ordering = ['-status','exp_date','tool']
     
     class Media:
         css = {
