@@ -85,7 +85,6 @@ class Tools(models.Model):
             self.count#берем из базы
             count_cc = self.count#сохраняем из базы
             self.count = count_c#возвращаем то, что ввели
-            print(str(self.count)+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
             if self.tool.count+(count_cc-self.count)<0:
                 raise ValidationError(f"На складе недостаточно деталей({self.tool.count}) для выдачи указанного количества")
             if self.count<1:
@@ -193,6 +192,9 @@ class Priem(models.Model):
 
         if self.id is None:
             self.tool.count=int(self.tool.count or 0) + int(self.count or 0)
+            if not self.tool.workplace==self.place:
+                self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
+            self.tool.workplace=self.place
             
             Priem.order_f(self)
             #order_c.save()
@@ -204,6 +206,9 @@ class Priem(models.Model):
             self.count = count_c  # возвращаем то, что ввели
             diff_count=self.count - count_cc# то, что ввели минус то, что в базе
             self.tool.count += diff_count  # новое значение = старое значение + (старое изменение - новое изменение///// то, что ввели - то, что в базе
+            if not self.tool.workplace==self.place:
+                self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
+            self.tool.workplace=self.place
         self.tool.save()
        
         return super(Priem, self).save()
