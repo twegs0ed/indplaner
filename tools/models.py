@@ -79,14 +79,21 @@ class Tools(models.Model):
         self.tool.save()
         return super(Tools, self).save()
     def clean(self):
-        count_c = self.count#сохраняем что ввели
-        del self.count
-        self.count#берем из базы
-        count_cc = self.count#сохраняем из базы
-        self.count = count_c#возвращаем то, что ввели
-        #print(count_cc)
-        #print(self.count)
-        if self.tool.count+(count_cc-self.count)<0:
+        if self.id is not None:
+            count_c = self.count#сохраняем что ввели
+            del self.count
+            self.count#берем из базы
+            count_cc = self.count#сохраняем из базы
+            self.count = count_c#возвращаем то, что ввели
+            print(str(self.count)+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            if self.tool.count+(count_cc-self.count)<0:
+                raise ValidationError(f"На складе недостаточно деталей({self.tool.count}) для выдачи указанного количества")
+            if self.count<1:
+                raise ValidationError(f"Отрицательное или нулевое количество")
+        else:   
+            if self.count<1:
+                raise ValidationError(f"Отрицательное или нулевое количество")
+            if self.count>self.tool.count:
                 raise ValidationError(f"На складе недостаточно деталей({self.tool.count}) для выдачи указанного количества")
     def __str__(self):
         #return self.worker.username
