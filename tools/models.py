@@ -23,7 +23,7 @@ class Toolsonwarehouse(models.Model):
     created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата получения на склад" )#Дата получения на склад
     count = models.IntegerField(default=0,blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
     workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, verbose_name="Место хранения", null=True, default=lambda: Workplace.objects.get(name='-'))#Работник, который получил детали
-
+    
     #min_count = models.IntegerField(blank=True, null=True,verbose_name="Минимальное количество")  # Минимальное количество деталей на складе
     #need_count = models.IntegerField(blank=True, null=True,verbose_name="Дефицит")
     #ordered = models.ManyToManyField()
@@ -51,21 +51,19 @@ class Toolsonwarehouse(models.Model):
 class Tools(models.Model):
 
     worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник")#Работник, который получил детали
-    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Деталь" )  # Работник, который получил детали
+    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Деталь")  # Работник, который получил детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     #created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )#Дата получения на склад
-    count = models.IntegerField(default=0, null=True, verbose_name="Кол-во" ) # Количество деталей на складе
+    count = models.IntegerField(default=0, null=True, verbose_name="Кол-во") # Количество деталей на складе
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )
+    is_cleaned=False
 
 
     def publish(self):
         self.published_date = timezone.now()
         self.save()
-    def clean(self):
-        if self.tool.count-self.count<0:
-            raise ValidationError("На складе недостаточно деталей для выдачи указанного количества")
+    
     def save(self):
-
         if self.id is None:
             self.tool.count-=self.count
         else:
@@ -77,13 +75,19 @@ class Tools(models.Model):
             self.count = count_c#возвращаем то, что ввели
             #print(count_cc)
             #print(self.count)
-
             self.tool.count+=(count_cc-self.count)#новое значение = старое значение + (старое изменение - новое изменение
-        
         self.tool.save()
         return super(Tools, self).save()
-
-
+    def clean(self):
+        count_c = self.count#сохраняем что ввели
+        del self.count
+        self.count#берем из базы
+        count_cc = self.count#сохраняем из базы
+        self.count = count_c#возвращаем то, что ввели
+        #print(count_cc)
+        #print(self.count)
+        if self.tool.count+(count_cc-self.count)<0:
+                raise ValidationError(f"На складе недостаточно деталей({self.tool.count}) для выдачи указанного количества")
     def __str__(self):
         #return self.worker.username
         return self.worker.bio
