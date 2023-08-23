@@ -94,7 +94,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     }
     resource_class = OrderResource
     list_display = ('tool','count', 'status', 'firm','exp_date','text')
-    list_filter = (('exp_date', DateRangeFilter),'firm', 'status')
+    list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool', 'firm']

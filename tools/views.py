@@ -6,7 +6,7 @@ from django.http import HttpResponse
 
 def tools_list(request):
     tools= Toolsonwarehouse.objects.all().order_by('-created_date')
-    return render(request, 'tools/tools_list.html', {'tools': tools})
+    return render(request, 'tools/tools_list.html', {'tools': tools, 'qwe':'qwe'})
 
 def tool_detail(request, pk):
     tool=Toolsonwarehouse.objects.get(pk=pk)

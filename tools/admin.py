@@ -10,6 +10,7 @@ from django.utils.html import format_html
 from import_export.widgets import ForeignKeyWidget
 from django.db import models
 from django.forms import TextInput, Textarea
+import re
 
 
 def order_it(modeladmin, request, queryset):
@@ -77,6 +78,11 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ['title', 'created_date']
     #actions = [order_it]
     list_editable = ['text']
+    def get_search_results(self, request, queryset, search_term):
+        search_term=re.sub("[^\d\.]", "", str(search_term))
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        queryset |= self.model.objects.filter(title=search_term)
+        return queryset, use_distinct
 
     #def count_deficite(self, obj):
         #i = Order.get_count_ordered(obj)
@@ -101,6 +107,12 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     search_fields = ['tool__title', 'worker__bio']
     ordering = ['-giveout_date']
     list_editable = ['text']
+    def get_search_results(self, request, queryset, search_term):
+        search_term=re.sub("[^\d\.]", "", str(search_term))
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        queryset |= self.model.objects.filter(tool__title=search_term)
+        return queryset, use_distinct
+    
 
     pass
 class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
@@ -141,6 +153,18 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     #list_filter = (('giveout_date', DateRangeFilter))
     search_fields = ['tool__title']
     list_editable = ['text']
+    def get_search_results(self, request, queryset, search_term):
+        search_term=re.sub("[^\d\.]", "", str(search_term))
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        
+        
+        try:
+            search_term_as_int = int(search_term)
+        except ValueError:
+            pass
+        else:
+            queryset |= self.model.objects.filter(tools=search_term_as_int)
+        return queryset, use_distinct
     pass
 
 admin.site.register(Tools, ToolsAdmin)
