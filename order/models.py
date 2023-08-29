@@ -15,6 +15,7 @@ from django.utils.html import format_html
 class Firm(models.Model):
     title = models.CharField(max_length=200, verbose_name="Изделие" )#Наименование инструмента
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
+    count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество изделий
     #tools = models.ManyToManyField(Toolsonwarehouse)
 
     def publish(self):
@@ -91,7 +92,7 @@ class Order(models.Model):
 class Orderformed(models.Model):
 
 
-    tools=models.ManyToManyField(Order, blank=True, null=True, verbose_name="Инструменты" )
+    
     bill = models.TextField(blank=True, null=True, verbose_name="Номер счета" )#Описание
     text = models.TextField(blank=True, null=True, verbose_name="Примечание")  # Описание
     datetime = models.DateTimeField(default=timezone.now, verbose_name="Дата заказа" )

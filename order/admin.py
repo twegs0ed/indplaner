@@ -85,7 +85,7 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text')
+    list_display = ('title', 'text', 'count')
     search_fields = ['title']
     ordering = ['title']
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -101,6 +101,12 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
     ordering = ['-status','exp_date','tool']
+    def get_search_results(self, request, queryset, search_term):
+        #search_term=re.sub("[^\d\.]", "", str(search_term))
+        print(str(request)+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        queryset |= self.model.objects.filter(firm__id=2)
+        return queryset, use_distinct
     
     class Media:
         css = {

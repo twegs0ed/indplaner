@@ -22,7 +22,7 @@ class Toolsonwarehouse(models.Model):
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата получения на склад" )#Дата получения на склад
     count = models.IntegerField(default=0,blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
-    workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, verbose_name="Место хранения", null=True, default=lambda: Workplace.objects.get(name='-'))#Работник, который получил детали
+    workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, verbose_name="Место хранения", null=True, default=Workplace.objects.get(name='-'))#Работник, который получил детали
     
     #min_count = models.IntegerField(blank=True, null=True,verbose_name="Минимальное количество")  # Минимальное количество деталей на складе
     #need_count = models.IntegerField(blank=True, null=True,verbose_name="Дефицит")
@@ -185,7 +185,7 @@ class Priem(models.Model):
     tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Детали")
     worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, от которого принята деталь",null=True)
     count = models.IntegerField(null=True, verbose_name="Кол-во")
-    place = models.ForeignKey(Workplace, on_delete=models.CASCADE, null=True, verbose_name="Место хранения")
+    place = models.ForeignKey(Workplace, on_delete=models.CASCADE, null=True, default=Workplace.objects.get(name='-'), verbose_name="Место хранения")
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата приема")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание")  # Описание
     def save(self):
