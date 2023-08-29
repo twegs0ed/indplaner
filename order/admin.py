@@ -9,6 +9,7 @@ from import_export.widgets import ForeignKeyWidget
 from rangefilter.filters import DateRangeFilter
 from django.forms import TextInput, Textarea
 from django.db import models
+from django.utils.html import format_html
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
@@ -85,10 +86,17 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count')
+    list_display = ('title', 'text', 'count', 'show_firm_url')
+    
     list_editable = ['count']
     search_fields = ['title']
     ordering = ['title']
+    def show_firm_url(self, obj):
+        #return format_html("{% url 'order' order_id=obj.id %}")
+        verbose_name = 'Изделия(заказы)'
+        verbose_name_plural = 'Изделия(заказы)'
+        return format_html("<a href='/order/order/?firm__id__exact={url}'>Детали</a>", url=obj.pk)
+    show_firm_url.short_description = 'Все детали'    
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
