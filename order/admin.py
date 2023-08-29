@@ -91,7 +91,7 @@ class FirmAdmin(admin.ModelAdmin):
     
     list_editable = ['count', 'date', 'exp_date']
     search_fields = ['title']
-    ordering = ['title']
+    ordering = ['-date', 'exp_date']
     def show_firm_url(self, obj):
         #return format_html("{% url 'order' order_id=obj.id %}")
         verbose_name = 'Изделия(заказы)'
