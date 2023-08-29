@@ -86,6 +86,7 @@ class FirmAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     list_display = ('title', 'text', 'count')
+    list_editable = ['count']
     search_fields = ['title']
     ordering = ['title']
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
