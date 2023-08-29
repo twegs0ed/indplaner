@@ -81,7 +81,7 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         search_term=re.sub("[^\d\.]", "", str(search_term))
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        queryset |= self.model.objects.filter(title=search_term)
+        #queryset |= self.model.objects.filter(title=search_term)
         return queryset, use_distinct
 
     #def count_deficite(self, obj):
@@ -103,14 +103,15 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     autocomplete_fields = ['tool','worker']
     resource_class = ToolsResource
     list_display = ('tool', 'worker', 'count', 'giveout_date', 'text')
-    list_filter = (('giveout_date', DateRangeFilter), 'worker','tool')
+    list_filter = (('giveout_date', DateRangeFilter), 'worker')
     search_fields = ['tool__title', 'worker__bio']
     ordering = ['-giveout_date']
     list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
+        #print(search_term)
         search_term=re.sub("[^\d\.]", "", str(search_term))
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        queryset |= self.model.objects.filter(tool__title=search_term)
+        #queryset |= self.model.objects.filter(tool__title=search_term)
         return queryset, use_distinct
     
 

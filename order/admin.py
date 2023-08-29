@@ -10,6 +10,7 @@ from rangefilter.filters import DateRangeFilter
 from django.forms import TextInput, Textarea
 from django.db import models
 from django.utils.html import format_html
+import re
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
@@ -86,9 +87,9 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count', 'show_firm_url')
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url')
     
-    list_editable = ['count']
+    list_editable = ['count', 'date', 'exp_date']
     search_fields = ['title']
     ordering = ['title']
     def show_firm_url(self, obj):
@@ -111,11 +112,11 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
     ordering = ['-status','exp_date','tool']
     def get_search_results(self, request, queryset, search_term):
-        #search_term=re.sub("[^\d\.]", "", str(search_term))
-        print(str(request)+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        search_term=re.sub("[^\d\.]", "", str(search_term))
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        queryset |= self.model.objects.filter(firm__id=2)
+        #queryset |= self.model.objects.filter(firm__id=2)
         return queryset, use_distinct
+    
     
     class Media:
         css = {
