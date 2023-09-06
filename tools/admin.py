@@ -164,7 +164,7 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         except ValueError:
             pass
         else:
-            queryset |= self.model.objects.filter(tools=search_term_as_int)
+            queryset |= self.model.objects.filter(tool=search_term_as_int)
         return queryset, use_distinct
     pass
 

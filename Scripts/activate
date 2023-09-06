@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\Opens\domains\planer"
+VIRTUAL_ENV="E:\domains\indplaner"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -55,9 +55,9 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    PS1="(planer) ${PS1:-}"
+    PS1="(indplaner) ${PS1:-}"
     export PS1
-    VIRTUAL_ENV_PROMPT="(planer) "
+    VIRTUAL_ENV_PROMPT="(indplaner) "
     export VIRTUAL_ENV_PROMPT
 fi
 

@@ -6,6 +6,7 @@ from workplace.models import Workplace
 import order
 from django.db.models import Q
 from django.core.exceptions import ValidationError
+import re
 
 
 
@@ -33,12 +34,24 @@ class Toolsonwarehouse(models.Model):
     def publish(self):
         self.published_date = timezone.now()
         self.save()
+    
 
+    def save(self):
+        if self.id is None:
+            self.title=self.title.upper()
+            return super(Toolsonwarehouse, self).save()
+        else:
+            self.title=self.title.upper()
+            return super(Toolsonwarehouse, self).save()
+    
 
-    #def save(self):
         #self.need_count = int(self.min_count or 0)-int(self.count or 0)
         #super(Toolsonwarehouse, self).save()
-
+    def clean(self):
+        if self.id is None:
+            t=Toolsonwarehouse.objects.filter(title=self.title.upper())
+            if t:
+                raise ValidationError('Такие детали уже есть в базе')
 
     def __str__(self):
         return self.title
@@ -192,21 +205,52 @@ class Priem(models.Model):
     def save(self):
 
         if self.id is None:
-            self.tool.count=int(self.tool.count or 0) + int(self.count or 0)
+            title_c=self.tool.title.split (' ',1)[0]
+            alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
+            count_all=0
+            for item in alltools:
+                
+                count_all+=item.count
+                if not item.pk == self.tool.pk:
+                    self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(item.workplace)+'\n'+str(self.tool.text)
+                    for v in Tools.objects.filter(tool=item):
+                        v.tool=self.tool
+                        v.save()
+                    for p in Priem.objects.filter(tool=item):
+                        if not p == self:
+                            p.tool=self.tool
+                            p.save()
+                    item.delete()
+            self.tool.count=count_all + int(self.count or 0)
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
             
             Priem.order_f(self)
+            
             #order_c.save()
         else:
-            count_c = self.count  # сохраняем что ввели
-            del self.count
-            self.count  # берем из базы
-            count_cc = self.count  # сохраняем из базы
-            self.count = count_c  # возвращаем то, что ввели
-            diff_count=self.count - count_cc# то, что ввели минус то, что в базе
-            self.tool.count += diff_count  # новое значение = старое значение + (старое изменение - новое изменение///// то, что ввели - то, что в базе
+            title_c=self.tool.title.split (' ',1)[0]
+            alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
+            count_all=0
+            for item in alltools:
+                count_all+=item.count
+                if not item.pk == self.tool.pk:
+                    self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(item.workplace)+'\n'+str(self.tool.text)
+                    for v in Tools.objects.filter(tool=item):
+                        v.tool=self.tool
+                        v.save()
+                    
+                        
+                    item.delete()
+            pr=Priem.objects.filter(pk=self.id).first()
+            if pr:
+                previous_count = pr.count
+            else:
+                previous_count=self.count
+            
+            diff_count=self.count - previous_count# то, что ввели минус то, что в базе
+            self.tool.count = count_all + diff_count# новое значение = старое значение + (старое изменение - новое изменение///// то, что ввели - то, что в базе
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
