@@ -48,10 +48,10 @@ class Toolsonwarehouse(models.Model):
         #self.need_count = int(self.min_count or 0)-int(self.count or 0)
         #super(Toolsonwarehouse, self).save()
     def clean(self):
-        if self.id is None:
-            t=Toolsonwarehouse.objects.filter(title=self.title.upper())
-            if t:
-                raise ValidationError('Такие детали уже есть в базе')
+        title_c=self.title.split (' ',1)[0]
+        alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
+        if alltools:
+            raise ValidationError('Такие детали уже есть в базе')
 
     def __str__(self):
         return self.title
