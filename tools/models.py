@@ -48,9 +48,9 @@ class Toolsonwarehouse(models.Model):
         #self.need_count = int(self.min_count or 0)-int(self.count or 0)
         #super(Toolsonwarehouse, self).save()
     def clean(self):
-        title_c=self.title.split (' ',1)[0]
-        alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
-        if alltools:
+        #title_c=self.title.split (' ',1)[0]
+        alltools = Toolsonwarehouse.objects.filter(title=self.title).exclude(pk=self.pk)
+        if alltools and self.id == None :
             raise ValidationError('Такие детали уже есть в базе')
 
     def __str__(self):
@@ -205,6 +205,7 @@ class Priem(models.Model):
     def save(self):
 
         if self.id is None:
+            '''
             title_c=self.tool.title.split (' ',1)[0]
             alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
             count_all=0
@@ -221,7 +222,9 @@ class Priem(models.Model):
                                 p.tool=self.tool
                                 p.save()
                         item.delete()
-            self.tool.count=count_all + int(self.count or 0)
+                        '''
+            self.tool.count+=int(self.count or 0)
+            
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
@@ -230,6 +233,7 @@ class Priem(models.Model):
             
             #order_c.save()
         else:
+            '''
             title_c=self.tool.title.split (' ',1)[0]
             alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
             count_all=0
@@ -244,6 +248,7 @@ class Priem(models.Model):
                         
                             
                         item.delete()
+                        '''
             pr=Priem.objects.filter(pk=self.id).first()
             if pr:
                 previous_count = pr.count
@@ -251,7 +256,7 @@ class Priem(models.Model):
                 previous_count=self.count
             
             diff_count=self.count - previous_count# то, что ввели минус то, что в базе
-            self.tool.count = count_all + diff_count# новое значение = старое значение + (старое изменение - новое изменение///// то, что ввели - то, что в базе
+            self.tool.count +=  diff_count# новое значение = старое значение + (старое изменение - новое изменение///// то, что ввели - то, что в базе
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
