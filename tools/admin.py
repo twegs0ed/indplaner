@@ -79,21 +79,10 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     #actions = [order_it]
     list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
-        search_term=re.sub("[^\d\.]", "", str(search_term))
+        search_term=str(search_term).upper()
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        #queryset |= self.model.objects.filter(title=search_term)
         return queryset, use_distinct
 
-    #def count_deficite(self, obj):
-        #i = Order.get_count_ordered(obj)
-        #if i>0 and i<(int(obj.min_count or 0)-int(obj.count or 0)):#Желтый
-         #   result = format_html('<p style="background-color: #e3de46  ; color: #424746  ">'+str(i)+'('+str(int(obj.min_count or 0)-int(obj.count or 0)-int(i))+')</p>')
-        #elif i>=0 and i>=(int(obj.min_count or 0)-int(obj.count or 0)):#Зеленый
-        #    result = format_html('<p style="background-color: #3ec76d ; color: #342ecf ">'+str(i)+'</p>')
-        #else:#красный
-        #    result = format_html('<p style="background-color: #FF5656 ; color: #FFFBAF ">'+str(i)+'('+str(int(obj.min_count or 0)-int(obj.count or 0)-int(i))+')</p>')
-        #return result
-    #count_deficite.short_description = "заказано(не хватает)"
 
 class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     formfield_overrides = {
@@ -109,7 +98,8 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
         #print(search_term)
-        search_term=re.sub("[^\d\.]", "", str(search_term))
+        #search_term=re.sub("[^\d\.]", "", str(search_term))
+        search_term=str(search_term).upper()
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         #queryset |= self.model.objects.filter(tool__title=search_term)
         return queryset, use_distinct
@@ -155,7 +145,7 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['tool__title']
     list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
-        search_term=re.sub("[^\d\.]", "", str(search_term))
+        search_term=str(search_term).upper()
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         
         
