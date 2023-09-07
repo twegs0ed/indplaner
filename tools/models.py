@@ -210,7 +210,7 @@ class Priem(models.Model):
             count_all=0
             if alltools:
                 for item in alltools:
-                    count_all+=item.count
+                    count_all+=int(item.count or 0)
                     if not item.pk == self.tool.pk:
                         self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(item.workplace)+'\n'+str(self.tool.text)
                         for v in Tools.objects.filter(tool=item):
