@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'workplace',
     'order',
     'rangefilter',
-    'import_export'
+    'import_export',
+    'info'
 ]
 
 MIDDLEWARE = [

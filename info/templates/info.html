@@ -1,0 +1,148 @@
+{% extends "admin/base_site.html" %}
+
+ {% block nav-global %}
+
+     {{ block.super }}
+ {% endblock %}
+
+
+
+
+  
+   
+ 
+
+
+ {% block content %}
+ <form action="" method="get">
+  {{ form }}
+  <input type="submit" value="Submit">
+</form>
+
+
+
+ <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детали на складе</h2></b>
+ <table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Кол-во на складе</th>
+      <th scope="col">Место хранения</th>
+      <th scope="col">Комментарии</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for tool in tools %}
+  <tr>
+  <th scope="row"><a href="/tools/toolsonwarehouse/{{ tool.id }}/change/">{{ tool.title }}</a></th>
+ <td>{{ tool.count }}</td>
+ <td>{{ tool.workplace }}</td>
+ <td>{{ tool.text }}</td>
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Выдача деталей</h2></b>
+<table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Работник</th>
+      <th scope="col">Количество</th>
+      <th scope="col">Дата выдачи</th>
+      <th scope="col">Комментарии</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for tool in toolsv %}
+  <tr>
+  <th scope="row"><a href="http://localhost/tools/tools/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
+ <td>{{ tool.worker }}</td>
+ <td>{{ tool.count }}</td>
+ <td>{{ tool.giveout_date }}</td>
+ <td>{{ tool.text }}</td>
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Прием деталей на склад</h2></b>
+<table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Количество</th>
+      <th scope="col">Работник</th>
+      <th scope="col">Дата приема на склад</th>
+      <th scope="col">Место хранения</th>
+      <th scope="col">Комментарии</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for tool in priems %}
+  <tr>
+  <th scope="row"><a href="http://localhost/tools/priem/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
+  <td>{{ tool.count }}</td>
+ <td>{{ tool.worker }}</td>
+ <td>{{ tool.giveout_date }}</td>
+ <td>{{ tool.place }}</td>
+ <td>{{ tool.text }}</td>
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+
+
+<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детали по изделиям</h2></b>
+ <table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Количество</th>
+      <th scope="col">Изделие</th>
+      <th scope="col">Срок изготовления</th>
+      <th scope="col">Дата запуска</th>
+      <th scope="col">Статус</th>
+      <th scope="col">Комментарии</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for order in orders %}
+  <tr>
+  <th scope="row"><a href="http://localhost/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
+  <td>{{ order.count }}</td>
+ <td>{{ order.firm }}</td>
+ <td>{{ order.exp_date }}</td>
+ <td>{{ order.order_date_worker }}</td>
+ <td>
+  {% for mykey,myvalue in order.ORDER_CHOICES %}
+    {% if mykey == order.status %}
+      {{myvalue}}</div>
+      {% endif %}
+    {% endfor %}
+  
+ </td>
+ <td>{{ order.text }}</td>
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+     {{ block.super }}
+ {% endblock %}

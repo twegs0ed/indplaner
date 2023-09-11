@@ -35,6 +35,7 @@
         {% block usertools %}
         {% if has_permission %}
         <div id="user-tools">
+          <a href="/info">Сводная по детали</a>
             {% block welcome-msg %}
                 {% translate 'Welcome,' %}
                 <strong>{% firstof user.get_short_name user.get_username %}</strong>.
@@ -58,6 +59,7 @@
         {% endif %}
         {% endblock %}
         {% block nav-global %}{% endblock %}
+        
     </div>
     <!-- END Header -->
     {% block breadcrumbs %}
@@ -92,6 +94,7 @@
             {{ content }}
           {% endblock %}
           {% block sidebar %}{% endblock %}
+          
           <br class="clear">
         </div>
         <!-- END Content -->
