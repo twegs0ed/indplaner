@@ -59,6 +59,7 @@ class ToolsonwarehouseResource(resources.ModelResource):
         column_name='workplace',
         attribute='workplace',
         widget=ForeignKeyWidgetWithCreation(model=Workplace, field='name'))
+    
     class Meta:
         model = Toolsonwarehouse
 
@@ -74,6 +75,7 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     #autocomplete_fields = ['tool']
     #readonly_fields = ('need_count',)
     list_display = ('title', 'count', 'workplace', 'text')
+    list_filter = ('workplace',)
     search_fields = ['title']
     ordering = ['title', 'created_date']
     #actions = [order_it]
