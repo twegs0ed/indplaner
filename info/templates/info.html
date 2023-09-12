@@ -62,7 +62,7 @@
 
   {% for tool in toolsv %}
   <tr>
-  <th scope="row"><a href="http://localhost/tools/tools/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
+  <th scope="row"><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
  <td>{{ tool.worker }}</td>
  <td>{{ tool.count }}</td>
  <td>{{ tool.giveout_date }}</td>
@@ -90,7 +90,7 @@
 
   {% for tool in priems %}
   <tr>
-  <th scope="row"><a href="http://localhost/tools/priem/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
+  <th scope="row"><a href="/tools/priem/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
   <td>{{ tool.count }}</td>
  <td>{{ tool.worker }}</td>
  <td>{{ tool.giveout_date }}</td>
@@ -125,7 +125,7 @@
 
   {% for order in orders %}
   <tr>
-  <th scope="row"><a href="http://localhost/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
+  <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
   <td>{{ order.count }}</td>
  <td>{{ order.firm }}</td>
  <td>{{ order.exp_date }}</td>
