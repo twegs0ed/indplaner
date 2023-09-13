@@ -1,0 +1,44 @@
+{% extends "admin/base_site.html" %}
+
+ {% block nav-global %}
+
+     {{ block.super }}
+ {% endblock %}
+
+
+
+
+  
+   
+ 
+
+
+ {% block content %}
+ <form action="" method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+      <ul>
+        
+        <li>{{ form.tool.label_tag }}</li>
+        <li>{{ form.tool }}</li>
+        
+          <li>{{ form.user.label_tag }}</li>
+          <li>{{ form.user }}</li>
+
+          <li>{{ form.count.label_tag }}</li>
+          <li>{{ form.count }}</li>
+
+          <li>{{ form.date.label_tag }}</li>
+          <li>{{ form.date }}</li>
+
+          <li>{{ form.text.label_tag }}</li>
+          <li>{{ form.text }}</li>
+
+      </ul>
+  <input type="submit" value="Submit">
+</form>
+
+
+
+     {{ block.super }}
+ {% endblock %}

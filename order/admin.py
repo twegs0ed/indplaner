@@ -103,7 +103,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm','exp_date','text')
+    list_display = ('tool','count', 'status', 'firm','exp_date','text', 'printmk')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
@@ -111,11 +111,11 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
     ordering = ['-status','exp_date','tool']
-    '''def get_search_results(self, request, queryset, search_term):
-        search_term=re.sub("[^\d\.]", "", str(search_term))
-        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        #queryset |= self.model.objects.filter(firm__id=2)
-        return queryset, use_distinct'''
+    def printmk(self, obj):
+        url = '/order/printmk'
+        url = url + '/'+str(obj.id)
+        return format_html('<a href="{}">print</a>', url)
+    printmk.short_description = "МК"
     
     
     class Media:

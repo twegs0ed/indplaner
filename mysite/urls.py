@@ -10,7 +10,10 @@ urlpatterns = [
     
     path('tools/', include('tools.urls')),
     path('info', include('info.urls')),
+    path('work', include('work.urls')),
+    path('order', include('order.urls')),
     path('', admin.site.urls),
+    
     #path('admin/', admin.site.urls),
    
     
