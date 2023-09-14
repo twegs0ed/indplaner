@@ -7,7 +7,7 @@ from import_export.admin import ExportActionMixin, ImportExportModelAdmin
 from import_export import resources
 from import_export.fields import Field
 from django.utils.html import format_html
-from import_export.widgets import ForeignKeyWidget
+from import_export.widgets import ForeignKeyWidget, CharWidget
 from django.db import models
 from django.forms import TextInput, Textarea
 import re
@@ -35,11 +35,12 @@ def get_object(self, obj):
 order_it.short_description = "В заявку"
 
 class ToolsResource(resources.ModelResource):
-
+    
    
 
     class Meta:
         model = Tools
+        
         fields = ('tool__title', 'count','worker__bio')
         export_order = ('tool__title', 'worker__bio', 'count')
 
@@ -55,6 +56,7 @@ class ToolsonwarehouseResource(resources.ModelResource):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
+    tool = Field(attribute='title', column_name='title', widget=CharWidget(),)
     workplace = Field(
         column_name='workplace',
         attribute='workplace',
@@ -63,9 +65,11 @@ class ToolsonwarehouseResource(resources.ModelResource):
     class Meta:
         model = Toolsonwarehouse
 
-        fields = ('title', 'count', 'workplace__name')
-        export_order = ('title', 'count','workplace__name')
-        import_id_fields = ('title', 'count','workplace')
+        fields = ('tool', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock' )
+        #exclude = ('count')
+        export_order = ('tool','count', 'workplace__name')
+        import_order = ('tool','workplace__name')
+        import_id_fields = ('tool', )
         
 class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {

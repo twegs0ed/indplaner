@@ -35,13 +35,13 @@ class Toolsonwarehouse(models.Model):
         self.save()
     
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.id is None:
             self.title=self.title.upper()
-            return super(Toolsonwarehouse, self).save()
+            return super(Toolsonwarehouse, self).save(*args, **kwargs)
         else:
             self.title=self.title.upper()
-            return super(Toolsonwarehouse, self).save()
+            return super(Toolsonwarehouse, self).save(*args, **kwargs)
     
 
         #self.need_count = int(self.min_count or 0)-int(self.count or 0)

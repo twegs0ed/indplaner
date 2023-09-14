@@ -79,7 +79,9 @@ class OrderResource(resources.ModelResource):
 
         fields = ('tool', 'count','exp_date')
         export_order = ('tool', 'count')
-        exclude = ('id',)
+        #Eexclude = ('id',)
+        skip_unchanged=False
+        
         import_id_fields = ('tool', 'count', 'firm','exp_date')
 
 

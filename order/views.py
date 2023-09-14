@@ -11,24 +11,30 @@ from django.contrib.sites.models import Site
 
 # Create your views here.
 def count_c(det,det_in_zag, lenght, ws):
+    if det_in_zag == None:
+        det_in_zag=1
+    if det is None or lenght is None:
+        return {'ws' : ws, 'count' : ''}
     if det_in_zag == 1:
-        return det
+        return {'ws' : ws, 'count' : 1}
     lenght_c = str(lenght).split("х")
     if lenght_c is None:
         lenght_c = int(str(lenght).split("х"))
 
     if det/det_in_zag < 1:
-        lenght_c[-1]=((int(lenght_c[-1])-30)/det_in_zag)*det+30
+        lenght_c[-1]=((int(lenght_c[-1])-20)/det_in_zag)*det+20
         ws.cell(row=4, column=7).value= str(lenght_c[0]) + 'x' + str(lenght_c[-1])
 
         return {'ws': ws, 'count' : 1}
     if det/det_in_zag > 1:
-        return lenght_c[-1]*(det//det_in_zag)+((lenght_c[-1]-30)/det_in_zag)*det%det_in_zag+30
+        count=lenght_c[-1]*(det//det_in_zag)+((lenght_c[-1]-30)/det_in_zag)*det%det_in_zag+30
+        ws.cell(row=4, column=7).value= str(lenght_c[0]) + 'x' + str(lenght_c[-1])
+        return {'ws' : ws, 'count' : count}
 
     
     l_zag = lenght_c[-1] / det
     l_fin = l_zag * det
-    return float(det/det_in_zag)
+    return {'ws' : ws, 'count' : float(det/det_in_zag)}
 def printmk(request, id):
 
     order=Order.objects.get(pk=id)
@@ -54,7 +60,7 @@ def printmk(request, id):
     if order.tool.count_in_one_stock != None:
         count_cc = count_c(int(order.count),int(order.tool.count_in_one_stock), order.tool.stock_sizes, ws)
         ws=count_cc['ws']
-        ws.cell(row=5, column=7).value= float(count_cc['count'])
+        ws.cell(row=5, column=7).value= count_cc['count']
     else:
         ws.cell(row=5, column=7).value= ' '
 
