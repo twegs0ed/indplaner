@@ -7,7 +7,7 @@ from order.models import Order
 import qrcode
 import openpyxl
 import uuid
-from django.contrib.sites.models import Site
+#from django.contrib.sites.models import Site
 
 # Create your views here.
 def count_c(det,det_in_zag, lenght, ws):

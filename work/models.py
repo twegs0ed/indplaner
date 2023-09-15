@@ -13,7 +13,7 @@ from django.utils import timezone
 
 class Work(models.Model):
     
-    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Детали" )  # Работник, который получил инструмент
+    tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Детали" )  
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Исполнитель")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     date = models.DateField(default=timezone.now, verbose_name="Дата выполнения работы", null=True,blank=True)#Дата получения на склад
@@ -25,8 +25,10 @@ class Work(models.Model):
 
 
 class WorkForm(ModelForm):
+    
     class Meta:
         model = Work
         fields = ['tool', 'user','text','date','count']
+        #exclude = ['user']
     
     

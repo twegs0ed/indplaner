@@ -20,10 +20,12 @@
       <ul>
         
         <li>{{ form.tool.label_tag }}</li>
-        <li>{{ form.tool }}</li>
+       {{ form.tool }}
+        <li>{{ tool }}</li>
         
           <li>{{ form.user.label_tag }}</li>
-          <li>{{ form.user }}</li>
+          {{ form.user }}
+          <li>{{ form.user.name }}</li>
 
           <li>{{ form.count.label_tag }}</li>
           <li>{{ form.count }}</li>
