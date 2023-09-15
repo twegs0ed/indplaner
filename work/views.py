@@ -22,7 +22,7 @@ def add(request, id):
         form.fields['tool'].widget.attrs['readonly'] = True 
         #form.fields['tool'].widget.attrs['disabled'] = True 
         form.fields['tool'].widget.attrs['hidden'] = True 
-        return render(request, 'work.html', { 'form':form, 'tool' : tool.title})
+        return render(request, 'work.html', { 'form':form, 'tool' : tool.title, 'user' : request.user})
 def detail(request, pk):
     work=Work.objects.get(pk)
     return render(request, 'work.html', { 'work':work})
