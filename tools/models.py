@@ -91,7 +91,7 @@ class Tools(models.Model):
         self.tool.save()
         return super(Tools, self).save()
     def clean(self):
-        if self.id is not None:
+        if self.id:
             count_c = self.count#сохраняем что ввели
             del self.count
             self.count#берем из базы
