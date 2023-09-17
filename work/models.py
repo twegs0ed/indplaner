@@ -18,6 +18,7 @@ class Work(models.Model):
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     date = models.DateField(default=timezone.now, verbose_name="Дата выполнения работы", null=True,blank=True)#Дата получения на склад
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество инструмента на складе
+    ready = models.BooleanField(default=False, verbose_name="Деталь готова?" )
 
     class Meta:
         verbose_name = 'Выполненные работы'
@@ -28,7 +29,7 @@ class WorkForm(ModelForm):
     
     class Meta:
         model = Work
-        fields = ['tool', 'user','text','date','count']
+        fields = ['tool', 'user','text','date','count', 'ready']
         #exclude = ['user']
     
     

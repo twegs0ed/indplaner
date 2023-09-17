@@ -16,12 +16,14 @@ def add(request, id):
         return render(request, 'success.html', { 'form':form, 'tool' : tool.title})
     else:
         form=WorkForm(initial={'tool': tool, 'user':request.user})
-        form.fields['user'].widget.attrs['readonly'] = True 
-        #form.fields['user'].widget.attrs['disabled'] = True 
-        form.fields['user'].widget.attrs['hidden'] = True 
-        form.fields['tool'].widget.attrs['readonly'] = True 
-        #form.fields['tool'].widget.attrs['disabled'] = True 
-        form.fields['tool'].widget.attrs['hidden'] = True 
+        if request.user.groups.filter(name='master').exists():
+            return redirect('/work/work/add/')
+        if request.user.groups.filter(name='worker').exists():
+            form.fields['user'].widget.attrs['readonly'] = True 
+            form.fields['user'].widget.attrs['hidden'] = True 
+            form.fields['tool'].widget.attrs['readonly'] = True 
+            form.fields['tool'].widget.attrs['hidden'] = True 
+            
         return render(request, 'work.html', { 'form':form, 'tool' : tool.title, 'user' : request.user})
 def detail(request, pk):
     work=Work.objects.get(pk)
