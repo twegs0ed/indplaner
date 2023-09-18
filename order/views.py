@@ -11,28 +11,33 @@ import uuid
 
 # Create your views here.
 def count_c(det,det_in_zag, lenght, ws):
+    lenght=int(lenght)
     if det_in_zag == None:
         det_in_zag=1
+
     if det is None or lenght is None:
         return {'ws' : ws, 'count' : ''}
+    
     if det_in_zag == 1:
-        return {'ws' : ws, 'count' : 1}
-    lenght_c = str(lenght).split("х")
+        return {'ws' : ws, 'count' : det}
+    '''lenght_c = str(lenght)
+
     if lenght_c is None:
-        lenght_c = int(str(lenght).split("х"))
+        lenght_c = int(str(lenght))'''
 
     if det/det_in_zag < 1:
-        lenght_c[-1]=((int(lenght_c[-1])-20)/det_in_zag)*det+20
-        ws.cell(row=4, column=7).value= str(lenght_c[0]) + 'x' + str(lenght_c[-1])
+        lenght=((lenght-20)/det_in_zag)*det+20
+        ws.cell(row=4, column=7).value= str(lenght)
 
         return {'ws': ws, 'count' : 1}
     if det/det_in_zag > 1:
-        count=lenght_c[-1]*(det//det_in_zag)+((lenght_c[-1]-30)/det_in_zag)*det%det_in_zag+30
-        ws.cell(row=4, column=7).value= str(lenght_c[0]) + 'x' + str(lenght_c[-1])
-        return {'ws' : ws, 'count' : count}
+        count = det/det_in_zag
+        #count=(lenght/det)*(det//det_in_zag)+((lenght-30)/det_in_zag)*det%det_in_zag+30
+        ws.cell(row=4, column=7).value= str(lenght)
+        return {'ws' : ws, 'count' : int(count+0.9)}
 
     
-    l_zag = lenght_c[-1] / det
+    l_zag = lenght/ det
     l_fin = l_zag * det
     return {'ws' : ws, 'count' : float(det/det_in_zag)}
 def printmk(request, id):
