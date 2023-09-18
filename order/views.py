@@ -29,13 +29,13 @@ def count_c(det,det_in_zag, lenght, ws):
 
     if det/det_in_zag < 1:
         lenght=((lenght-20)/det_in_zag)*det+20
-        ws.cell(row=4, column=7).value= str(lenght)
+        ws.cell(row=4, column=7).value= str(int(lenght))
 
         return {'ws': ws, 'count' : 1}
     if det/det_in_zag > 1:
         count = det/det_in_zag
         #count=(lenght/det)*(det//det_in_zag)+((lenght-30)/det_in_zag)*det%det_in_zag+30
-        ws.cell(row=4, column=7).value= str(lenght)
+        ws.cell(row=4, column=7).value= str(int(lenght))
         return {'ws' : ws, 'count' : int(count+0.9)}
 
     
