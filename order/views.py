@@ -11,19 +11,21 @@ import uuid
 
 # Create your views here.
 def count_c(det,det_in_zag, lenght, ws):
-    lenght=int(lenght)
+    if det_in_zag == 1:
+        return {'ws' : ws, 'count' : det}
+    
+    
     if det_in_zag == None:
         det_in_zag=1
 
     if det is None or lenght is None:
         return {'ws' : ws, 'count' : ''}
     
-    if det_in_zag == 1:
-        return {'ws' : ws, 'count' : det}
-    '''lenght_c = str(lenght)
-
-    if lenght_c is None:
-        lenght_c = int(str(lenght))'''
+    
+    try:
+        lenght=int(lenght)
+    except:
+        return {'ws' : ws, 'count' : ''}
 
     if det/det_in_zag < 1:
         lenght=((lenght-20)/det_in_zag)*det+20
