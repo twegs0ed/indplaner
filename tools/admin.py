@@ -78,7 +78,7 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ToolsonwarehouseResource
     #autocomplete_fields = ['tool']
     #readonly_fields = ('need_count',)
-    list_display = ('title', 'count', 'workplace', 'text')
+    list_display = ('title', 'count', 'workplace', 'created_date', 'text')
     list_filter = ('workplace',)
     search_fields = ['title']
     ordering = ['title', 'created_date']

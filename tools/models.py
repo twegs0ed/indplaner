@@ -21,7 +21,7 @@ import re
 class Toolsonwarehouse(models.Model):
     title = models.CharField(max_length=200, verbose_name="Обозначение" )#Наименование детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
-    created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата получения на склад" )#Дата получения на склад
+    created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата" )#Дата получения на склад
     count = models.IntegerField(default=0,blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
     workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, verbose_name="Место хранения", null=True, )#Работник, который получил детали
     material = models.TextField(max_length=500, blank=True, null=True, verbose_name="Материал" )
