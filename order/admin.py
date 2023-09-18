@@ -77,12 +77,12 @@ class OrderResource(resources.ModelResource):
     class Meta:
         model = Order
 
-        fields = ('tool', 'count','exp_date')
+        fields = ('tool', 'count','exp_date', 'firm')
         export_order = ('tool', 'count')
         #Eexclude = ('id',)
-        skip_unchanged=False
+        #skip_unchanged=True
         
-        import_id_fields = ('tool', 'count', 'firm','exp_date')
+        import_id_fields = ('tool','firm','exp_date')
 
 
 class FirmAdmin(admin.ModelAdmin):

@@ -56,7 +56,8 @@ class ToolsonwarehouseResource(resources.ModelResource):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    tool = Field(attribute='title', column_name='title', widget=CharWidget(),)
+    #tool = Field(attribute='title', column_name='title', widget=CharWidget(),)
+    
     workplace = Field(
         column_name='workplace',
         attribute='workplace',
@@ -64,12 +65,13 @@ class ToolsonwarehouseResource(resources.ModelResource):
     
     class Meta:
         model = Toolsonwarehouse
-
-        fields = ('tool', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock' )
-        #exclude = ('count')
-        export_order = ('tool','count', 'workplace__name')
-        import_order = ('tool','workplace__name')
-        import_id_fields = ('tool', )
+        #skip_unchanged=False
+        fields = ('title', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock' )
+        exclude = ('id',)
+        export_order = ('title','count', 'workplace')
+        import_id_fields=['title']
+        #import_id_field = 'title'
+    
         
 class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
