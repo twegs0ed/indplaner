@@ -82,7 +82,7 @@ class OrderResource(resources.ModelResource):
         #Eexclude = ('id',)
         #skip_unchanged=True
         
-        import_id_fields = ('tool','firm','exp_date')
+        import_id_fields = ('tool','firm')
 
 
 class FirmAdmin(admin.ModelAdmin):
