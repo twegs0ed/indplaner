@@ -8,9 +8,6 @@
 
 
 
-  
-   
- 
 
 
  {% block content %}
@@ -35,11 +32,11 @@
 
           <li>{{ form.text.label_tag }}</li>
           <li>{{ form.text }}</li>
-          <li>{{ form.ready.label_tag }}</li>
-          <li>{{ form.ready }}</li>
+          <li>{{ form.ready.label_tag }}    {{ form.ready }}</li>
+          
 
       </ul>
-  <input type="submit" value="Отправить">
+  <input id="subbutton" type="submit" value="Отправить">
 </form>
 
 
