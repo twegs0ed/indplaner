@@ -33,6 +33,8 @@ def count_c(det,det_in_zag, lenght, ws):
 
         return {'ws': ws, 'count' : 1}
     if det/det_in_zag > 1:
+        if det%det_in_zag != 0:
+            det+=1
         count = int((det/det_in_zag)+0.9)
         l_z =(lenght - 30)/det_in_zag
         lenght = ((det*l_z) + (30*count))/count
