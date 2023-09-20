@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 class Profile(models.Model):
     '''user = models.OneToOneField(
         User,
@@ -50,13 +49,30 @@ class Operation(models.Model):
         blank=True,
         verbose_name="Название"
     )
+    def __str__(self):
+        return self.name
     class Meta:
         verbose_name = 'Операция'
         verbose_name_plural = 'Операция'
+class Machine(models.Model):
+    name=models.CharField(
+        max_length=160,
+        null=True,
+        blank=True,
+        verbose_name="Марка, модель станка"
+    )
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name = 'Станок'
+        verbose_name_plural = 'Станок'
 
 class StanProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="Операция", null=True, blank=True)
+    machines = models.ManyToManyField(Machine)
+    def __str__(self):
+        return self.user.username
     class Meta:
         verbose_name = 'Станочники'
         verbose_name_plural = 'Станочники'
