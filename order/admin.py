@@ -14,7 +14,7 @@ import re
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
-    count_minus(queryset)
+    
     queryset.update(status= Order.ORDERED)
 make_ordered.short_description = "Статус запущено"#заказано
 
