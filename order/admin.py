@@ -108,7 +108,9 @@ class FirmAdmin(admin.ModelAdmin):
     show_firm_url.short_description = 'Все детали'    
 
 def status_order_colored(obj):
-    return mark_safe('<b style="background:{};">{}</b>'.format(obj.firm.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.firm.color2, '______'))
+    if obj.firm != None:
+        return mark_safe('<b style="background:{};">{}</b>'.format(obj.firm.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.firm.color2, '______'))
+    return mark_safe('<b style="background:{};">{}</b>'.format('white','______')+'<br><b style="background:{};">{}</b>'.format('white', '______'))
 status_order_colored.allow_tags = True
 status_order_colored.short_description = "Цвет"
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
