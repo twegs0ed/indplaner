@@ -11,6 +11,7 @@ class Work(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Исполнитель")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     date = models.DateField(default=timezone.now, verbose_name="Дата выполнения работы", null=True,blank=True)#Дата получения на склад
+    time = models.TimeField(auto_now_add=True, verbose_name="Время")
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество инструмента на складе
     ready = models.BooleanField(default=True, verbose_name="Деталь готова?" )
     machines = models.ManyToManyField(Machine,  blank=True, null=True, verbose_name="Станки" )
