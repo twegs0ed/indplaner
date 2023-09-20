@@ -87,6 +87,8 @@ class OrderResource(resources.ModelResource):
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
 status_colored.allow_tags = True
+status_colored.short_description = "Цвет"
+
 
 class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -107,7 +109,8 @@ class FirmAdmin(admin.ModelAdmin):
 
 def status_order_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.firm.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.firm.color2, '______'))
-status_colored.allow_tags = True
+status_order_colored.allow_tags = True
+status_order_colored.short_description = "Цвет"
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
