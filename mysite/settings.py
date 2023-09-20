@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rangefilter',
     'import_export',
     'info',
-    'work'
+    'work',
+    'colorfield'
 ]
 SITE_ID = 1
 MIDDLEWARE = [

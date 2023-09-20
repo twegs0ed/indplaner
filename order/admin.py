@@ -89,7 +89,7 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url')
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', 'color')
     
     list_editable = ['count', 'date', 'exp_date']
     search_fields = ['title']

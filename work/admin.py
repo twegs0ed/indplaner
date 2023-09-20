@@ -18,7 +18,7 @@ def get_operation(obj):
 get_operation.short_description='Операция'
 def get_machines(obj):
     t=''
-    for machine in obj.user.stanprofile.machines.all():
+    for machine in obj.machines.all():
         t=t+machine.name+' | '
     return t
 get_machines.short_description='Станки'

@@ -4,6 +4,7 @@ from django.utils import timezone
 from profiles.models import Profile
 from tools.models import Toolsonwarehouse
 from django.utils.html import format_html
+from colorfield.fields import ColorField
 
 
 
@@ -13,11 +14,16 @@ from django.utils.html import format_html
 
 
 class Firm(models.Model):
+    COLOR_PALETTE = [
+        ("#FFFFFF", "white", ),
+        ("#000000", "black", ),
+    ]
     title = models.CharField(max_length=200, verbose_name="Изделие" )#Наименование инструмента
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество изделий
     date = models.DateField(default=timezone.now, verbose_name="Дата запуска", null=True,blank=True )
     exp_date = models.DateField(default=None, verbose_name="Срок изготовления", null=True,blank=True)#Дата получения на склад
+    color = ColorField(samples=COLOR_PALETTE)
     #tools = models.ManyToManyField(Toolsonwarehouse)
 
     def publish(self):
