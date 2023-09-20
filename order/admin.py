@@ -10,7 +10,7 @@ from rangefilter.filters import DateRangeFilter
 from django.forms import TextInput, Textarea
 from django.db import models
 from django.utils.html import format_html
-import re
+from django.utils.safestring import mark_safe
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
@@ -84,12 +84,16 @@ class OrderResource(resources.ModelResource):
         
         import_id_fields = ('tool','firm')
 
+def status_colored(obj):
+    return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
+status_colored.allow_tags = True
 
 class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', 'color')
+    
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored)
     
     list_editable = ['count', 'date', 'exp_date']
     search_fields = ['title']
@@ -100,12 +104,16 @@ class FirmAdmin(admin.ModelAdmin):
         verbose_name_plural = 'Изделия(заказы)'
         return format_html("<a href='/order/order/?firm__id__exact={url}'>Детали</a>", url=obj.pk)
     show_firm_url.short_description = 'Все детали'    
+
+def status_order_colored(obj):
+    return mark_safe('<b style="background:{};">{}</b>'.format(obj.firm.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.firm.color2, '______'))
+status_colored.allow_tags = True
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm','exp_date','text', 'printmk')
+    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']

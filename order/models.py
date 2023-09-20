@@ -24,6 +24,7 @@ class Firm(models.Model):
     date = models.DateField(default=timezone.now, verbose_name="Дата запуска", null=True,blank=True )
     exp_date = models.DateField(default=None, verbose_name="Срок изготовления", null=True,blank=True)#Дата получения на склад
     color = ColorField(samples=COLOR_PALETTE)
+    color2 = ColorField(samples=COLOR_PALETTE)
     #tools = models.ManyToManyField(Toolsonwarehouse)
 
     def publish(self):
