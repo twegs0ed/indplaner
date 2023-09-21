@@ -48,7 +48,7 @@ class Toolsonwarehouse(models.Model):
         #super(Toolsonwarehouse, self).save()
     def clean(self):
         #title_c=self.title.split (' ',1)[0]
-        alltools = Toolsonwarehouse.objects.filter(title=self.title).exclude(pk=self.pk)
+        alltools = Toolsonwarehouse.objects.filter(title=self.title).exclude(id=self.id)
         if alltools and self.id == None :
             raise ValidationError('Такие детали уже есть в базе')
 
