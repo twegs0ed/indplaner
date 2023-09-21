@@ -45,7 +45,7 @@ class WorkResource(resources.ModelResource):
 class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
    resource_class = WorkResource
    form = WorkForm
-   list_display = ('tool', full_name, 'count', 'date', get_operation, get_machines, 'text', 'ready')
+   list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, get_machines, 'text', 'ready')
    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation' ,'user',)
    search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
    autocomplete_fields = ('user', 'tool', 'machines' )
