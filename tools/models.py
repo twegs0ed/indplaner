@@ -155,33 +155,43 @@ class Priem(models.Model):
                 Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by(
                 'order_date_worker').first()
         if order_cf:
-            if self.count<order_cf.count:
-                order_cf.text=str(order_cf.text)+'\n'+dateformat.format(timezone.now(), 'd-m-Y')+" в запуске было "+str(order_cf.count)+"."
-                order_cf.count-=self.count
-                order_cf.status = order.models.Order.ORDERED
-                order_cf.save()
-            elif self.count==order_cf.count:
-                order_cf.count=0
+            safe_self_count = self.count
+            while self.count > order_cf.count:
+                print(' while self.count > order_cf.count:')
+                #сохраним количество деталей приема для дальнейцшегно восстановления значения
+                self.count-=order_cf.count
                 order_cf.status = order.models.Order.COM  
                 order_cf.save()
-            else:
-                order_cf.text='\n'+'Изготовлено '+dateformat.format(timezone.now(), 'd-m-Y')+' '+str(order_cf.count)+' шт. '
-                diff=self.count-order_cf.count
-                firm=order_cf.firm
-                order_cf.count=0
-                order_cf.status = order.models.Order.COM
-                order_cf.save()
 
-                
-                order_cf=order.models.Order()
-                order_cf.count=diff
-                order_cf.tool=self.tool
-                order_cf.text='Принято больше чем запущено(излишки) '+dateformat.format(timezone.now(), 'd-m-Y')
-                order_cf.status = order.models.Order.COM
-                order_cf.exp_date=timezone.now()
-                order_cf.firm=firm
+                order_cf = order.models.Order.objects.filter(tool=self.tool).filter(
+                Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by(
+                'order_date_worker').first()
+
+                if order_cf == None:
+                    print(' while self.count > order_cf.count:rder_cf == None')
+                    order_cf=order.models.Order()
+                    order_cf.count=self.count
+                    order_cf.tool=self.tool
+                    order_cf.text='Сформировано из "Приема"'
+                    order_cf.status = order.models.Order.COM
+                    order_cf.save()
+                    self.count = safe_self_count
+                    return 1
+            if self.count<order_cf.count:
+                print(' self.count<order_cf.count')
+
+                order_cf.text=str(order_cf.text)+'\n'+dateformat.format(timezone.now(), 'd-m-Y')+" в запуске было "+str(order_cf.count)+"."
+                order_cf.count-=self.count
+                #order_cf.status = order.models.Order.ORDERED
                 order_cf.save()
-                
+                self.count = safe_self_count
+                return 1
+            elif self.count==order_cf.count:
+                #order_cf.count=0
+                order_cf.status = order.models.Order.COM  
+                order_cf.save()
+                self.count = safe_self_count
+                return 1
             
         else:
             order_cf=order.models.Order()
