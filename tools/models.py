@@ -28,6 +28,7 @@ class Toolsonwarehouse(models.Model):
     stock_sizes = models.CharField(max_length=20, blank=True, null=True, verbose_name="Габариты заготовки" )
     count_in_one_stock = models.CharField(max_length=20, blank=True, null=True, verbose_name="Кол-во деталей из одной заготовки" )
     
+    
 
 
     def publish(self):

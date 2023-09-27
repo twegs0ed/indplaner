@@ -77,7 +77,7 @@ class OrderResource(resources.ModelResource):
     class Meta:
         model = Order
 
-        fields = ('tool', 'count','exp_date', 'firm')
+        fields = ('tool', 'count','exp_date', 'firm', 'cover')
         export_order = ('tool', 'count')
         #Eexclude = ('id',)
         #skip_unchanged=True
@@ -115,21 +115,21 @@ status_order_colored.allow_tags = True
 status_order_colored.short_description = "Цвет"
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+        models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk')
-    list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
+    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', 'cover')
+    list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'cover')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
-    list_editable = ['firm', 'count','exp_date', 'text', 'status']
+    list_editable = ['firm', 'count','exp_date', 'text', 'status', 'cover']
     ordering = ['-status','exp_date','tool']
     def printmk(self, obj):
         url = '/order/printmk'
         url = url + '/'+str(obj.id)
-        return format_html('<a href="{}">print</a>', url)
+        return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
     
     
