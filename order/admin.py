@@ -110,9 +110,10 @@ status_order_colored.short_description = "Цвет"
 def tool_cover(obj):
     if obj.tool.cover == False:
         cv='Нет'
+        return mark_safe('<b style="background:#FF7878;">{}</b>'.format(cv))
     elif obj.tool.cover == True:
         cv='Да'
-    return mark_safe('<b style="background:white;">{}</b>'.format(cv))
+        return mark_safe('<b style="background:#0EFF23;">{}</b>'.format(cv))
 tool_cover.allow_tags = True
 tool_cover.short_description = "покр."
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
