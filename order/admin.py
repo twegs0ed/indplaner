@@ -11,6 +11,8 @@ from django.forms import TextInput, Textarea
 from django.db import models
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.core.exceptions import ValidationError
+
 
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
@@ -76,14 +78,9 @@ class OrderResource(resources.ModelResource):
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
     class Meta:
         model = Order
-
         fields = ('tool', 'count','exp_date', 'firm', 'cover')
         export_order = ('tool', 'count')
-        #Eexclude = ('id',)
-        #skip_unchanged=True
-        
         import_id_fields = ('tool','firm')
-
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
 status_colored.allow_tags = True
@@ -94,9 +91,7 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    
     list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored)
-    
     list_editable = ['count', 'date', 'exp_date']
     search_fields = ['title']
     ordering = ['-date', 'exp_date']
@@ -106,25 +101,32 @@ class FirmAdmin(admin.ModelAdmin):
         verbose_name_plural = 'Изделия(заказы)'
         return format_html("<a href='/order/order/?firm__id__exact={url}'>Детали</a>", url=obj.pk)
     show_firm_url.short_description = 'Все детали'    
-
 def status_order_colored(obj):
     if obj.firm != None:
         return mark_safe('<b style="background:{};">{}</b>'.format(obj.firm.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.firm.color2, '______'))
     return mark_safe('<b style="background:{};">{}</b>'.format('white','______')+'<br><b style="background:{};">{}</b>'.format('white', '______'))
 status_order_colored.allow_tags = True
 status_order_colored.short_description = "Цвет"
+def tool_cover(obj):
+    if obj.tool.cover == False:
+        cv='Нет'
+    elif obj.tool.cover == True:
+        cv='Да'
+    return mark_safe('<b style="background:white;">{}</b>'.format(cv))
+tool_cover.allow_tags = True
+tool_cover.short_description = "покр."
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', 'cover')
-    list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'cover')
+    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover)
+    list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
-    list_editable = ['firm', 'count','exp_date', 'text', 'status', 'cover']
+    list_editable = ['firm', 'count','exp_date', 'text', 'status']
     ordering = ['-status','exp_date','tool']
     def printmk(self, obj):
         url = '/order/printmk'

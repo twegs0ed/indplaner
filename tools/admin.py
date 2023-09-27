@@ -66,7 +66,7 @@ class ToolsonwarehouseResource(resources.ModelResource):
     class Meta:
         model = Toolsonwarehouse
         #skip_unchanged=False
-        fields = ('title', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock' )
+        fields = ('title', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock', 'cover' )
         exclude = ('id',)
         export_order = ('title','count', 'workplace')
         import_id_fields=['title']
@@ -80,7 +80,7 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ToolsonwarehouseResource
     #autocomplete_fields = ['tool']
     #readonly_fields = ('need_count',)
-    list_display = ('title', 'count', 'workplace', 'created_date', 'text')
+    list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover')
     list_filter = ('workplace',)
     search_fields = ['title']
     ordering = ['title', 'created_date']

@@ -27,7 +27,7 @@ class Toolsonwarehouse(models.Model):
     material = models.TextField(max_length=500, blank=True, null=True, verbose_name="Материал" )
     stock_sizes = models.CharField(max_length=20, blank=True, null=True, verbose_name="Габариты заготовки" )
     count_in_one_stock = models.CharField(max_length=20, blank=True, null=True, verbose_name="Кол-во деталей из одной заготовки" )
-    
+    cover = models.BooleanField(default=False, verbose_name="Покрывается" )
     
 
 
@@ -37,6 +37,7 @@ class Toolsonwarehouse(models.Model):
     
 
     def save(self, *args, **kwargs):
+        
         if self.id is None:
             self.title=self.title.upper()
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
@@ -51,6 +52,12 @@ class Toolsonwarehouse(models.Model):
         #title_c=self.title.split (' ',1)[0]
         if Toolsonwarehouse.objects.filter(title__contains=self.title).exclude(id=self.id).exists():
             raise ValidationError('Такие детали уже есть в базе')
+        t=self.title.upper()
+        if t!=self.title.upper():
+            raise ValidationError(f"Названия должны быть прописными буквами({self.tool.title})")
+    
+        
+        
 
     def __str__(self):
         return self.title
