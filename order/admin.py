@@ -76,6 +76,10 @@ class OrderResource(resources.ModelResource):
         column_name='firm',
         attribute='firm',
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    cover = Field(
+        column_name='cover',
+        attribute='tool',
+        widget=ForeignKeyWidget(model=Toolsonwarehouse, field='cover'))
     class Meta:
         model = Order
         fields = ('tool', 'count','exp_date', 'firm', 'cover')
@@ -116,6 +120,8 @@ def tool_cover(obj):
         return mark_safe('<b style="background:#0EFF23;">{}</b>'.format(cv))
 tool_cover.allow_tags = True
 tool_cover.short_description = "покр."
+
+
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
@@ -134,7 +140,6 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
-    
     
     class Media:
         css = {
