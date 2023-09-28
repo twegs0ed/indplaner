@@ -165,18 +165,14 @@ class Priem(models.Model):
         if order_cf:
             safe_self_count = self.count
             while self.count > order_cf.count:
-                print(' while self.count > order_cf.count:')
                 #сохраним количество деталей приема для дальнейцшегно восстановления значения
                 self.count-=order_cf.count
                 order_cf.status = order.models.Order.COM  
                 order_cf.save()
-
                 order_cf = order.models.Order.objects.filter(tool=self.tool).filter(
                 Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by(
                 'order_date_worker').first()
-
                 if order_cf == None:
-                    print(' while self.count > order_cf.count:rder_cf == None')
                     order_cf=order.models.Order()
                     order_cf.count=self.count
                     order_cf.tool=self.tool
@@ -186,12 +182,15 @@ class Priem(models.Model):
                     self.count = safe_self_count
                     return 1
             if self.count<order_cf.count:
-                print(' self.count<order_cf.count')
-
+                order_cf1 = order_cf
                 order_cf.text=str(order_cf.text)+'\n'+dateformat.format(timezone.now(), 'd-m-Y')+" в запуске было "+str(order_cf.count)+"."
                 order_cf.count-=self.count
                 #order_cf.status = order.models.Order.ORDERED
                 order_cf.save()
+                order_cf1.pk = None
+                order_cf1.count = self.count
+                order_cf1.status = order.models.Order.COM
+                order_cf1.save()
                 self.count = safe_self_count
                 return 1
             elif self.count==order_cf.count:
@@ -199,8 +198,6 @@ class Priem(models.Model):
                 order_cf.status = order.models.Order.COM  
                 order_cf.save()
                 self.count = safe_self_count
-                return 1
-            
         else:
             order_cf=order.models.Order()
             order_cf.count=self.count
