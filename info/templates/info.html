@@ -119,6 +119,7 @@
       <th scope="col">Дата запуска</th>
       <th scope="col">Статус</th>
       <th scope="col">Комментарии</th>
+      <th scope="col">МК</th>
     </tr>
   </thead>
   <tbody>
@@ -139,6 +140,8 @@
   
  </td>
  <td>{{ order.text }}</td>
+ <td> 
+  <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
 </tr>
   {% endfor %}
 </tbody>
