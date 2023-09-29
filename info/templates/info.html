@@ -144,5 +144,51 @@
 </tbody>
 </table>
 
+
+
+
+<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Изготовление</h2></b>
+ <table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Количество</th>
+      <th scope="col">Исполнитель</th>
+      <th scope="col">Дата изготовления</th>
+      <th scope="col">Готовность</th>
+      <th scope="col">Операция</th>
+      <th scope="col">Станки</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for work in works %}
+  <tr>
+  <th scope="row"><a href="/tools/toolsonwarehouse/{{ work.tool.id }}/change/">{{ work.tool }}</a></th>
+  <td>{{work.count }}</td>
+ <td><a href="/auth/user/{{ work.user.id }}/change/">{{ work.user.first_name }} {{ work.user.last_name }}</a> </td>
+ <td>{{ work.date }} / {{ work.time }}</td>
+ <td>
+  {% if work.ready == True %}&#9989;{% endif %}
+  {% if work.ready == False %}&#10060;{% endif %}
+  </td>
+ <td>{{ work.user.stanprofile.operation }}</td>
+ <td> 
+  {% for myvalue in work.user.stanprofile.machines.all %}
+    {{myvalue}}
+    |
+  {% endfor %}
+  
+  
+  
+  </td>
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+
      {{ block.super }}
  {% endblock %}
