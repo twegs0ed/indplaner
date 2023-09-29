@@ -2,11 +2,18 @@ from django.shortcuts import render
 from tools.models import Toolsonwarehouse
 from .models import WorkForm, Work
 from django.shortcuts import redirect
+from django.http import Http404
 
 
 # Create your views here.
 def add(request, id):
-    tool = Toolsonwarehouse.objects.get(pk=id)
+    print(request.get_host())
+    if 'localhost' in request.get_host() or '1779247-cl68349.twc1.net' in request.get_host():
+        return redirect('http://cptpsk.ru/work/work/add/'+str(id))
+    try:
+        tool = Toolsonwarehouse.objects.get(pk=id)
+    except Toolsonwarehouse.DoesNotExist:
+        raise Http404
     form_class = WorkForm
     form = form_class(request.POST or None)
     if request.method == "POST":
