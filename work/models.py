@@ -20,10 +20,11 @@ class Work(models.Model):
         #self.machines = self.user.stanprofile.machines
         
 		# call the save() method of the parent
-        super(Work, self).save(*args, **kwargs)
+        
         macs=self.user.stanprofile.machines.all()
         for item in macs:
             self.machines.add(item)
+        super(Work, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Выполненные работы'

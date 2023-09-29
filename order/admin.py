@@ -78,13 +78,13 @@ class OrderResource(resources.ModelResource):
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
     cover = Field(
         column_name='cover',
-        attribute='tool',
-        widget=ForeignKeyWidget(model=Toolsonwarehouse, field='cover'))
+        attribute='cover',
+        widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='cover'))
     class Meta:
         model = Order
         fields = ('tool', 'count','exp_date', 'firm', 'cover')
         export_order = ('tool', 'count')
-        import_id_fields = ('tool','firm')
+        import_id_fields = ('tool','firm', 'exp_date')
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
 status_colored.allow_tags = True
