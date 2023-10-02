@@ -76,13 +76,10 @@ class OrderResource(resources.ModelResource):
         column_name='firm',
         attribute='firm',
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
-    cover = Field(
-        column_name='cover',
-        attribute='cover',
-        widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='cover'))
+    
     class Meta:
         model = Order
-        fields = ('tool', 'count','exp_date', 'firm', 'cover')
+        fields = ('tool', 'count','exp_date', 'firm')
         export_order = ('tool', 'count')
         import_id_fields = ('tool','firm', 'exp_date')
 def status_colored(obj):
