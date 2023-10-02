@@ -112,7 +112,7 @@ def status_order_colored(obj):
 status_order_colored.allow_tags = True
 status_order_colored.short_description = "Цвет"
 def tool_cover(obj):
-    if obj:
+    if obj.tool:
         if obj.tool.cover == False:
             cv='Нет'
             return mark_safe('<b style="background:#FF7878;">{}</b>'.format(cv))
