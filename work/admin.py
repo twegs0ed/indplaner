@@ -16,12 +16,13 @@ full_name.short_description='Исполнитель'
 def get_operation(obj):
     return obj.user.stanprofile.operation
 get_operation.short_description='Операция'
-def get_machines(obj):
+'''def get_machines(obj):
     t=''
     for machine in obj.machines.all():
         t=t+machine.name+' | '
     return t
 get_machines.short_description='Станки'
+'''
 
 class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
 
@@ -36,7 +37,7 @@ class WorkResource(resources.ModelResource):
     machines = ManyToManyWidget(Machine, separator=', ')
     class Meta:
         model = Work
-        fields = ('tool__title', 'user__first_name', 'user__last_name', 'user__stanprofile__operation__name','machines','count')
+        fields = ('tool__title', 'user__first_name', 'user__last_name', 'user__stanprofile__operation__name','count')
         export_order = fields
         #Eexclude = ('id',)
         #skip_unchanged=True
@@ -45,10 +46,10 @@ class WorkResource(resources.ModelResource):
 class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
    resource_class = WorkResource
    form = WorkForm
-   list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, get_machines, 'text', 'ready')
+   list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'text', 'ready')
    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation' ,'user',)
    search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
-   autocomplete_fields = ('user', 'tool', 'machines' )
+   autocomplete_fields = ('user', 'tool' )
 
    
 admin.site.register(Work, WorkAdmin)
