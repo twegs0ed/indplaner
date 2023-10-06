@@ -133,7 +133,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
-    ordering = ['exp_date','tool', '-status']
+    ordering = ['exp_date','-status']
     def printmk(self, obj):
         url = '/order/printmk'
         url = url + '/'+str(obj.id)
