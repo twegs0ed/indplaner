@@ -22,19 +22,16 @@ make_ordered.short_description = "Статус запущено"#заказан�
 
 #Меняем статус заказа на оплачен
 def make_payed(modeladmin, request, queryset):
-    count_minus(queryset)
     queryset.update(status= Order.PAYED)
 make_payed.short_description = "Статус отдано на сторону"#оплачено
 
 #Меняем статус заказа на "получен"
 def make_com(modeladmin, request, queryset):
-    count_plus(queryset)
     queryset.update(status= Order.COM)
 make_com.short_description = "Статус изготовлено"#получено
 
 #Меняем статус заказа на закзаан рабочим
 def make_ordered_by_worker(modeladmin, request, queryset):
-    count_minus(queryset)
     queryset.update(status= Order.ORDERED_BY_WORKER)
 make_ordered_by_worker.short_description = "Статус в запуске"#заяввка
 
