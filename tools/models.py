@@ -55,7 +55,7 @@ class Toolsonwarehouse(models.Model):
         t=self.title.upper()
         if t!=self.title.upper():
             raise ValidationError(f"Названия должны быть прописными буквами({self.tool.title})")
-        if self.count<1:
+        if self.count<0:
                 raise ValidationError(f"Отрицательное количество")
     
         
