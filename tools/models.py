@@ -55,6 +55,8 @@ class Toolsonwarehouse(models.Model):
         t=self.title.upper()
         if t!=self.title.upper():
             raise ValidationError(f"Названия должны быть прописными буквами({self.tool.title})")
+        if self.count<1:
+                raise ValidationError(f"Отрицательное количество")
     
         
         
@@ -75,6 +77,7 @@ class Tools(models.Model):
     #created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )#Дата получения на склад
     count = models.IntegerField(default=0, null=True, verbose_name="Кол-во") # Количество деталей на складе
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )
+    and_priem = models.BooleanField(default=False, verbose_name="С приемом на склад" )
     is_cleaned=False
 
 
@@ -83,6 +86,14 @@ class Tools(models.Model):
         self.save()
     
     def save(self):
+        if self.and_priem:
+            priem=Priem()
+            priem.tool=self.tool
+            priem.count=self.count
+            priem.save()
+
+
+
         if self.id is None:
             self.tool.count-=self.count
         else:
@@ -104,14 +115,14 @@ class Tools(models.Model):
             self.count#берем из базы
             count_cc = self.count#сохраняем из базы
             self.count = count_c#возвращаем то, что ввели
-            if self.tool.count+(count_cc-self.count)<0:
+            if self.tool.count+(count_cc-self.count)<0 and not self.and_priem:
                 raise ValidationError(f"На складе недостаточно деталей({self.tool.count}) для выдачи указанного количества")
             if self.count<1:
                 raise ValidationError(f"Отрицательное или нулевое количество")
         else:   
             if self.count<1:
                 raise ValidationError(f"Отрицательное или нулевое количество")
-            if self.count>self.tool.count:
+            if self.count>self.tool.count and not self.and_priem:
                 raise ValidationError(f"На складе недостаточно деталей({self.tool.count}) для выдачи указанного количества")
     def __str__(self):
         #return self.worker.username
@@ -209,10 +220,9 @@ class Priem(models.Model):
         
         
     tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Детали")
-    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, от которого принята деталь",null=True)
+    worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник, от которого принята деталь",null=True, blank=True)
     count = models.IntegerField(null=True, verbose_name="Кол-во")
-    place = models.ForeignKey(Workplace, on_delete=models.CASCADE, null=True,  verbose_name="Место хранения")
-    #default=Workplace.objects.get(name='-'),
+    place = models.ForeignKey(Workplace, on_delete=models.CASCADE, null=True,  verbose_name="Место хранения", blank=True)
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата приема")
     text = models.TextField(blank=True, null=True, verbose_name="Примечание")  # Описание
     def save(self):
