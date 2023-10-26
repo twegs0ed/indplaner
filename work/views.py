@@ -8,7 +8,7 @@ from django.http import Http404
 # Create your views here.
 def add(request, id):
     print(request.get_host())
-    if 'localhost' in request.get_host() or '1779247-cl68349.twc1.net' in request.get_host():
+    if '1779247-cl68349.twc1.net' in request.get_host():
         return redirect('http://cptpsk.ru/work/work/add/'+str(id))
     try:
         tool = Toolsonwarehouse.objects.get(pk=id)
@@ -30,8 +30,10 @@ def add(request, id):
             form.fields['user'].widget.attrs['hidden'] = True 
             form.fields['tool'].widget.attrs['readonly'] = True 
             form.fields['tool'].widget.attrs['hidden'] = True 
+
+        works = Work.objects.filter(user = request.user).order_by('-date', '-time')[:10]
             
-        return render(request, 'work.html', { 'form':form, 'tool' : tool.title, 'user' : request.user})
+        return render(request, 'work.html', { 'form':form, 'tool' : tool.title, 'user' : request.user, 'works':works})
 def detail(request, pk):
     work=Work.objects.get(pk)
     return render(request, 'work.html', { 'work':work})

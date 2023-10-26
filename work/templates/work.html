@@ -39,7 +39,24 @@
   <input id="subbutton" type="submit" value="Отправить">
 </form>
 
+Выполненные работы:
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Кол-во</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Время</th>
+    </tr>
+  </thead>
+{% for work in works %} 
+  <tr>
+<td>{{ work.tool}}</td><td>{{ work.count}}</td><td> {{ work.date }}</td><td>{{ work.time }}</td>
+</tr>
 
+
+{% endfor %}
+</table>
 
      {{ block.super }}
  {% endblock %}
