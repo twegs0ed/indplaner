@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from tools.models import Toolsonwarehouse, Tools, Priem
 from order.models import Order
 from work.models import Work
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 
 
 def info(request):

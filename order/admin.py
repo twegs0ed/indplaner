@@ -12,6 +12,8 @@ from django.db import models
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ValidationError
+from django.contrib.admin.models import LogEntry
+from datetime import datetime
 
 
 #Меняем статус заказа на  заказано
@@ -123,7 +125,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover)
+    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
@@ -136,6 +138,20 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
+    def log(self, obj):
+        logs = LogEntry.objects.filter(content_type__app_label='order', object_id = obj.id).order_by('-action_time').all()#or you can filter, etc.
+        t=""
+        for l in logs: 
+            t+='<font color="green"><b>'+str(l.user)+'</b></font>'
+            t+=" "
+            if l.action_flag==1:t+="добавил "
+            if l.action_flag==2:t+="изменил "
+            if l.action_flag==3:t+="удалил "
+            t+=datetime.strftime(l.action_time, '%d.%m.%Y')
+            t+='<br>'
+
+        return format_html(t)
+    log.short_description = "История"
     
     class Media:
         css = {
