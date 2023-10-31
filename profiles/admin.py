@@ -17,7 +17,7 @@ class StanProfileAdmin(admin.ModelAdmin):
     list_display = ('user','operation', get_machines, 'pk')
     list_editable = ['operation']
     autocomplete_fields = ['user','operation', 'machines']
-    search_fields = ['user','operation',]
+    search_fields = ['user__first_name','user__last_name', 'user__username','operation__name',]
     pass
 class OperationAdmin(admin.ModelAdmin):
     search_fields = ['name',]
