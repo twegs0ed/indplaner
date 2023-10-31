@@ -139,7 +139,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
     def log(self, obj):
-        logs = LogEntry.objects.filter(content_type__app_label='order', object_id = obj.id).order_by('-action_time').all()#or you can filter, etc.
+        logs = LogEntry.objects.filter(content_type__app_label='order', object_id = obj.id).order_by('action_time').all()#or you can filter, etc.
         t=""
         for l in logs: 
             t+='<font color="green"><b>'+str(l.user)+'</b></font>'
