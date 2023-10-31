@@ -15,6 +15,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.admin.models import LogEntry
 from datetime import datetime
 from work.models import Work
+from django.contrib.auth import get_user_model
 
 
 #Меняем статус заказа на  заказано
@@ -143,7 +144,11 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         logs = LogEntry.objects.filter(content_type__app_label='order', object_id = obj.id).order_by('action_time').all()#or you can filter, etc.
         t=""
         for l in logs: 
-            t+='<font color="green"><b>'+str(l.user.last_name)+' '+l.user.first_name+'</b></font>'
+            try:
+                name=l.user.last_name+' '+l.user.first_name[0]
+            except IndexError:
+                name=l.user.last_name+' '+l.user.first_name
+            t+='<font color="green"><b>'+name+'</b></font>'
             t+=" "
             if l.action_flag==1:t+="добавил "
             if l.action_flag==2:t+="изменил "
@@ -154,11 +159,14 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html(t)
     log.short_description = "История"
     def work(self, obj):
-        logs = LogEntry.objects.filter(content_type__app_label='order', object_id = obj.id).order_by('-action_time').all()#or you can filter, etc.
         w=Work.objects.filter(tool=obj.tool).order_by('-date', '-time').all()[:1]
         t=""
         for l in w: 
-            t+='<font color="green"><b>'+str(l.user.last_name)+' '+l.user.first_name+'</b></font> '
+            try:
+                name=l.user.last_name+' '+l.user.first_name[0]
+            except IndexError:
+                name=l.user.last_name+' '+l.user.first_name
+            t+='<font color="green"><b>'+name+'</b></font> '
             t+=datetime.strftime(l.date, '%d.%m.%Y')
             t+=' - '+str(l.count)+' шт. '
             t+=str(l.user.stanprofile.operation)
