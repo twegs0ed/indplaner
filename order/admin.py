@@ -148,13 +148,13 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 name=l.user.last_name+' '+l.user.first_name[0]
             except IndexError:
                 name=l.user.last_name+' '+l.user.first_name
-            t+='<font color="green"><b>'+name+'</b></font>'
+            t+='<p style="background-color:;"><font color=""><b>'+name+'</b></font>'
             t+=" "
             if l.action_flag==1:t+="добавил "
             if l.action_flag==2:t+="изменил "
             if l.action_flag==3:t+="удалил "
             t+=datetime.strftime(l.action_time, '%d.%m.%Y')
-            t+='<br>'
+            t+='<br></p>'
 
         return format_html(t)
     log.short_description = "История"
@@ -166,7 +166,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 name=l.user.last_name+' '+l.user.first_name[0]
             except IndexError:
                 name=l.user.last_name+' '+l.user.first_name
-            t+='<font color="green"><b>'+name+'</b></font> '
+            t+='<a href="/work/work/?q='+l.tool.title+'"><p style="background-color:;"><font color=""><b>'+name+'</b></font> '
             t+=datetime.strftime(l.date, '%d.%m.%Y')
             t+=' - '+str(l.count)+' шт. '
             t+=str(l.user.stanprofile.operation)
@@ -174,7 +174,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             for mach in l.user.stanprofile.machines.all() :
                 t+=str(mach)+' / '
             t+=')'
-            t+='<br>'
+            t+='<br></p></a>'
 
         return format_html(t)
     work.short_description = "Изгот-е"
