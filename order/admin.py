@@ -179,6 +179,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html(t)
     work.short_description = "Изгот-е"
     
+    
     class Media:
         css = {
             'all': (

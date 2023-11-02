@@ -4,10 +4,14 @@ from rangefilter.filters import DateRangeFilter
 from import_export import resources
 from import_export.widgets import ForeignKeyWidget
 from import_export.admin import ImportExportModelAdmin
-from import_export.widgets import ManyToManyWidget
+from import_export.widgets import ManyToManyWidget, CharWidget
 from import_export.fields import Field
 from profiles.models import Machine
 from django.contrib.auth.models import User
+from order.models import Order
+from django.utils.html import format_html
+from datetime import datetime
+from tools.models import Toolsonwarehouse
 
 
 def full_name(obj):
@@ -35,21 +39,63 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
 
 class WorkResource(resources.ModelResource):
     machines = ManyToManyWidget(Machine, separator=', ')
+    firm = Field()
+    def ord(self, obj):
+        o=Order.objects.filter(tool=obj.tool).order_by('-exp_date', '-order_date_worker').all()[:1]
+        print('obj')
+        t=""
+        for l in o: 
+            
+            if l.firm:
+                t+='<p style="background-color:;"><font color="">'+l.firm.title+'</font> '
+                t+=datetime.strftime(l.exp_date, '%d.%m.%Y')
+                t+=' - '+str(l.count)+' шт. '
+                t+='<br></p>'
+        obj.firm=format_html(t)
+
+        return format_html(t)
+    def before_export(self, queryset, *args, **kwargs):
+        self.firm='1'
+        return self
     class Meta:
         model = Work
-        fields = ('tool__title', 'user__first_name', 'user__last_name', 'user__stanprofile__operation__name','count')
+        fields = ('tool__title', 'user__first_name', 'user__last_name', 'user__stanprofile__operation__name','count', 'firm')
         export_order = fields
         #Eexclude = ('id',)
         #skip_unchanged=True
+    def dehydrate_firm(self, work):
+        o=Order.objects.filter(tool=work.tool).order_by('-exp_date', '-order_date_worker').all()[:1]
+        t=""
+        for l in o: 
+            
+            if l.firm:
+                t+=l.firm.title
+                if l.exp_date:t+=' срок '+datetime.strftime(l.exp_date, '%d.%m.%Y')
+                t+=' - '+str(l.count)+' шт. \n'
+        return t
         
         #import_id_fields = ('tool')
 class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-   resource_class = WorkResource
-   form = WorkForm
-   list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'text', 'ready')
-   list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation' ,'user',)
-   search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
-   autocomplete_fields = ('user', 'tool' )
+    resource_class = WorkResource
+    form = WorkForm
+    list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'text', 'ready', 'ord')
+    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation' ,'user',)
+    search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
+    autocomplete_fields = ('user', 'tool' )
+    def ord(self, obj):
+        o=Order.objects.filter(tool=obj.tool).order_by('-exp_date', '-order_date_worker').all()[:1]
+
+        t=""
+        for l in o: 
+            
+            if l.firm:
+                t+='<p style="background-color:;"><font color="">'+l.firm.title+'</font> '
+                t+=datetime.strftime(l.exp_date, '%d.%m.%Y')
+                t+=' - '+str(l.count)+' шт. '
+                t+='<br></p>'
+
+        return format_html(t)
+    ord.short_description = "Изделие"
 
    
 admin.site.register(Work, WorkAdmin)
