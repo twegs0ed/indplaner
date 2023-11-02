@@ -40,26 +40,15 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
 class WorkResource(resources.ModelResource):
     machines = ManyToManyWidget(Machine, separator=', ')
     firm = Field()
-    def ord(self, obj):
-        o=Order.objects.filter(tool=obj.tool).order_by('-exp_date', '-order_date_worker').all()[:1]
-        print('obj')
-        t=""
-        for l in o: 
-            
-            if l.firm:
-                t+='<p style="background-color:;"><font color="">'+l.firm.title+'</font> '
-                t+=datetime.strftime(l.exp_date, '%d.%m.%Y')
-                t+=' - '+str(l.count)+' шт. '
-                t+='<br></p>'
-        obj.firm=format_html(t)
+    machines = Field()
+    
 
-        return format_html(t)
     def before_export(self, queryset, *args, **kwargs):
         self.firm='1'
         return self
     class Meta:
         model = Work
-        fields = ('tool__title', 'user__first_name', 'user__last_name', 'user__stanprofile__operation__name','count', 'firm')
+        fields = ('tool__title', 'user__first_name', 'user__last_name', 'user__stanprofile__operation__name','count', 'firm','machines')
         export_order = fields
         #Eexclude = ('id',)
         #skip_unchanged=True
@@ -73,13 +62,20 @@ class WorkResource(resources.ModelResource):
                 if l.exp_date:t+=' срок '+datetime.strftime(l.exp_date, '%d.%m.%Y')
                 t+=' - '+str(l.count)+' шт. \n'
         return t
+    def dehydrate_machines(self, work):
+        ms=work.user.stanprofile.machines.all()
+        t=""
+        for m in ms:
+            t+=m.name+'\n'
+        
+        return t
         
         #import_id_fields = ('tool')
 class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = WorkResource
     form = WorkForm
     list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'text', 'ready', 'ord')
-    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation' ,'user',)
+    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation' ,'user', 'user__stanprofile__machines')
     search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
     autocomplete_fields = ('user', 'tool' )
     def ord(self, obj):
