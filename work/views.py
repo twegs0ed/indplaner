@@ -7,13 +7,15 @@ from django.http import Http404
 
 # Create your views here.
 def add(request, id):
-    print(request.get_host())
     if '1779247-cl68349.twc1.net' in request.get_host():
         return redirect('http://cptpsk.ru/work/work/add/'+str(id))
+    if request.user.groups.filter(name='sclad').exists():
+            return redirect('/work/workaddsclad/'+str(id))
     try:
         tool = Toolsonwarehouse.objects.get(pk=id)
     except Toolsonwarehouse.DoesNotExist:
         raise Http404
+    
     form_class = WorkForm
     form = form_class(request.POST or None)
     if request.method == "POST":
@@ -25,6 +27,7 @@ def add(request, id):
         form=WorkForm(initial={'tool': tool, 'user':request.user})
         if request.user.groups.filter(name='master').exists():
             return redirect('/work/work/add/')
+        
         if request.user.groups.filter(name='worker').exists():
             form.fields['user'].widget.attrs['readonly'] = True 
             form.fields['user'].widget.attrs['hidden'] = True 
@@ -34,6 +37,10 @@ def add(request, id):
         works = Work.objects.filter(user = request.user).order_by('-date', '-time')[:10]
             
         return render(request, 'work.html', { 'form':form, 'tool' : tool.title, 'user' : request.user, 'works':works})
+def addsclad(request, id):
+    
+    print("!!!!!!!!!!")
+    return render(request, 'worksclad.html', { 'id':id, })
 def detail(request, pk):
     work=Work.objects.get(pk)
     return render(request, 'work.html', { 'work':work})
