@@ -64,9 +64,11 @@ class WorkResource(resources.ModelResource):
         return t
     def dehydrate_machines(self, work):
         ms=work.machines.all()
-        t=""
-        for m in ms:
-            t+=m.name+' ()'
+        if ms:
+            t=""
+            for m in ms:
+                t+=m.name+' ()'
+        else: t='отсутствует'
         
         return t
         
@@ -75,7 +77,7 @@ class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = WorkResource
     form = WorkForm
     list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'get_machines', 'text', 'ready', 'ord')
-    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation' ,'user', 'user__stanprofile__machines')
+    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation', 'machines' ,'user')
     search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
     autocomplete_fields = ('user', 'tool' )
     def get_machines(self, obj):
@@ -89,7 +91,7 @@ class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             
             if l.firm:
                 t+='<p style="background-color:;"><font color="">'+l.firm.title+'</font> '
-                t+=datetime.strftime(l.exp_date, '%d.%m.%Y')
+                if l.exp_date:t+=datetime.strftime(l.exp_date, '%d.%m.%Y')
                 t+=' - '+str(l.count)+' шт. '
                 t+='<br></p>'
 
