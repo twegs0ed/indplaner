@@ -179,12 +179,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html(t)
     work.short_description = "Изгот-е"
     def c_count(self, obj):
-        w = Toolsonwarehouse.objects.filter(title=obj.tool).all()
-        
-        t= w[0]
-        t=t.count
-        
-        t='<b>'+str(w.count)+'</b>'
+        t=' <a href = "/tools/toolsonwarehouse/?q='+obj.tool.title+'">'+str(obj.tool.count)+'</a> '
         return format_html(t)
     c_count.short_description = "На скл."
     
