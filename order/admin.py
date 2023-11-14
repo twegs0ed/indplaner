@@ -127,7 +127,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work')
+    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
@@ -178,6 +178,11 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         return format_html(t)
     work.short_description = "Изгот-е"
+    def c_count(self, obj):
+        w=Toolsonwarehouse.objects.get(title=obj.tool)
+        t='<b>'+str(w.count)+'</b>'
+        return format_html(t)
+    c_count.short_description = "На скл."
     
     
     class Media:
