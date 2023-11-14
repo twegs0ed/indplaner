@@ -9,11 +9,14 @@
 
 .column-tool {
     max-width: 150px;
+    padding-right: 150px !important;
    
 }
 .field-tool {
     max-width: 150px;
+    overflow: hidden;
    
 }
+
 
 
