@@ -60,7 +60,7 @@ class WorkResource(resources.ModelResource):
             if l.firm:
                 t+=l.firm.title
                 if l.exp_date:t+=' срок '+datetime.strftime(l.exp_date, '%d.%m.%Y')
-                t+=' - '+str(l.count)+' шт. ()'
+                #t+=' - '+str(l.count)+' шт. ()'
         return t
     def dehydrate_machines(self, work):
         ms=work.machines.all()
