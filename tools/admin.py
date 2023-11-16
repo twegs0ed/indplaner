@@ -150,6 +150,7 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = ['tool', 'place','worker']
     list_display = ('tool', 'count', 'giveout_date', 'text')
     #list_filter = (('giveout_date', DateRangeFilter))
+    list_filter = (('giveout_date', DateRangeFilter),)
     search_fields = ['tool__title']
     list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
