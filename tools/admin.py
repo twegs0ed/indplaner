@@ -41,7 +41,7 @@ class ToolsResource(resources.ModelResource):
     class Meta:
         model = Tools
         
-        fields = ('tool__title', 'count','worker__bio')
+        fields = ('tool__title', 'count','worker__bio', 'giveout_date')
         export_order = ('tool__title', 'worker__bio', 'count')
 
 class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
