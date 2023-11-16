@@ -48,7 +48,7 @@ class WorkResource(resources.ModelResource):
         return self
     class Meta:
         model = Work
-        fields = ('tool__title', 'user__first_name', 'user__last_name', 'user__stanprofile__operation__name','count', 'firm','machines')
+        fields = ('tool__title', 'user__first_name', 'user__last_name', 'date', 'user__stanprofile__operation__name','count', 'firm','machines')
         export_order = fields
         #Eexclude = ('id',)
         #skip_unchanged=True
