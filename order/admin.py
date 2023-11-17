@@ -77,16 +77,18 @@ class OrderResource(resources.ModelResource):
         column_name='firm',
         attribute='firm',
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
-    
     class Meta:
         model = Order
-        fields = ('tool', 'count','exp_date', 'firm')
+        fields = ('tool', 'count','exp_date', 'firm', 'status')
         export_order = ('tool', 'count')
         import_id_fields = ('tool','firm', 'exp_date')
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
 status_colored.allow_tags = True
 status_colored.short_description = "Цвет"
+
+
+
 
 
 class FirmAdmin(admin.ModelAdmin):
