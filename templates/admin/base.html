@@ -39,6 +39,7 @@
         {% if has_permission %}
         <div id="user-tools">
           <a href="/info">Сводная по детали</a>
+          <a href="/info/gantt">График Ганта</a>
             {% block welcome-msg %}
                 {% translate 'Welcome,' %}
                 <strong>{% firstof user.get_short_name user.get_username %}</strong>.
