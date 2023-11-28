@@ -19,3 +19,4 @@ xlsxwriter
 qrcode
 pillow
 django-colorfield
+plotly

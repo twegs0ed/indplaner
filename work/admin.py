@@ -59,6 +59,7 @@ class WorkResource(resources.ModelResource):
             
             if l.firm:
                 t+=l.firm.title
+                t+='\n'
                 if l.exp_date:t+=' срок '+datetime.strftime(l.exp_date, '%d.%m.%Y')
                 #t+=' - '+str(l.count)+' шт. ()'
         return t

@@ -19,29 +19,17 @@
   {{ form }}
   <input type="submit" value="Submit">
 </form>
- <script src="{% static 'js/cdn.anychart.com_releases_8.6.0_js_anychart-core.min.js' %}"></script>
- <script src="{% static 'js/cdn.anychart.com_releases_8.6.0_js_anychart-gantt.min.js' %}"></script>
- <div id = "container" ></div>
-<script>
-anychart.onDocumentReady(function () {
-	// create data
-  var data = {{data|safe}}; 
-	// create a data tree
-	var treeData = anychart.data.tree(data, "as-tree");
 
-	// create a chart
-	var chart = anychart.ganttProject();
+{% autoescape off %}
+        {{ plot_div }}
+    {% endautoescape %}
 
-	// set the data
-	chart.data(treeData);
-	// configure the scale
-	chart.getTimeline().scale().maximum(Date.UTC(2024, 1, 1));
-	// set the container id
-	chart.container("container");
-	// initiate drawing the chart
-	chart.draw();
-	// fit elements to the width of the timeline
-	chart.fitAll();
-});
-</script>
+
+	{% autoescape off %}
+        {{ hist_div }}
+    {% endautoescape %}
+
+	Ленточнопильная:{{norms.lentopil}} часов =  {% widthratio norms.lentopil 8 1 %} смен = {% widthratio norms.lentopil 16 1 %} рабочих дней
+
+
  {% endblock %}

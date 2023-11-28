@@ -15,9 +15,6 @@ import re
 
 
 
-
-
-
 class Toolsonwarehouse(models.Model):
     title = models.CharField(max_length=200, verbose_name="Обозначение" )#Наименование детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
@@ -28,6 +25,36 @@ class Toolsonwarehouse(models.Model):
     stock_sizes = models.CharField(max_length=20, blank=True, null=True, verbose_name="Габариты заготовки" )
     count_in_one_stock = models.CharField(max_length=20, blank=True, null=True, verbose_name="Кол-во деталей из одной заготовки" )
     cover = models.BooleanField(default=False, verbose_name="Покрывается" )
+
+    norm_lentopil_p = models.FloatField(default=0,blank=True, verbose_name="Ленточнопильная п/з, ч." )
+    norm_lentopil = models.FloatField(default=0,blank=True, verbose_name="Ленточнопильная, ч." )
+    
+    norm_plazma_p = models.FloatField(default=0,blank=True, verbose_name="Плазма п/з, ч." )
+    norm_plazma = models.FloatField(default=0,blank=True, verbose_name="Плазма, ч." )
+
+    norm_turn_p = models.FloatField(default=0,blank=True, verbose_name="Токарнаяп/з, ч." )
+    norm_turn = models.FloatField(default=0,blank=True, verbose_name="Токарная, ч." )
+
+
+    norm_mill_p = models.FloatField(default=0,blank=True, verbose_name="Фрезернаяп/з, ч." )
+    norm_mill = models.FloatField(default=0,blank=True, verbose_name="Фрезерная, ч." )
+
+    norm_electro_p = models.FloatField(default=0,blank=True, verbose_name="Электроэрозионная п/з, ч." )
+    norm_electro = models.FloatField(default=0,blank=True, verbose_name="Электроэрозионная, ч." )
+
+
+    norm_slesarn = models.FloatField(default=0,blank=True, verbose_name="Слесарная, ч." )
+
+
+    norm_sverliln_p = models.FloatField(default=0,blank=True, verbose_name="Сверлильная п/з, ч." )
+    norm_sverliln = models.FloatField(default=0,blank=True, verbose_name="Сверлильная, ч." )
+
+
+    norm_rastoch_p = models.FloatField(default=0,blank=True, verbose_name="Расточная п/з, ч." )
+    norm_rastoch = models.FloatField(default=0,blank=True, verbose_name="Расточная, ч." )
+
+
+    
     
 
 

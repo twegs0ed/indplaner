@@ -7,6 +7,10 @@ from work.models import Work
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from datetime import datetime 
 from django.utils.dateformat import format
+import pandas as pd
+from plotly.offline import plot
+import plotly.graph_objects as go
+import plotly.express as px
 
 
 def info(request):
@@ -32,39 +36,127 @@ def gantt(request):
     form = SearchtoolForm()
     
     
-
     
-    data = [{
-		'id': "1",
-		'name': request.GET.get('tool'),
-        
-		'actualStart':int(round(projects[0].order_date_worker.timestamp() * 1000)),
-		'actualEnd': int(round(datetime.timestamp(datetime.combine(projects[len(projects)-1].exp_date, datetime.min.time())))*1000)  ,
-		'children': [
-			
+    def status(x):
+        if x=="OW": return "В запуске"
+        if x=="OR": return "Запущено"
+        if x=="PD": return "На стороне"
+        if x=="CM": return "Изготовлено"
+        pass
 
-		]
-	}]
-    prew_id=0
+
+    projects_data = [
+        {
+            'Деталь': x.tool.title,
+            'Start': datetime.date(x.order_date_worker),
+            'Finish': x.exp_date,
+            'Статус': status(x.status)
+        } for x in projects
+    ]
+    df = pd.DataFrame(projects_data)
+    
+    fig = px.timeline(
+        df, x_start="Start", x_end="Finish", y="Деталь", color="Статус"
+    )
+    
+    fig.update_yaxes(autorange="reversed")
+    gantt_plot = plot(fig, output_type="div")
+
+
+    lentopil=0.0
+    plazma=0.0
+    turn=0.0
+    mill=0.0
+    electro=0.0
+    slesarn=0.0
+    sverliln=0.0
+    rastoch=0.0
     for p in projects:
-        if p.exp_date:
-            d=int(round(datetime.timestamp(datetime.combine(p.exp_date, datetime.min.time())))*1000) 
-        else: d=1700164761000
-        prc={
-				'id': p.id,
-				'name': p.tool.title,
-				'actualStart':int(round(p.order_date_worker.timestamp() * 1000)),
-                
-		        'actualEnd': d,
-				'connectTo': prew_id,
-				'connectorType': "finish-start",
-				'progressValue': "75%"
-			}
-        prew_id=p.id
-        data[0]['children'].append(prc)
+        lentopil+=p.tool.norm_lentopil
+        if p.tool.count>0:lentopil+=p.tool.norm_lentopil_p/p.tool.count
+
+        plazma+=p.tool.norm_plazma
+        if p.tool.count>0:plazma+=p.tool.norm_plazma_p/p.tool.count
+
+        turn+=p.tool.norm_turn
+        if p.tool.count>0:turn+=p.tool.norm_turn_p/p.tool.count
+
+        mill+=p.tool.norm_mill
+        if p.tool.count>0:mill+=p.tool.norm_mill_p/p.tool.count
+
+        electro+=p.tool.norm_electro
+        if p.tool.count>0:electro+=p.tool.norm_electro_p/p.tool.count
+
+        slesarn+=p.tool.norm_slesarn
+
+        sverliln+=p.tool.norm_sverliln
+        if p.tool.count>0:sverliln+=p.tool.norm_sverliln_p/p.tool.count
+
+        rastoch+=p.tool.norm_rastoch
+        if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count
+    norms={
+        'lentopil':lentopil,
+        'plazma':plazma,
+        'turn':turn,
+        'mill':mill,
+        'electro':electro,
+        'slesarn':slesarn,
+        'sverliln':sverliln,
+        'rastoch':rastoch,
+        }
+    
+
+    projects_data = [
+        
+        {
+            'Операция': "Ленточнопильная",
+            'Время, ч': lentopil,
+        }, 
+        {
+            'Операция': "Плазма",
+            'Время, ч': plazma,
+        }, 
+        {
+            'Операция': "Токарная",
+            'Время, ч': turn,
+        },
+        {
+            'Операция': "Фрезерная",
+            'Время, ч': mill,
+        }, 
+        {
+            'Операция': "Электроэрозионная",
+            'Время, ч': electro,
+        }, 
+        {
+            'Операция': "Слесарная",
+            'Время, ч': slesarn,
+        }, 
+        {
+            'Операция': "Сверлильная",
+            'Время, ч': sverliln,
+        }, 
+        {
+            'Операция': "Расточная",
+            'Время, ч': rastoch,
+        }, 
+    ]
+    dfh = pd.DataFrame(projects_data)
+
+    hist = px.histogram(dfh, x="Операция",y="Время, ч", color="Время, ч", title='Трудозатраты по операциям' )
+    hist_plot = plot(hist, output_type="div")
+    
+
+    context = {
+        'plot_div': gantt_plot,
+        'form':form,
+        'hist_div': hist_plot,
+        'norms':norms
+        }
+    return render(request, 'gantt.html', context)
     
     
         
-    return render(request, 'gantt.html', { 'data':data, 'form':form})
+    
 
 
