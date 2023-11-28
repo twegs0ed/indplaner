@@ -72,27 +72,27 @@ def gantt(request):
     sverliln=0.0
     rastoch=0.0
     for p in projects:
-        lentopil+=p.tool.norm_lentopil
+        lentopil+=p.tool.norm_lentopil*p.count
         if p.tool.count>0:lentopil+=p.tool.norm_lentopil_p/p.tool.count
 
-        plazma+=p.tool.norm_plazma
+        plazma+=p.tool.norm_plazma*p.count
         if p.tool.count>0:plazma+=p.tool.norm_plazma_p/p.tool.count
 
-        turn+=p.tool.norm_turn
+        turn+=p.tool.norm_turn*p.count
         if p.tool.count>0:turn+=p.tool.norm_turn_p/p.tool.count
 
-        mill+=p.tool.norm_mill
+        mill+=p.tool.norm_mill*p.count
         if p.tool.count>0:mill+=p.tool.norm_mill_p/p.tool.count
 
-        electro+=p.tool.norm_electro
+        electro+=p.tool.norm_electro*p.count
         if p.tool.count>0:electro+=p.tool.norm_electro_p/p.tool.count
 
-        slesarn+=p.tool.norm_slesarn
+        slesarn+=p.tool.norm_slesarn*p.count
 
-        sverliln+=p.tool.norm_sverliln
+        sverliln+=p.tool.norm_sverliln*p.count
         if p.tool.count>0:sverliln+=p.tool.norm_sverliln_p/p.tool.count
 
-        rastoch+=p.tool.norm_rastoch
+        rastoch+=p.tool.norm_rastoch*p.count
         if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count
     norms={
         'lentopil':lentopil,

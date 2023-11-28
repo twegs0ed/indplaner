@@ -66,7 +66,9 @@ class ToolsonwarehouseResource(resources.ModelResource):
     class Meta:
         model = Toolsonwarehouse
         #skip_unchanged=False
-        fields = ('title', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock', 'cover', 'norm_lentopil_p','norm_lentopil','norm_plazma_p','norm_plazma','norm_turn_p','norm_turn','norm_mill_p','norm_mill','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
+        fields = ('title', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock', 'cover', 
+                  'norm_lentopil_p','norm_lentopil','norm_plazma_p','norm_plazma','norm_turn_p','norm_turn','norm_mill_p',
+                  'norm_mill','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
         exclude = ('id',)
         export_order = ('title','count', 'workplace')
         import_id_fields=['title']
