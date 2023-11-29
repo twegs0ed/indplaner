@@ -67,13 +67,15 @@ def gantt(request):
     plazma=0.0
     turn=0.0
     mill=0.0
+    turnun=0.0
+    millun=0.0
     electro=0.0
     slesarn=0.0
     sverliln=0.0
     rastoch=0.0
     for p in projects:
-        lentopil+=p.tool.norm_lentopil*p.count
-        if p.tool.count>0:lentopil+=p.tool.norm_lentopil_p/p.tool.count
+        lentopil+=(p.tool.norm_lentopil*p.count)
+        if p.count>0:lentopil+=p.tool.norm_lentopil_p/p.count
 
         plazma+=p.tool.norm_plazma*p.count
         if p.tool.count>0:plazma+=p.tool.norm_plazma_p/p.tool.count
@@ -83,6 +85,12 @@ def gantt(request):
 
         mill+=p.tool.norm_mill*p.count
         if p.tool.count>0:mill+=p.tool.norm_mill_p/p.tool.count
+
+        turnun+=p.tool.norm_turnun*p.count
+        if p.tool.count>0:turnun+=p.tool.norm_turnun_p/p.tool.count
+
+        millun+=p.tool.norm_millun*p.count
+        if p.tool.count>0:millun+=p.tool.norm_millun_p/p.tool.count
 
         electro+=p.tool.norm_electro*p.count
         if p.tool.count>0:electro+=p.tool.norm_electro_p/p.tool.count
@@ -99,6 +107,8 @@ def gantt(request):
         'plazma':plazma,
         'turn':turn,
         'mill':mill,
+        'turnun':turnun,
+        'millun':millun,
         'electro':electro,
         'slesarn':slesarn,
         'sverliln':sverliln,
@@ -117,11 +127,19 @@ def gantt(request):
             'Время, ч': plazma,
         }, 
         {
-            'Операция': "Токарная",
+            'Операция': "Токарная ЧПУ",
             'Время, ч': turn,
         },
         {
-            'Операция': "Фрезерная",
+            'Операция': "Фрезерная ЧПУ",
+            'Время, ч': mill,
+        }, 
+        {
+            'Операция': "Токарная универс.",
+            'Время, ч': turn,
+        },
+        {
+            'Операция': "Фрезерная универс.",
             'Время, ч': mill,
         }, 
         {
@@ -145,7 +163,6 @@ def gantt(request):
 
     hist = px.histogram(dfh, x="Операция",y="Время, ч", color="Время, ч", title='Трудозатраты по операциям' )
     hist_plot = plot(hist, output_type="div")
-    
 
     context = {
         'plot_div': gantt_plot,

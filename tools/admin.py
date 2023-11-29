@@ -68,7 +68,8 @@ class ToolsonwarehouseResource(resources.ModelResource):
         #skip_unchanged=False
         fields = ('title', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock', 'cover', 
                   'norm_lentopil_p','norm_lentopil','norm_plazma_p','norm_plazma','norm_turn_p','norm_turn','norm_mill_p',
-                  'norm_mill','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
+                  'norm_mill','norm_turnun_p','norm_turnun','norm_millun_p',
+                  'norm_millun','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
         exclude = ('id',)
         export_order = ('title','count', 'workplace')
         import_id_fields=['title']

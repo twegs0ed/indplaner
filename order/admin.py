@@ -97,6 +97,11 @@ class OrderResource(resources.ModelResource):
     norm_turn_p = Field()
     norm_turn = Field()
     norm_mill_p = Field()
+    norm_mill = Field()
+    norm_turnun_p = Field()
+    norm_turnun = Field()
+    norm_millun_p = Field()
+    norm_millun = Field()
     norm_electro_p = Field()
     norm_electro = Field()
     norm_slesarn = Field()
@@ -107,7 +112,8 @@ class OrderResource(resources.ModelResource):
     class Meta:
         model = Order
         fields = ('tool', 'count','exp_date', 'firm', 'status', 'norm_lentopil_p', 'norm_lentopil', 'norm_plazma_p', 'norm_plazma', 'norm_turn_p',
-                  'norm_turn', 'norm_mill_p', 'norm_mill', 'norm_electro_p', 'norm_electro', 
+                  'norm_turn', 'norm_mill_p', 'norm_mill', 'norm_electro_p', 'norm_electro', 'norm_turnun_p',
+                  'norm_turnun', 'norm_millun_p', 'norm_millun',
                   'norm_slesarn', 'norm_sverliln_p', 'norm_sverliln', 'norm_rastoch_p', 'norm_rastoch')
         export_order = ('tool', 'count')
         import_id_fields = ('tool','firm', 'exp_date')
@@ -119,13 +125,19 @@ class OrderResource(resources.ModelResource):
     def dehydrate_norm_turn(self, order): return order.count*order.tool.norm_turn
     def dehydrate_norm_mill_p(self, order): return order.tool.norm_mill_p
     def dehydrate_norm_mill(self, order): return order.count*order.tool.norm_mill
-    def dehydrate_ (self, order): return order.count*order.tool.norm_turn
-    def dehydrate_norm_electro(self, order): return order.count*order.tool.norm_turn
-    def dehydrate_norm_slesarn(self, order): return order.count*order.tool.norm_turn
-    def dehydrate_norm_sverliln_p(self, order): return order.count*order.tool.norm_turn
-    def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_turn
-    def dehydrate_norm_rastoch_p(self, order): return order.count*order.tool.norm_turn
-    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_turn
+    
+    def dehydrate_norm_turnun_p(self, order): return order.tool.norm_turnun_p
+    def dehydrate_norm_turnun(self, order): return order.count*order.tool.norm_turnun
+    def dehydrate_norm_millun_p(self, order): return order.tool.norm_millun_p
+    def dehydrate_norm_millun(self, order): return order.count*order.tool.norm_millun
+
+    def dehydrate_norm_electro_p (self, order): return order.tool.norm_electro_p
+    def dehydrate_norm_electro(self, order): return order.count*order.tool.norm_electro
+    def dehydrate_norm_slesarn(self, order): return order.count*order.tool.norm_slesarn
+    def dehydrate_norm_sverliln_p(self, order): return order.tool.norm_sverliln_p
+    def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_sverliln
+    def dehydrate_norm_rastoch_p(self, order): return order.tool.norm_rastoch_p
+    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch
 
 
 

@@ -32,12 +32,18 @@ class Toolsonwarehouse(models.Model):
     norm_plazma_p = models.FloatField(default=0,blank=True, verbose_name="Плазма п/з, ч." )
     norm_plazma = models.FloatField(default=0,blank=True, verbose_name="Плазма, ч." )
 
-    norm_turn_p = models.FloatField(default=0,blank=True, verbose_name="Токарнаяп/з, ч." )
-    norm_turn = models.FloatField(default=0,blank=True, verbose_name="Токарная, ч." )
+    norm_turn_p = models.FloatField(default=0,blank=True, verbose_name="Токарная ЧПУ п/з, ч." )
+    norm_turn = models.FloatField(default=0,blank=True, verbose_name="Токарная ЧПУ, ч." )
+
+    norm_turnun_p = models.FloatField(default=0,blank=True, verbose_name="Токарная универс. п/з, ч." )
+    norm_turnun = models.FloatField(default=0,blank=True, verbose_name="Токарная универс., ч." )
 
 
-    norm_mill_p = models.FloatField(default=0,blank=True, verbose_name="Фрезернаяп/з, ч." )
-    norm_mill = models.FloatField(default=0,blank=True, verbose_name="Фрезерная, ч." )
+    norm_mill_p = models.FloatField(default=0,blank=True, verbose_name="Фрезерная ЧПУ п/з, ч." )
+    norm_mill = models.FloatField(default=0,blank=True, verbose_name="Фрезерная ЧПУ, ч." )
+
+    norm_millun_p = models.FloatField(default=0,blank=True, verbose_name="Фрезерная универс. п/з, ч." )
+    norm_millun = models.FloatField(default=0,blank=True, verbose_name="Фрезерная универс. , ч." )
 
     norm_electro_p = models.FloatField(default=0,blank=True, verbose_name="Электроэрозионная п/з, ч." )
     norm_electro = models.FloatField(default=0,blank=True, verbose_name="Электроэрозионная, ч." )
