@@ -79,7 +79,9 @@ class OrderResource(resources.ModelResource):
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
     class Meta:
         model = Order
-        fields = ('tool', 'count','exp_date', 'firm', 'status')
+        fields = ('tool', 'count','exp_date', 'firm', 'status', 'norm_lentopil_p', 'tool__norm_lentopil', 'tool__norm_plazma_p', 'tool__norm_plazma', 'tool__norm_turn_p',
+                  'tool__norm_turn', 'tool__norm_mill_p', 'tool__norm_mill', 'tool__norm_electro_p', 'tool__norm_electro', 
+                  'tool__norm_slesarn', 'tool__norm_sverliln_p', 'tool__norm_sverliln', 'tool__norm_rastoch_p', 'tool__norm_rastoch')
         export_order = ('tool', 'count')
         import_id_fields = ('tool','firm', 'exp_date')
 def status_colored(obj):
