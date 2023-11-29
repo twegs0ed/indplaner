@@ -77,13 +77,61 @@ class OrderResource(resources.ModelResource):
         column_name='firm',
         attribute='firm',
         widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    '''norm_lentopil_p = Field(column_name='Тпз лентопильная')
+    norm_lentopil = Field(column_name='Тшт лентопильная')
+    norm_plazma_p = Field(column_name='Тпз плазма')
+    norm_plazma = Field(column_name='Тшт плазма')
+    norm_turn_p = Field(column_name='Тпз токарная')
+    norm_turn = Field(column_name='Тшт токарная')
+    norm_mill_p = Field(column_name='Тпз фрезерная')
+    norm_electro_p = Field(column_name='Тпз электроэрозионная')
+    norm_electro = Field(column_name='Тшт электроэрозионная')
+    norm_slesarn = Field(column_name='Т слесарная')
+    norm_sverliln_p = Field(column_name='Т сверлильная')
+    norm_rastoch_p = Field(column_name='Тпз расточная')
+    norm_rastoch = Field(column_name='Тшт расточная')'''
+    norm_lentopil_p = Field()
+    norm_lentopil = Field()
+    norm_plazma_p = Field()
+    norm_plazma = Field()
+    norm_turn_p = Field()
+    norm_turn = Field()
+    norm_mill_p = Field()
+    norm_electro_p = Field()
+    norm_electro = Field()
+    norm_slesarn = Field()
+    norm_sverliln_p = Field()
+    norm_rastoch_p = Field()
+    norm_rastoch = Field()
+    
     class Meta:
         model = Order
-        fields = ('tool', 'count','exp_date', 'firm', 'status', 'norm_lentopil_p', 'tool__norm_lentopil', 'tool__norm_plazma_p', 'tool__norm_plazma', 'tool__norm_turn_p',
-                  'tool__norm_turn', 'tool__norm_mill_p', 'tool__norm_mill', 'tool__norm_electro_p', 'tool__norm_electro', 
-                  'tool__norm_slesarn', 'tool__norm_sverliln_p', 'tool__norm_sverliln', 'tool__norm_rastoch_p', 'tool__norm_rastoch')
+        fields = ('tool', 'count','exp_date', 'firm', 'status', 'norm_lentopil_p', 'norm_lentopil', 'norm_plazma_p', 'norm_plazma', 'norm_turn_p',
+                  'norm_turn', 'norm_mill_p', 'norm_mill', 'norm_electro_p', 'norm_electro', 
+                  'norm_slesarn', 'norm_sverliln_p', 'norm_sverliln', 'norm_rastoch_p', 'norm_rastoch')
         export_order = ('tool', 'count')
         import_id_fields = ('tool','firm', 'exp_date')
+    def dehydrate_norm_lentopil_p(self, order): return order.tool.norm_lentopil_p
+    def dehydrate_norm_lentopil(self, order): return order.count*order.tool.norm_lentopil
+    def dehydrate_norm_plazma_p(self, order): return order.tool.norm_plazma_p
+    def dehydrate_norm_plazma(self, order): return order.count*order.tool.norm_plazma
+    def dehydrate_norm_turn_p(self, order): return order.tool.norm_turn_p
+    def dehydrate_norm_turn(self, order): return order.count*order.tool.norm_turn
+    def dehydrate_norm_mill_p(self, order): return order.tool.norm_mill_p
+    def dehydrate_norm_mill(self, order): return order.count*order.tool.norm_mill
+    def dehydrate_ (self, order): return order.count*order.tool.norm_turn
+    def dehydrate_norm_electro(self, order): return order.count*order.tool.norm_turn
+    def dehydrate_norm_slesarn(self, order): return order.count*order.tool.norm_turn
+    def dehydrate_norm_sverliln_p(self, order): return order.count*order.tool.norm_turn
+    def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_turn
+    def dehydrate_norm_rastoch_p(self, order): return order.count*order.tool.norm_turn
+    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_turn
+
+
+
+
+
+            
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
 status_colored.allow_tags = True
