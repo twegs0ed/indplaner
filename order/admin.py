@@ -90,7 +90,7 @@ class OrderResource(resources.ModelResource):
     norm_sverliln_p = Field(column_name='Т сверлильная')
     norm_rastoch_p = Field(column_name='Тпз расточная')
     norm_rastoch = Field(column_name='Тшт расточная')'''
-    norm_lentopil_p = Field()
+    '''norm_lentopil_p = Field()
     norm_lentopil = Field()
     norm_plazma_p = Field()
     norm_plazma = Field()
@@ -107,7 +107,7 @@ class OrderResource(resources.ModelResource):
     norm_slesarn = Field()
     norm_sverliln_p = Field()
     norm_rastoch_p = Field()
-    norm_rastoch = Field()
+    norm_rastoch = Field()'''
     
     
     class Meta:
@@ -118,7 +118,7 @@ class OrderResource(resources.ModelResource):
                   'norm_millun','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
         export_order = ('tool', 'count', 'exp_date','firm')
         import_id_fields = ('tool','firm', 'exp_date')
-    def dehydrate_norm_lentopil_p(self, order): return order.tool.norm_lentopil_p
+    '''def dehydrate_norm_lentopil_p(self, order): return order.tool.norm_lentopil_p
     def dehydrate_norm_lentopil(self, order): return order.count*order.tool.norm_lentopil
     def dehydrate_norm_plazma_p(self, order): return order.tool.norm_plazma_p
     def dehydrate_norm_plazma(self, order): return order.count*order.tool.norm_plazma
@@ -139,7 +139,7 @@ class OrderResource(resources.ModelResource):
     def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_sverliln
     def dehydrate_norm_rastoch_p(self, order): return order.tool.norm_rastoch_p
     def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch
-
+'''
             
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
