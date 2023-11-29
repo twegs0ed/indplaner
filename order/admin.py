@@ -109,13 +109,14 @@ class OrderResource(resources.ModelResource):
     norm_rastoch_p = Field()
     norm_rastoch = Field()
     
+    
     class Meta:
         model = Order
-        fields = ('tool', 'count','exp_date', 'firm', 'status', 'norm_lentopil_p', 'norm_lentopil', 'norm_plazma_p', 'norm_plazma', 'norm_turn_p',
-                  'norm_turn', 'norm_mill_p', 'norm_mill', 'norm_electro_p', 'norm_electro', 'norm_turnun_p',
-                  'norm_turnun', 'norm_millun_p', 'norm_millun',
-                  'norm_slesarn', 'norm_sverliln_p', 'norm_sverliln', 'norm_rastoch_p', 'norm_rastoch')
-        export_order = ('tool', 'count')
+        fields = ('tool', 'count','exp_date', 'firm', 'status', 'norm_lentopil_p','norm_lentopil','norm_plazma_p',
+                  'norm_plazma','norm_turn_p','norm_turn','norm_turnun_p','norm_turnun','norm_mill_p',
+                  'norm_mill','norm_millun_p',
+                  'norm_millun','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
+        export_order = ('tool', 'count', 'exp_date','firm')
         import_id_fields = ('tool','firm', 'exp_date')
     def dehydrate_norm_lentopil_p(self, order): return order.tool.norm_lentopil_p
     def dehydrate_norm_lentopil(self, order): return order.count*order.tool.norm_lentopil
@@ -138,10 +139,6 @@ class OrderResource(resources.ModelResource):
     def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_sverliln
     def dehydrate_norm_rastoch_p(self, order): return order.tool.norm_rastoch_p
     def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch
-
-
-
-
 
             
 def status_colored(obj):
