@@ -69,46 +69,27 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
     
 
 class OrderResource(resources.ModelResource):
-    tool = Field(
-        column_name='tool',
-        attribute='tool',
-        widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
-    firm = Field(
-        column_name='firm',
-        attribute='firm',
-        widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
-    '''norm_lentopil_p = Field(column_name='Тпз лентопильная')
-    norm_lentopil = Field(column_name='Тшт лентопильная')
-    norm_plazma_p = Field(column_name='Тпз плазма')
-    norm_plazma = Field(column_name='Тшт плазма')
-    norm_turn_p = Field(column_name='Тпз токарная')
-    norm_turn = Field(column_name='Тшт токарная')
-    norm_mill_p = Field(column_name='Тпз фрезерная')
-    norm_electro_p = Field(column_name='Тпз электроэрозионная')
-    norm_electro = Field(column_name='Тшт электроэрозионная')
-    norm_slesarn = Field(column_name='Т слесарная')
-    norm_sverliln_p = Field(column_name='Т сверлильная')
-    norm_rastoch_p = Field(column_name='Тпз расточная')
-    norm_rastoch = Field(column_name='Тшт расточная')'''
-    '''norm_lentopil_p = Field()
-    norm_lentopil = Field()
-    norm_plazma_p = Field()
-    norm_plazma = Field()
-    norm_turn_p = Field()
-    norm_turn = Field()
-    norm_mill_p = Field()
-    norm_mill = Field()
-    norm_turnun_p = Field()
-    norm_turnun = Field()
-    norm_millun_p = Field()
-    norm_millun = Field()
-    norm_electro_p = Field()
-    norm_electro = Field()
-    norm_slesarn = Field()
-    norm_sverliln_p = Field()
-    norm_rastoch_p = Field()
-    norm_rastoch = Field()'''
-    
+    tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
+    firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    norm_lentopil_p = Field(column_name='norm_lentopil_p',attribute='norm_lentopil_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil_p'))
+    norm_lentopil = Field(column_name='norm_lentopil',attribute='norm_lentopil',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil'))
+    norm_plazma_p = Field(column_name='norm_plazma_p',attribute='norm_plazma_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma_p'))
+    norm_plazma = Field(column_name='norm_plazma',attribute='norm_plazma',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma'))
+    norm_turn_p = Field(column_name='norm_turn_p',attribute='norm_turn_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn_p'))
+    norm_turn = Field(column_name='norm_turn',attribute='norm_turn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn'))
+    norm_mill_p = Field(column_name='norm_mill_p',attribute='norm_mill_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill_p'))
+    norm_mill = Field(column_name='norm_mill',attribute='norm_mill',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill'))
+    norm_millun_p = Field(column_name='norm_millun_p',attribute='norm_millun_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun_p'))
+    norm_millun = Field(column_name='norm_millun',attribute='norm_millun',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun'))
+    norm_electro_p = Field(column_name='norm_electro_p',attribute='norm_electro_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro_p'))
+    norm_electro = Field(column_name='norm_electro',attribute='norm_electro',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro'))
+    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
+    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
+    norm_sverliln_p = Field(column_name='norm_sverliln_p',attribute='norm_sverliln_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln_p'))
+    norm_sverliln = Field(column_name='norm_sverliln',attribute='norm_sverliln',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln'))
+    norm_rastoch_p = Field(column_name='norm_rastoch_p',attribute='norm_rastoch_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch_p'))
+    norm_rastoch = Field(column_name='norm_rastoch',attribute='norm_rastoch',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch'))
+       
     
     class Meta:
         model = Order
@@ -126,20 +107,18 @@ class OrderResource(resources.ModelResource):
     def dehydrate_norm_turn(self, order): return order.count*order.tool.norm_turn
     def dehydrate_norm_mill_p(self, order): return order.tool.norm_mill_p
     def dehydrate_norm_mill(self, order): return order.count*order.tool.norm_mill
-    
     def dehydrate_norm_turnun_p(self, order): return order.tool.norm_turnun_p
     def dehydrate_norm_turnun(self, order): return order.count*order.tool.norm_turnun
     def dehydrate_norm_millun_p(self, order): return order.tool.norm_millun_p
     def dehydrate_norm_millun(self, order): return order.count*order.tool.norm_millun
-
     def dehydrate_norm_electro_p (self, order): return order.tool.norm_electro_p
     def dehydrate_norm_electro(self, order): return order.count*order.tool.norm_electro
     def dehydrate_norm_slesarn(self, order): return order.count*order.tool.norm_slesarn
     def dehydrate_norm_sverliln_p(self, order): return order.tool.norm_sverliln_p
     def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_sverliln
     def dehydrate_norm_rastoch_p(self, order): return order.tool.norm_rastoch_p
-    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch
-'''
+    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch'''
+
             
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
