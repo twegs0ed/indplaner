@@ -11,6 +11,7 @@ import pandas as pd
 from plotly.offline import plot
 import plotly.graph_objects as go
 import plotly.express as px
+from django.http import Http404
 
 
 def info(request):
@@ -31,8 +32,11 @@ def gantt(request):
     if request.GET.get('tool'):
         form = SearchtoolForm(request.GET)
         projects = Order.objects.filter(firm__title__icontains  = request.GET.get('tool')).all()
+        if not projects :
+            raise Http404
     else:
         projects = Order.objects.filter(firm__title__icontains  = '').order_by('exp_date').all()
+
     form = SearchtoolForm()
     
     

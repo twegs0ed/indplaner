@@ -20,7 +20,7 @@ class Toolsonwarehouse(models.Model):
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата" )#Дата получения на склад
     count = models.IntegerField(default=0,blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
-    workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, verbose_name="Место хранения", null=True, )#Работник, который получил детали
+    workplace = models.ForeignKey(Workplace, blank=True, on_delete=models.CASCADE, verbose_name="Место хранения", null=True, )#Работник, который получил детали
     material = models.TextField(max_length=500, blank=True, null=True, verbose_name="Материал" )
     stock_sizes = models.CharField(max_length=20, blank=True, null=True, verbose_name="Габариты заготовки" )
     count_in_one_stock = models.CharField(max_length=20, blank=True, null=True, verbose_name="Кол-во деталей из одной заготовки" )
