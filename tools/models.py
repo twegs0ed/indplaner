@@ -7,6 +7,9 @@ import order
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 import re
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.contrib.auth.models import User, Permission
 
 
 
@@ -229,8 +232,23 @@ class Priem(models.Model):
                 order_cf1 = order_cf
                 order_cf.text=str(order_cf.text)+'\n'+dateformat.format(timezone.now(), 'd-m-Y')+" в запуске было "+str(order_cf.count)+"."
                 order_cf.count-=self.count
-                #order_cf.status = order.models.Order.ORDERED
+                order_cf.order_date_worker=timezone.now()
                 order_cf.save()
+
+                users=User.objects.all()
+                mails=[]
+                for u in users:
+                    if u.groups.filter(name='tehnolog').exists():
+                        if u.email:
+                            mails.append(u.email)
+                send_mail(
+                'Прием деталей на склад',
+                'Деталь: '+order_cf.tool.title+
+                '\nИзделие: '+str(order_cf.firm),
+                settings.EMAIL_FROM_ADRESS,
+                mails,
+                fail_silently=False,
+            )
                 order_cf1.pk = None
                 order_cf1.count = self.count
                 order_cf1.status = order.models.Order.COM

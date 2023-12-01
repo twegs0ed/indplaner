@@ -142,3 +142,14 @@ STATIC_ROOT = '/root/planer/staticroot/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = "cptpsk@mail.ru"
+#EMAIL_HOST_PASSWORD = "ME4-ws6-aS8-gWB"
+
+EMAIL_HOST_PASSWORD = "PbamyR24VSxtjXvtRkrS"
+EMAIL_FROM_ADRESS="cptpsk@mail.ru"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

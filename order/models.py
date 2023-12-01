@@ -12,7 +12,6 @@ from colorfield.fields import ColorField
 
 
 
-
 class Firm(models.Model):
     COLOR_PALETTE = [
         ("#FFFFFF", "white", ),
