@@ -98,8 +98,8 @@ class OrderResource(resources.ModelResource):
                   'norm_mill','norm_millun_p',
                   'norm_millun','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
         export_order = ('tool', 'count', 'exp_date','firm')
-        import_id_fields = ('tool','firm', 'exp_date')
-    '''def dehydrate_norm_lentopil_p(self, order): return order.tool.norm_lentopil_p
+        import_id_fields = ('tool','firm', 'exp_date', 'status')
+    def dehydrate_norm_lentopil_p(self, order): return order.tool.norm_lentopil_p
     def dehydrate_norm_lentopil(self, order): return order.count*order.tool.norm_lentopil
     def dehydrate_norm_plazma_p(self, order): return order.tool.norm_plazma_p
     def dehydrate_norm_plazma(self, order): return order.count*order.tool.norm_plazma
@@ -117,7 +117,7 @@ class OrderResource(resources.ModelResource):
     def dehydrate_norm_sverliln_p(self, order): return order.tool.norm_sverliln_p
     def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_sverliln
     def dehydrate_norm_rastoch_p(self, order): return order.tool.norm_rastoch_p
-    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch'''
+    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch
 
             
 def status_colored(obj):
