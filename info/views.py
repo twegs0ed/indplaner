@@ -195,7 +195,7 @@ def gantt(request):
     ]
     dfh = pd.DataFrame(projects_data)
 
-    hist = px.histogram(dfh, x="Операция",y="Время, ч", color="Время, ч", title='Трудозатраты по операциям' )
+    hist = px.histogram(dfh, x="Операция",y="Время, ч", color="Время, ч", title='Трудозатраты по операциям', text_auto=True )
     hist_plot = plot(hist, output_type="div")
 
     context = {
