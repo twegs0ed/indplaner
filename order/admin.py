@@ -167,7 +167,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work')
+    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
@@ -180,6 +180,23 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
+    def norms(self, obj):
+        t=str(obj.tool.title)+'</br>'
+        t+='Ленточнопильная:'+str(obj.tool.norm_lentopil)+'</br>'
+        t+='Плазма:'+str(obj.tool.norm_plazma)+'</br>'
+        t+='ток.чпу.:'+str(obj.tool.norm_turn)+'</br>'
+        t+='фрез.чпу:'+str(obj.tool.norm_mill)+'</br>'
+        t+='ток.унив.:'+str(obj.tool.norm_turnun)+'</br>'
+        t+='фрез.унив.:'+str(obj.tool.norm_millun)+'</br>'
+        t+='сверл.:'+str(obj.tool.norm_sverliln)+'</br>'
+        t+='слесарн.:'+str(obj.tool.norm_slesarn)+'</br>'
+        t+='электроэроз.:'+str(obj.tool.norm_electro)+'</br>'
+        t+='электроэроз.:'+str(obj.tool.norm_electro)+'</br>'
+        t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
+        t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
+        
+        return format_html(t)
+    norms.short_description = "Нормы"
     def log(self, obj):
         logs = LogEntry.objects.filter(content_type__app_label='order', object_id = obj.id).order_by('action_time').all()#or you can filter, etc.
         t=""
