@@ -30,11 +30,13 @@ def info(request):
 
 def gantt(request):
     if request.GET.get('tool'):
+        t_title=request.GET.get('tool')
         form = SearchtoolForm(request.GET)
         projects = Order.objects.filter(firm__title__icontains  = request.GET.get('tool')).all()
         if not projects :
             raise Http404
     else:
+        t_title="Не задано"
         projects = Order.objects.filter(firm__title__icontains  = '').order_by('exp_date').all()
 
     form = SearchtoolForm()
@@ -200,7 +202,8 @@ def gantt(request):
         'plot_div': gantt_plot,
         'form':form,
         'hist_div': hist_plot,
-        'norms':norms
+        'norms':norms,
+        't_title':t_title
         }
     return render(request, 'gantt.html', context)
     

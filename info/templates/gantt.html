@@ -11,10 +11,11 @@
 
   
    
- 
+
 
 
  {% block content %}
+ <h2>{{t_title}}</h2>
  <form action="" method="get">
   {{ form }}
   <input type="submit" value="Submit">
@@ -29,7 +30,8 @@
         {{ hist_div }}
     {% endautoescape %}
 
-	Ленточнопильная:{{norms.lentopil}} часов =  {% widthratio norms.lentopil 8 1 %} смен = {% widthratio norms.lentopil 16 1 %} рабочих дней-
+	<!--Ленточнопильная:{{norms.lentopil}} часов =  {% widthratio norms.lentopil 8 1 %} смен = {% widthratio norms.lentopil 16 1 %} рабочих дней<br>-->
+    
 
 
  {% endblock %}
