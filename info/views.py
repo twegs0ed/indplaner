@@ -50,8 +50,8 @@ def gantt(request):
     for p in projects:
         mill+=(p.tool.norm_mill*p.count)+p.tool.norm_mill_p
         turn+=(p.tool.norm_turn*p.count)+p.tool.norm_turn_p
-    mill_d=mill/8/2/int(millscnc)
-    turn_d=turn/8/2/int(turnscnc)
+    mill_d=mill/8/2/int(millscnc)*30/20
+    turn_d=turn/8/2/int(turnscnc)*30/20
 
     
     def status(x):
@@ -65,13 +65,13 @@ def gantt(request):
             'Операция':'Фрезерная с ЧПУ',
             'Start': project.date,
             'Finish': project.date+timedelta(days=mill_d),
-            'Статус': 'q'
+            'Общее время': str(mill/8/2/21)+' мес.'
         } ,
         {
             'Операция':'Токарная с ЧПУ',
             'Start': project.date,
             'Finish': project.date+timedelta(days=turn_d),
-            'Статус': 'q'
+            'Общее время': str(turn/8/2/21)+' мес.'
         } 
     ]
     
@@ -87,8 +87,8 @@ def gantt(request):
     df = pd.DataFrame(projects_data)
     
     fig = px.timeline(
-        df, x_start="Start", x_end="Finish", y="Операция", color="Операция",text="Операция", title="Нормы по операциям",
-                 hover_data=['Операция', 'Start', 'Finish']
+        df, x_start="Start", x_end="Finish", y="Операция", color="Операция",text="Общее время", title="Нормы по операциям",
+                 hover_data=['Операция', 'Start', 'Finish', 'Общее время']
     )
     
     fig.update_yaxes(autorange="reversed")
