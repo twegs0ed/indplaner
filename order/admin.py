@@ -271,7 +271,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html(t)
     work.short_description = "Изгот-е"
     def c_count(self, obj):
-        if obj.tool.title:
+        if obj:
             title=obj.tool.title
             count=obj.tool.count
         t=' <a href = "/tools/toolsonwarehouse/?q='+str(title)+'">'+str(count)+'</a> '
