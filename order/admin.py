@@ -216,6 +216,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
     def norms(self, obj):
+        t=''
         if obj.tool:
             t=str(obj.tool.title)+'</br>'
             t+='Ленточнопильная:'+str(obj.tool.norm_lentopil)+'</br>'
