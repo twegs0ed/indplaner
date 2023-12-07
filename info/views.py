@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from .forms import SearchtoolForm
+from .forms import GanttForm, SearchtoolForm
 from django.http import HttpResponseRedirect
 from tools.models import Toolsonwarehouse, Tools, Priem
-from order.models import Order
+from order.models import Order, Firm
 from work.models import Work
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
-from datetime import datetime 
+from datetime import datetime, timedelta
 from django.utils.dateformat import format
 import pandas as pd
 from plotly.offline import plot
@@ -16,7 +16,7 @@ from django.http import Http404
 
 def info(request):
     if request.GET.get('tool'):
-        form = SearchtoolForm(request.GET)
+        form = GanttForm(request.GET)
         result = request.GET.get('tool')
         tools=Toolsonwarehouse.objects.filter(title__icontains  = result.upper()).all()
         toolsv=Tools.objects.filter(tool__title__icontains  = result.upper())
@@ -31,17 +31,28 @@ def info(request):
 def gantt(request):
     if request.GET.get('tool'):
         t_title=request.GET.get('tool')
-        form = SearchtoolForm(request.GET)
+        project=Firm.objects.filter(title__icontains  = request.GET.get('tool')).first()
+        #print(project[0]+'!!!!!!!!')
+        form = GanttForm(initial=request.GET)
         projects = Order.objects.filter(firm__title__icontains  = request.GET.get('tool')).all()
         if not projects :
             raise Http404
     else:
         t_title="Не задано"
-        projects = Order.objects.filter(firm__title__icontains  = '').order_by('exp_date').all()
+        projects = Order.objects.filter(firm__title__icontains  = '').order_by('exp_date').all()   
+    
+    if request.GET.get('millscnc'):millscnc=request.GET.get('millscnc')
+    else:millscnc=1
+    if request.GET.get('turnscnc'):turnscnc=request.GET.get('turnscnc')
+    else:turnscnc=1
+    mill=0
+    turn=0
+    for p in projects:
+        mill+=(p.tool.norm_mill*p.count)+p.tool.norm_mill_p
+        turn+=(p.tool.norm_turn*p.count)+p.tool.norm_turn_p
+    mill_d=mill/8/2/int(millscnc)
+    turn_d=turn/8/2/int(turnscnc)
 
-    form = SearchtoolForm()
-    
-    
     
     def status(x):
         if x=="OW": return "В запуске"
@@ -49,20 +60,35 @@ def gantt(request):
         if x=="PD": return "На стороне"
         if x=="CM": return "Изготовлено"
         pass
+    projects_data=[
+        {
+            'Операция':'Фрезерная с ЧПУ',
+            'Start': project.date,
+            'Finish': project.date+timedelta(days=mill_d),
+            'Статус': 'q'
+        } ,
+        {
+            'Операция':'Токарная с ЧПУ',
+            'Start': project.date,
+            'Finish': project.date+timedelta(days=turn_d),
+            'Статус': 'q'
+        } 
+    ]
+    
 
-
-    projects_data = [
+    '''projects_data = [
         {
             'Деталь': x.tool.title,
             'Start': datetime.date(x.order_date_worker),
             'Finish': x.exp_date,
             'Статус': status(x.status)
         } for x in projects
-    ]
+    ]'''
     df = pd.DataFrame(projects_data)
     
     fig = px.timeline(
-        df, x_start="Start", x_end="Finish", y="Деталь", color="Статус"
+        df, x_start="Start", x_end="Finish", y="Операция", color="Операция",text="Операция", title="Нормы по операциям",
+                 hover_data=['Операция', 'Start', 'Finish']
     )
     
     fig.update_yaxes(autorange="reversed")
@@ -203,7 +229,8 @@ def gantt(request):
         'form':form,
         'hist_div': hist_plot,
         'norms':norms,
-        't_title':t_title
+        't_title':t_title,
+        'project':project
         }
     return render(request, 'gantt.html', context)
     
