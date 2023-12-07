@@ -216,19 +216,20 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
     def norms(self, obj):
-        t=str(obj.tool.title)+'</br>'
-        t+='Ленточнопильная:'+str(obj.tool.norm_lentopil)+'</br>'
-        t+='Плазма:'+str(obj.tool.norm_plazma)+'</br>'
-        t+='ток.чпу.:'+str(obj.tool.norm_turn)+'</br>'
-        t+='фрез.чпу:'+str(obj.tool.norm_mill)+'</br>'
-        t+='ток.унив.:'+str(obj.tool.norm_turnun)+'</br>'
-        t+='фрез.унив.:'+str(obj.tool.norm_millun)+'</br>'
-        t+='сверл.:'+str(obj.tool.norm_sverliln)+'</br>'
-        t+='слесарн.:'+str(obj.tool.norm_slesarn)+'</br>'
-        t+='электроэроз.:'+str(obj.tool.norm_electro)+'</br>'
-        t+='электроэроз.:'+str(obj.tool.norm_electro)+'</br>'
-        t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
-        t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
+        if obj.tool:
+            t=str(obj.tool.title)+'</br>'
+            t+='Ленточнопильная:'+str(obj.tool.norm_lentopil)+'</br>'
+            t+='Плазма:'+str(obj.tool.norm_plazma)+'</br>'
+            t+='ток.чпу.:'+str(obj.tool.norm_turn)+'</br>'
+            t+='фрез.чпу:'+str(obj.tool.norm_mill)+'</br>'
+            t+='ток.унив.:'+str(obj.tool.norm_turnun)+'</br>'
+            t+='фрез.унив.:'+str(obj.tool.norm_millun)+'</br>'
+            t+='сверл.:'+str(obj.tool.norm_sverliln)+'</br>'
+            t+='слесарн.:'+str(obj.tool.norm_slesarn)+'</br>'
+            t+='электроэроз.:'+str(obj.tool.norm_electro)+'</br>'
+            t+='электроэроз.:'+str(obj.tool.norm_electro)+'</br>'
+            t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
+            t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
         
         return format_html(t)
     norms.short_description = "Нормы"
