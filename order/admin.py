@@ -59,67 +59,9 @@ def count_plus(queryset):
         tool.count = int(tool.count) + int(queryset.values()[0]['count'])#то количество инструмента на складе уменьшаем
         tool.save()
 
-class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
 
-    def clean(self, value, row=None, *args, **kwargs):
-        try:
-            return super(ForeignKeyWidgetWithCreation, self).clean(value, row, *args, **kwargs)
-        except:
-            return self.model.objects.create(**{self.field: value})
-    
 
-class OrderResource(resources.ModelResource):
-    tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
-    firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
-    norm_lentopil_p = Field(column_name='norm_lentopil_p',attribute='norm_lentopil_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil_p'))
-    norm_lentopil = Field(column_name='norm_lentopil',attribute='norm_lentopil',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil'))
-    norm_plazma_p = Field(column_name='norm_plazma_p',attribute='norm_plazma_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma_p'))
-    norm_plazma = Field(column_name='norm_plazma',attribute='norm_plazma',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma'))
-    norm_turn_p = Field(column_name='norm_turn_p',attribute='norm_turn_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn_p'))
-    norm_turn = Field(column_name='norm_turn',attribute='norm_turn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn'))
-    norm_mill_p = Field(column_name='norm_mill_p',attribute='norm_mill_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill_p'))
-    norm_mill = Field(column_name='norm_mill',attribute='norm_mill',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill'))
-    norm_millun_p = Field(column_name='norm_millun_p',attribute='norm_millun_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun_p'))
-    norm_millun = Field(column_name='norm_millun',attribute='norm_millun',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun'))
-    norm_electro_p = Field(column_name='norm_electro_p',attribute='norm_electro_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro_p'))
-    norm_electro = Field(column_name='norm_electro',attribute='norm_electro',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro'))
-    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
-    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
-    norm_sverliln_p = Field(column_name='norm_sverliln_p',attribute='norm_sverliln_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln_p'))
-    norm_sverliln = Field(column_name='norm_sverliln',attribute='norm_sverliln',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln'))
-    norm_rastoch_p = Field(column_name='norm_rastoch_p',attribute='norm_rastoch_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch_p'))
-    norm_rastoch = Field(column_name='norm_rastoch',attribute='norm_rastoch',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch'))
-       
-    
-    class Meta:
-        model = Order
-        fields = ('tool', 'count','exp_date', 'firm', 'status', 'norm_lentopil_p','norm_lentopil','norm_plazma_p',
-                  'norm_plazma','norm_turn_p','norm_turn','norm_turnun_p','norm_turnun','norm_mill_p',
-                  'norm_mill','norm_millun_p',
-                  'norm_millun','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
-        export_order = ('tool', 'count', 'exp_date','firm')
-        import_id_fields = ('tool','firm', 'exp_date', 'status')
-    def dehydrate_norm_lentopil_p(self, order): return order.tool.norm_lentopil_p
-    def dehydrate_norm_lentopil(self, order): return order.count*order.tool.norm_lentopil
-    def dehydrate_norm_plazma_p(self, order): return order.tool.norm_plazma_p
-    def dehydrate_norm_plazma(self, order): return order.count*order.tool.norm_plazma
-    def dehydrate_norm_turn_p(self, order): return order.tool.norm_turn_p
-    def dehydrate_norm_turn(self, order): return order.count*order.tool.norm_turn
-    def dehydrate_norm_mill_p(self, order): return order.tool.norm_mill_p
-    def dehydrate_norm_mill(self, order): return order.count*order.tool.norm_mill
-    def dehydrate_norm_turnun_p(self, order): return order.tool.norm_turnun_p
-    def dehydrate_norm_turnun(self, order): return order.count*order.tool.norm_turnun
-    def dehydrate_norm_millun_p(self, order): return order.tool.norm_millun_p
-    def dehydrate_norm_millun(self, order): return order.count*order.tool.norm_millun
-    def dehydrate_norm_electro_p (self, order): return order.tool.norm_electro_p
-    def dehydrate_norm_electro(self, order): return order.count*order.tool.norm_electro
-    def dehydrate_norm_slesarn(self, order): return order.count*order.tool.norm_slesarn
-    def dehydrate_norm_sverliln_p(self, order): return order.tool.norm_sverliln_p
-    def dehydrate_norm_sverliln(self, order): return order.count*order.tool.norm_sverliln
-    def dehydrate_norm_rastoch_p(self, order): return order.tool.norm_rastoch_p
-    def dehydrate_norm_rastoch(self, order): return order.count*order.tool.norm_rastoch
 
-            
 def status_colored(obj):
     return mark_safe('<b style="background:{};">{}</b>'.format(obj.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.color2, '______'))
 status_colored.allow_tags = True
@@ -129,20 +71,7 @@ status_colored.short_description = "Цвет"
 
 
 
-class FirmAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
-    }
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored)
-    list_editable = ['count', 'date', 'exp_date']
-    search_fields = ['title']
-    ordering = ['-date', 'exp_date']
-    def show_firm_url(self, obj):
-        #return format_html("{% url 'order' order_id=obj.id %}")
-        verbose_name = 'Изделия(заказы)'
-        verbose_name_plural = 'Изделия(заказы)'
-        return format_html("<a href='/order/order/?firm__id__exact={url}'>Детали</a>", url=obj.pk)
-    show_firm_url.short_description = 'Все детали'    
+  
 def status_order_colored(obj):
     if obj.firm != None:
         return mark_safe('<b style="background:{};">{}</b>'.format(obj.firm.color,'______')+'<br><b style="background:{};">{}</b>'.format(obj.firm.color2, '______'))
@@ -160,6 +89,112 @@ def tool_cover(obj):
     return 0
 tool_cover.allow_tags = True
 tool_cover.short_description = "покр."
+
+
+
+
+class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
+
+    def clean(self, value, row=None, *args, **kwargs):
+        try:
+            return super(ForeignKeyWidgetWithCreation, self).clean(value, row, *args, **kwargs)
+        except:
+            return self.model.objects.create(**{self.field: value})
+    
+
+class OrderResource(resources.ModelResource):
+
+    tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
+    firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    
+    norm_lentopil_p = Field()
+    norm_lentopil = Field()
+    norm_plazma_p = Field()
+    norm_plazma = Field()
+    norm_turn_p = Field()
+    norm_turn = Field()
+    norm_mill_p = Field()
+    norm_mill = Field()
+    norm_millun_p = Field()
+    norm_millun = Field()
+    norm_electro_p = Field()
+    norm_electro = Field()
+    norm_slesarn = Field()
+    norm_slesarn = Field()
+    norm_sverliln_p = Field()
+    norm_sverliln = Field()
+    norm_rastoch_p = Field()
+    norm_rastoch = Field()
+    '''norm_lentopil_p = Field(column_name='norm_lentopil_p',attribute='norm_lentopil_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil_p'))
+    norm_lentopil = Field(column_name='norm_lentopil',attribute='norm_lentopil',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil'))
+    norm_plazma_p = Field(column_name='norm_plazma_p',attribute='norm_plazma_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma_p'))
+    norm_plazma = Field(column_name='norm_plazma',attribute='norm_plazma',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma'))
+    norm_turn_p = Field(column_name='norm_turn_p',attribute='norm_turn_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn_p'))
+    norm_turn = Field(column_name='norm_turn',attribute='norm_turn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn'))
+    norm_mill_p = Field(column_name='norm_mill_p',attribute='norm_mill_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill_p'))
+    norm_mill = Field(column_name='norm_mill',attribute='norm_mill',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill'))
+    norm_millun_p = Field(column_name='norm_millun_p',attribute='norm_millun_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun_p'))
+    norm_millun = Field(column_name='norm_millun',attribute='norm_millun',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun'))
+    norm_electro_p = Field(column_name='norm_electro_p',attribute='norm_electro_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro_p'))
+    norm_electro = Field(column_name='norm_electro',attribute='norm_electro',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro'))
+    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
+    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
+    norm_sverliln_p = Field(column_name='norm_sverliln_p',attribute='norm_sverliln_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln_p'))
+    norm_sverliln = Field(column_name='norm_sverliln',attribute='norm_sverliln',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln'))
+    norm_rastoch_p = Field(column_name='norm_rastoch_p',attribute='norm_rastoch_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch_p'))
+    norm_rastoch = Field(column_name='norm_rastoch',attribute='norm_rastoch',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch'))'''
+       
+    
+    class Meta:
+        model = Order
+        fields = ('tool', 'count','exp_date', 'firm', 'status')
+        
+        export_order = ('tool', 'count', 'exp_date','firm')
+        import_id_fields = ('tool','firm')
+    def dehydrate_norm_lentopil_p(self, order): 
+        if order.tool: return order.tool.norm_lentopil_p
+        
+            
+        
+    def dehydrate_norm_lentopil(self, order):  
+        if order.tool: return order.count*order.tool.norm_lentopil
+    def dehydrate_norm_plazma_p(self, order):  
+        if order.tool: return order.tool.norm_plazma_p
+    def dehydrate_norm_plazma(self, order):  
+        if order.tool: return order.count*order.tool.norm_plazma
+    def dehydrate_norm_turn_p(self, order):  
+        if order.tool: return order.tool.norm_turn_p
+    def dehydrate_norm_turn(self, order):  
+        if order.tool: return order.count*order.tool.norm_turn
+    def dehydrate_norm_mill_p(self, order):  
+        if order.tool: return order.tool.norm_mill_p
+    def dehydrate_norm_mill(self, order):  
+        if order.tool: return order.count*order.tool.norm_mill
+    def dehydrate_norm_turnun_p(self, order):  
+        if order.tool: return order.tool.norm_turnun_p
+    def dehydrate_norm_turnun(self, order):  
+        if order.tool: return order.count*order.tool.norm_turnun
+    def dehydrate_norm_millun_p(self, order):  
+        if order.tool: return order.tool.norm_millun_p
+    def dehydrate_norm_millun(self, order):  
+        if order.tool: return order.count*order.tool.norm_millun
+    def dehydrate_norm_electro_p (self, order):  
+        if order.tool: return order.tool.norm_electro_p
+    def dehydrate_norm_electro(self, order):  
+        if order.tool: return order.count*order.tool.norm_electro
+    def dehydrate_norm_slesarn(self, order):  
+        if order.tool: return order.count*order.tool.norm_slesarn
+    def dehydrate_norm_sverliln_p(self, order):  
+        if order.tool: return order.tool.norm_sverliln_p
+    def dehydrate_norm_sverliln(self, order):  
+        if order.tool: return order.count*order.tool.norm_sverliln
+    def dehydrate_norm_rastoch_p(self, order):  
+        if order.tool: return order.tool.norm_rastoch_p
+    def dehydrate_norm_rastoch(self, order):  
+        if order.tool: return order.count*order.tool.norm_rastoch
+
+            
+
 
 
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -249,6 +284,24 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         }
         js = ('js/guarded_admin.js',)
     
+
+
+
+
+class FirmAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored)
+    list_editable = ['count', 'date', 'exp_date']
+    search_fields = ['title']
+    ordering = ['-date', 'exp_date']
+    def show_firm_url(self, obj):
+        #return format_html("{% url 'order' order_id=obj.id %}")
+        verbose_name = 'Изделия(заказы)'
+        verbose_name_plural = 'Изделия(заказы)'
+        return format_html("<a href='/order/order/?firm__id__exact={url}'>Детали</a>", url=obj.pk)
+    show_firm_url.short_description = 'Все детали'  
 
 
 class LogEntryAdmin(admin.ModelAdmin):
