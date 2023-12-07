@@ -65,13 +65,13 @@ def gantt(request):
             'Операция':'Фрезерная с ЧПУ',
             'Start': project.date,
             'Finish': project.date+timedelta(days=mill_d),
-            'Общее время': str(mill/8/2/21)+' мес.'
+            'Общее время': str(mill)+' час.'
         } ,
         {
             'Операция':'Токарная с ЧПУ',
             'Start': project.date,
             'Finish': project.date+timedelta(days=turn_d),
-            'Общее время': str(turn/8/2/21)+' мес.'
+            'Общее время': str(turn)+' час.'
         } 
     ]
     
