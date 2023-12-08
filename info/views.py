@@ -16,7 +16,7 @@ from django.http import Http404
 
 def info(request):
     if request.GET.get('tool'):
-        form = GanttForm(request.GET)
+        form = SearchtoolForm(request.GET)
         result = request.GET.get('tool')
         tools=Toolsonwarehouse.objects.filter(title__icontains  = result.upper()).all()
         toolsv=Tools.objects.filter(tool__title__icontains  = result.upper())
