@@ -153,7 +153,13 @@ class OrderResource(resources.ModelResource):
         import_id_fields = ('tool','firm')
     def dehydrate_norm_lentopil_p(self, order): 
         if order.tool: return order.tool.norm_lentopil_p
-        
+    def dehydrate_status(self, order):  
+        if order.status == 'OW' : return 'В запуске'
+        if order.status == 'OR' : return 'Запущено'
+        if order.status == 'PD' : return 'На стороне'
+        if order.status == 'CM' : return 'Изготовлено'
+
+
             
         
     def dehydrate_norm_lentopil(self, order):  
