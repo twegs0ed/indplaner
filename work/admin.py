@@ -85,7 +85,7 @@ class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return ",".join([str(p) for p in obj.machines.all()])
     get_machines.short_description = "Станки"
     def ord(self, obj):
-        o=Order.objects.filter(tool=obj.tool).order_by('-exp_date', '-order_date_worker').all()[:1]
+        o=Order.objects.filter(tool=obj.tool).order_by('-exp_date', '-order_date_worker').all()
 
         t=""
         for l in o: 

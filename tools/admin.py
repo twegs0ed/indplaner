@@ -2,7 +2,7 @@ from django.contrib import admin
 from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 from .models import Toolsonwarehouse, Tools, Rec_Tools, Priem, Workplace
 from profiles.models import Profile
-from order.models import Order
+from order.models import Order, Firm
 from import_export.admin import ExportActionMixin, ImportExportModelAdmin
 from import_export import resources
 from import_export.fields import Field
@@ -83,7 +83,7 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ToolsonwarehouseResource
     #autocomplete_fields = ['tool']
     #readonly_fields = ('need_count',)
-    list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover')
+    list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover', 'firms')
     list_filter = ('workplace',)
     search_fields = ['title']
     ordering = ['title', 'created_date']
@@ -93,6 +93,22 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         search_term=str(search_term).upper()
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         return queryset, use_distinct
+    def firms(self, obj):
+        orders=Order.objects.filter(tool=obj)
+        t=''
+        f=[]
+        for o in orders:
+            if o.firm:
+                f.append(o.firm.title)
+            pass
+        for x in f: 
+            if f.count(x) > 1: 
+                f.remove(x) 
+        for x in f:
+            t+=' <a href = "/order/order/?q='+x+'">'+x+'</a> '+'</br>'
+            #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
+        return format_html(t)
+    firms.short_description = "Изделия"
 
 
 class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
@@ -102,21 +118,37 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     #raw_id_fields = ('worker', 'tool')
     autocomplete_fields = ['tool','worker']
     resource_class = ToolsResource
-    list_display = ('tool', 'worker', 'count', 'giveout_date', 'text')
+    list_display = ('tool', 'worker', 'count', 'giveout_date', 'text','firms')
     list_filter = (('giveout_date', DateRangeFilter), 'worker')
     search_fields = ['tool__title', 'worker__bio']
     ordering = ['-giveout_date']
     list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
-        #print(search_term)
         #search_term=re.sub("[^\d\.]", "", str(search_term))
         search_term=str(search_term).upper()
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         #queryset |= self.model.objects.filter(tool__title=search_term)
         return queryset, use_distinct
     
+    
 
     pass
+    def firms(self, obj):
+        orders=Order.objects.filter(tool=obj.tool)
+        t=''
+        f=[]
+        for o in orders:
+            if o.firm:
+                f.append(o.firm.title)
+            pass
+        for x in f: 
+            if f.count(x) > 1: 
+                f.remove(x) 
+        for x in f:
+            t+=' <a href = "/order/order/?q='+x+'">'+x+'</a> '+'</br>'
+            #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
+        return format_html(t)
+    firms.short_description = "Изделия"
 class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     #raw_id_fields = ('worker', 'tool')
     autocomplete_fields = ['worker', 'tool']
@@ -151,7 +183,7 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     autocomplete_fields = ['tool', 'place','worker']
-    list_display = ('tool', 'count', 'giveout_date', 'text')
+    list_display = ('tool', 'count', 'giveout_date', 'text', 'firms')
     #list_filter = (('giveout_date', DateRangeFilter))
     list_filter = (('giveout_date', DateRangeFilter),)
     search_fields = ['tool__title']
@@ -169,6 +201,22 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             queryset |= self.model.objects.filter(tool=search_term_as_int)
         return queryset, use_distinct
     pass
+    def firms(self, obj):
+        orders=Order.objects.filter(tool=obj.tool)
+        t=''
+        f=[]
+        for o in orders:
+            if o.firm:
+                f.append(o.firm.title)
+            pass
+        for x in f: 
+            if f.count(x) > 1: 
+                f.remove(x) 
+        for x in f:
+            t+=' <a href = "/order/order/?q='+x+'">'+x+'</a> '+'</br>'
+            #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
+        return format_html(t)
+    firms.short_description = "Изделия"
 
 admin.site.register(Tools, ToolsAdmin)
 admin.site.register(Priem, PriemAdmin)

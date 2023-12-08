@@ -39,7 +39,12 @@ def gantt(request):
             raise Http404
     else:
         t_title="Не задано"
-        projects = Order.objects.filter(firm__title__icontains  = '').order_by('exp_date').all()   
+        order=Order
+        order.count=0
+        projects = [order]
+        project=Firm
+        project.date=datetime.now() 
+        form = GanttForm(initial=request.GET)
     
     if request.GET.get('millscnc'):millscnc=request.GET.get('millscnc')
     else:millscnc=1
@@ -48,8 +53,9 @@ def gantt(request):
     mill=0
     turn=0
     for p in projects:
-        mill+=(p.tool.norm_mill*p.count)+p.tool.norm_mill_p
-        turn+=(p.tool.norm_turn*p.count)+p.tool.norm_turn_p
+        if p.count:
+            mill+=(p.tool.norm_mill*p.count)+p.tool.norm_mill_p
+            turn+=(p.tool.norm_turn*p.count)+p.tool.norm_turn_p
     mill_d=mill/8/2/int(millscnc)*30/20
     turn_d=turn/8/2/int(turnscnc)*30/20
 
@@ -134,34 +140,35 @@ def gantt(request):
 
         rastoch+=p.tool.norm_rastoch*p.count
         if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count'''
-        lentopil+=(p.tool.norm_lentopil*p.count)
-        if p.count>0:lentopil+=p.tool.norm_lentopil_p/p.count
+        if p.count:
+            lentopil+=(p.tool.norm_lentopil*p.count)
+            if p.count>0:lentopil+=p.tool.norm_lentopil_p/p.count
 
-        plazma+=p.tool.norm_plazma*p.count
-        if p.tool.count>0:plazma+=p.tool.norm_plazma_p/p.tool.count
+            plazma+=p.tool.norm_plazma*p.count
+            if p.tool.count>0:plazma+=p.tool.norm_plazma_p/p.tool.count
 
-        turn+=p.tool.norm_turn*p.count
-        if p.tool.count>0:turn+=p.tool.norm_turn_p/p.tool.count
+            turn+=p.tool.norm_turn*p.count
+            if p.tool.count>0:turn+=p.tool.norm_turn_p/p.tool.count
 
-        mill+=p.tool.norm_mill*p.count
-        if p.tool.count>0:mill+=p.tool.norm_mill_p/p.tool.count
+            mill+=p.tool.norm_mill*p.count
+            if p.tool.count>0:mill+=p.tool.norm_mill_p/p.tool.count
 
-        turnun+=p.tool.norm_turnun*p.count
-        if p.tool.count>0:turnun+=p.tool.norm_turnun_p/p.tool.count
+            turnun+=p.tool.norm_turnun*p.count
+            if p.tool.count>0:turnun+=p.tool.norm_turnun_p/p.tool.count
 
-        millun+=p.tool.norm_millun*p.count
-        if p.tool.count>0:millun+=p.tool.norm_millun_p/p.tool.count
+            millun+=p.tool.norm_millun*p.count
+            if p.tool.count>0:millun+=p.tool.norm_millun_p/p.tool.count
 
-        electro+=p.tool.norm_electro*p.count
-        if p.tool.count>0:electro+=p.tool.norm_electro_p/p.tool.count
+            electro+=p.tool.norm_electro*p.count
+            if p.tool.count>0:electro+=p.tool.norm_electro_p/p.tool.count
 
-        slesarn+=p.tool.norm_slesarn*p.count
+            slesarn+=p.tool.norm_slesarn*p.count
 
-        sverliln+=p.tool.norm_sverliln*p.count
-        if p.tool.count>0:sverliln+=p.tool.norm_sverliln_p/p.tool.count
+            sverliln+=p.tool.norm_sverliln*p.count
+            if p.tool.count>0:sverliln+=p.tool.norm_sverliln_p/p.tool.count
 
-        rastoch+=p.tool.norm_rastoch*p.count
-        if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count
+            rastoch+=p.tool.norm_rastoch*p.count
+            if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count
     norms={
         'lentopil':lentopil,
         'plazma':plazma,
