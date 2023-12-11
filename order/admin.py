@@ -113,6 +113,8 @@ class OrderResource(resources.ModelResource):
     norm_plazma = Field()
     norm_turn_p = Field()
     norm_turn = Field()
+    norm_turnun_p = Field()
+    norm_turnun = Field()
     norm_mill_p = Field()
     norm_mill = Field()
     norm_millun_p = Field()
@@ -125,24 +127,7 @@ class OrderResource(resources.ModelResource):
     norm_sverliln = Field()
     norm_rastoch_p = Field()
     norm_rastoch = Field()
-    '''norm_lentopil_p = Field(column_name='norm_lentopil_p',attribute='norm_lentopil_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil_p'))
-    norm_lentopil = Field(column_name='norm_lentopil',attribute='norm_lentopil',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_lentopil'))
-    norm_plazma_p = Field(column_name='norm_plazma_p',attribute='norm_plazma_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma_p'))
-    norm_plazma = Field(column_name='norm_plazma',attribute='norm_plazma',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_plazma'))
-    norm_turn_p = Field(column_name='norm_turn_p',attribute='norm_turn_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn_p'))
-    norm_turn = Field(column_name='norm_turn',attribute='norm_turn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_turn'))
-    norm_mill_p = Field(column_name='norm_mill_p',attribute='norm_mill_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill_p'))
-    norm_mill = Field(column_name='norm_mill',attribute='norm_mill',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_mill'))
-    norm_millun_p = Field(column_name='norm_millun_p',attribute='norm_millun_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun_p'))
-    norm_millun = Field(column_name='norm_millun',attribute='norm_millun',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_millun'))
-    norm_electro_p = Field(column_name='norm_electro_p',attribute='norm_electro_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro_p'))
-    norm_electro = Field(column_name='norm_electro',attribute='norm_electro',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_electro'))
-    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
-    norm_slesarn = Field(column_name='norm_slesarn',attribute='norm_slesarn',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_slesarn'))
-    norm_sverliln_p = Field(column_name='norm_sverliln_p',attribute='norm_sverliln_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln_p'))
-    norm_sverliln = Field(column_name='norm_sverliln',attribute='norm_sverliln',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_sverliln'))
-    norm_rastoch_p = Field(column_name='norm_rastoch_p',attribute='norm_rastoch_p',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch_p'))
-    norm_rastoch = Field(column_name='norm_rastoch',attribute='norm_rastoch',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='norm_rastoch'))'''
+    
        
     
     class Meta:
