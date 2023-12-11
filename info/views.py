@@ -32,7 +32,6 @@ def gantt(request):
     if request.GET.get('tool'):
         t_title=request.GET.get('tool')
         project=Firm.objects.filter(title__icontains  = request.GET.get('tool')).first()
-        #print(project[0]+'!!!!!!!!')
         form = GanttForm(initial=request.GET)
         projects = Order.objects.filter(firm__title__icontains  = request.GET.get('tool')).all()
         if not projects :
@@ -50,16 +49,26 @@ def gantt(request):
     else:millscnc=1
     if request.GET.get('turnscnc'):turnscnc=request.GET.get('turnscnc')
     else:turnscnc=1
+    if request.GET.get('millunscnc'):millunscnc=request.GET.get('millunscnc')
+    else:millunscnc=1
+    if request.GET.get('turnunscnc'):turnunscnc=request.GET.get('turnunscnc')
+    else:turnunscnc=1
     mill=0
     turn=0
+    millun=0
+    turnun=0
     for p in projects:
         if p.count:
             mill+=(p.tool.norm_mill*p.count)+p.tool.norm_mill_p
             turn+=(p.tool.norm_turn*p.count)+p.tool.norm_turn_p
-    mill_d=mill/8/2/int(millscnc)*30/20
-    turn_d=turn/8/2/int(turnscnc)*30/20
+            millun+=(p.tool.norm_millun*p.count)+p.tool.norm_millun_p
+            turnun+=(p.tool.norm_turnun*p.count)+p.tool.norm_turnun_p
+    mill_d=mill/int(millscnc)*30/20
+    turn_d=turn/int(turnscnc)*30/20
+    millun_d=mill/int(millunscnc)*30/20
+    turnun_d=turn/int(turnunscnc)*30/20
 
-    
+  
     def status(x):
         if x=="OW": return "В запуске"
         if x=="OR": return "Запущено"
@@ -70,14 +79,26 @@ def gantt(request):
         {
             'Операция':'Фрезерная с ЧПУ',
             'Start': project.date,
-            'Finish': project.date+timedelta(days=mill_d),
+            'Finish': project.date+timedelta(hours=mill_d),
             'Общее время': str(mill)+' час.'
         } ,
         {
             'Операция':'Токарная с ЧПУ',
             'Start': project.date,
-            'Finish': project.date+timedelta(days=turn_d),
+            'Finish': project.date+timedelta(hours=turn_d),
             'Общее время': str(turn)+' час.'
+        },
+        {
+            'Операция':'Фрезерная универсальная',
+            'Start': project.date,
+            'Finish': project.date+timedelta(hours=millun_d),
+            'Общее время': str(millun)+' час.'
+        } ,
+        {
+            'Операция':'Токарная Универсальная',
+            'Start': project.date,
+            'Finish': project.date+timedelta(hours=turnun_d),
+            'Общее время': str(turnun)+' час.'
         } 
     ]
     
@@ -142,33 +163,33 @@ def gantt(request):
         if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count'''
         if p.count:
             lentopil+=(p.tool.norm_lentopil*p.count)
-            if p.count>0:lentopil+=p.tool.norm_lentopil_p/p.count
+            lentopil+=p.tool.norm_lentopil_p
 
             plazma+=p.tool.norm_plazma*p.count
-            if p.tool.count>0:plazma+=p.tool.norm_plazma_p/p.tool.count
+            plazma+=p.tool.norm_plazma_p
 
             turn+=p.tool.norm_turn*p.count
-            if p.tool.count>0:turn+=p.tool.norm_turn_p/p.tool.count
+            turn+=p.tool.norm_turn_p
 
             mill+=p.tool.norm_mill*p.count
-            if p.tool.count>0:mill+=p.tool.norm_mill_p/p.tool.count
+            mill+=p.tool.norm_mill_p
 
             turnun+=p.tool.norm_turnun*p.count
-            if p.tool.count>0:turnun+=p.tool.norm_turnun_p/p.tool.count
+            turnun+=p.tool.norm_turnun_p
 
             millun+=p.tool.norm_millun*p.count
-            if p.tool.count>0:millun+=p.tool.norm_millun_p/p.tool.count
+            millun+=p.tool.norm_millun_p
 
             electro+=p.tool.norm_electro*p.count
-            if p.tool.count>0:electro+=p.tool.norm_electro_p/p.tool.count
+            electro+=p.tool.norm_electro_p
 
             slesarn+=p.tool.norm_slesarn*p.count
 
             sverliln+=p.tool.norm_sverliln*p.count
-            if p.tool.count>0:sverliln+=p.tool.norm_sverliln_p/p.tool.count
+            sverliln+=p.tool.norm_sverliln_p
 
             rastoch+=p.tool.norm_rastoch*p.count
-            if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count
+            rastoch+=p.tool.norm_rastoch_p
     norms={
         'lentopil':lentopil,
         'plazma':plazma,
@@ -228,7 +249,7 @@ def gantt(request):
     ]
     dfh = pd.DataFrame(projects_data)
 
-    hist = px.histogram(dfh, x="Операция",y="Время, ч", color="Время, ч", title='Трудозатраты по операциям', text_auto=True )
+    hist = px.histogram(dfh, x="Операция",y="Время, ч", color="Операция", title='Трудозатраты по операциям', text_auto=True )
     hist_plot = plot(hist, output_type="div")
 
     context = {
