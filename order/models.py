@@ -71,6 +71,15 @@ class Order(models.Model):
         editable = True
 
     )
+    def get_status(self):
+        if self.status == 'OW': return 'в запуске'
+        if self.status == 'OR': return 'запущен'
+        if self.status == 'PD': return 'На стороное'
+        if self.status == 'CM': return 'изготовлен'
+        return 'null'
+
+
+
 
     def publish(self):
         self.published_date = timezone.now()

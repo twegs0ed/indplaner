@@ -12,6 +12,7 @@ from order.models import Order
 from django.utils.html import format_html
 from datetime import datetime
 from tools.models import Toolsonwarehouse
+from django.db.models import Q
 
 
 def full_name(obj):
@@ -52,17 +53,18 @@ class WorkResource(resources.ModelResource):
         export_order = fields
         #Eexclude = ('id',)
         #skip_unchanged=True
-    def dehydrate_firm(self, work):
-        o=Order.objects.filter(tool=work.tool).order_by('-exp_date', '-order_date_worker').all()[:1]
+    def dehydrate_firm(self, obj):
+        o=Order.objects.filter(Q(tool=obj.tool) & ~Q(status =Order.COM)).order_by('-exp_date', '-order_date_worker')
+
         t=""
         for l in o: 
             
             if l.firm:
                 t+=l.firm.title
-                t+='\n'
-                if l.exp_date:t+=' срок '+datetime.strftime(l.exp_date, '%d.%m.%Y')
-                #t+=' - '+str(l.count)+' шт. ()'
-        return t
+                if l.exp_date:t+=datetime.strftime(l.exp_date, '%d.%m.%Y')
+                t+=' - '+str(l.count)+' шт. ('+str(l.get_status())+')'
+
+        return format_html(t)
     def dehydrate_machines(self, work):
         ms=work.machines.all()
         if ms:
@@ -85,15 +87,15 @@ class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return ",".join([str(p) for p in obj.machines.all()])
     get_machines.short_description = "Станки"
     def ord(self, obj):
-        o=Order.objects.filter(tool=obj.tool).order_by('-exp_date', '-order_date_worker').all()
+        o=Order.objects.filter(Q(tool=obj.tool) & ~Q(status =Order.COM)).order_by('-exp_date', '-order_date_worker')
 
         t=""
         for l in o: 
             
             if l.firm:
-                t+='<p style="background-color:;"><font color="">'+l.firm.title+'</font> '
+                t+='<p style="background-color:;"><font color=""><a href="/order/order/'+str(l.id)+'/change/">'+l.firm.title+'</a>'+'</font> '
                 if l.exp_date:t+=datetime.strftime(l.exp_date, '%d.%m.%Y')
-                t+=' - '+str(l.count)+' шт. '
+                t+=' - '+str(l.count)+' шт. ('+str(l.get_status())+')'
                 t+='<br></p>'
 
         return format_html(t)
