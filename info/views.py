@@ -12,6 +12,8 @@ from plotly.offline import plot
 import plotly.graph_objects as go
 import plotly.express as px
 from django.http import Http404
+from django.http import JsonResponse
+from django.views.generic import View
 
 
 def info(request):
@@ -307,6 +309,23 @@ def gantt(request):
         'project':project
         }
     return render(request, 'gantt.html', context)
+
+
+
+
+
+class ToolAutocompleteView(View):
+    def get(self, request, *args, **kwargs):
+        term = request.GET.get('term')
+        cities = Firm.objects.filter(name__icontains=term)
+        results = []
+        for city in cities:
+            city_json = {}
+            city_json['id'] = city.id
+            city_json['label'] = city.name
+            city_json['value'] = city.name
+            results.append(city_json)
+        return JsonResponse(results, safe=False)
     
     
         

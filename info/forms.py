@@ -7,7 +7,7 @@ class SearchtoolForm(forms.Form):
 
 class GanttForm(forms.Form):
     #tool = forms.CharField(label='Изделие', max_length=100)
-    tool = forms.ModelChoiceField(queryset=Firm.objects.all(), widget=forms.Select())
+    tool = forms.ModelChoiceField(queryset=Firm.objects.all().order_by('-id')    , widget=forms.Select())
     turnscnc = forms.IntegerField(label='Токарных ЧПУ',  initial=1)
     millscnc = forms.IntegerField(label='Фрезерных ЧПУ',  initial=1)
     turnunscnc = forms.IntegerField(label='Токарных универс.',  initial=1)

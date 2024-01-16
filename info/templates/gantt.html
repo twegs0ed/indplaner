@@ -1,11 +1,25 @@
 {% extends "admin/base_site.html" %}cc
 {% load static %}
 
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+   $(function() {
+       $("#id_tool").autocomplete({
+           source: "{% url 'tool-autocomplete' %}",
+           minLength: 2,
+       });
+   });
+   </script>
+
+
+
  {% block nav-global %}
 
      {{ block.super }}
  {% endblock %}
-
 
 
 
@@ -17,7 +31,7 @@
  {% block content %}
  <h2>{{t_title}}</h2>
  <form action="" method="get">
-  {{ form }}
+  {{ form|linebreaks }}
   <input type="submit" value="Submit">
 </form>
 <a href="/order/firm/{{project.id}}/change/" target="_blank">{{ project.title}}</a>
