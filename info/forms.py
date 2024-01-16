@@ -2,8 +2,8 @@ from django import forms
 from order.models import Firm
 
 class SearchtoolForm(forms.Form):
-    #tool = forms.CharField(label='Деталь', max_length=100)
-    tool = forms.ModelChoiceField(queryset=Firm.objects.all(), widget=forms.Select())
+    tool = forms.CharField(label='Деталь', max_length=100)
+    #tool = forms.ModelChoiceField(queryset=Firm.objects.all(), widget=forms.Select())
 
 class GanttForm(forms.Form):
     #tool = forms.CharField(label='Изделие', max_length=100)

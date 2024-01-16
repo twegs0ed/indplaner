@@ -174,6 +174,14 @@ def gantt(request):
                 'Finish': project.date+timedelta(hours=rastoch_d),
                 'Общее время': str(rastoch)+' час.'
             } )
+    if not projects_data:
+        projects_data.append(
+            {
+                'Операция':'нет',
+                'Start': datetime.now(),
+                'Finish': datetime.now(),
+                'Общее время': '0 час.'
+            } )
     
 
     df = pd.DataFrame(projects_data)
@@ -198,34 +206,7 @@ def gantt(request):
     sverliln=0.0
     rastoch=0.0
     for p in projects:
-        '''lentopil+=(p.tool.norm_lentopil*p.count)
-        if p.count>0:lentopil+=p.tool.norm_lentopil_p/p.count
-
-        plazma+=p.tool.norm_plazma*p.count
-        if p.tool.count>0:plazma+=p.tool.norm_plazma_p/p.tool.count
-
-        turn+=p.tool.norm_turn*p.count
-        if p.tool.count>0:turn+=p.tool.norm_turn_p/p.tool.count
-
-        mill+=p.tool.norm_mill*p.count
-        if p.tool.count>0:mill+=p.tool.norm_mill_p/p.tool.count
-
-        turnun+=p.tool.norm_turnun*p.count
-        if p.tool.count>0:turnun+=p.tool.norm_turnun_p/p.tool.count
-
-        millun+=p.tool.norm_millun*p.count
-        if p.tool.count>0:millun+=p.tool.norm_millun_p/p.tool.count
-
-        electro+=p.tool.norm_electro*p.count
-        if p.tool.count>0:electro+=p.tool.norm_electro_p/p.tool.count
-
-        slesarn+=p.tool.norm_slesarn*p.count
-
-        sverliln+=p.tool.norm_sverliln*p.count
-        if p.tool.count>0:sverliln+=p.tool.norm_sverliln_p/p.tool.count
-
-        rastoch+=p.tool.norm_rastoch*p.count
-        if p.tool.count>0:rastoch+=p.tool.norm_rastoch_p/p.tool.count'''
+       
         if p.count:
             lentopil+=(p.tool.norm_lentopil*p.count)
             lentopil+=p.tool.norm_lentopil_p
