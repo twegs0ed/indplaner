@@ -105,6 +105,7 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
 class OrderResource(resources.ModelResource):
 
     tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
+    count_avail = Field()
     firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
     
     norm_lentopil_p = Field()
@@ -127,7 +128,7 @@ class OrderResource(resources.ModelResource):
     norm_sverliln = Field()
     norm_rastoch_p = Field()
     norm_rastoch = Field()
-    count_avail = Field()
+    
     
        
     
