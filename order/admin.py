@@ -127,6 +127,7 @@ class OrderResource(resources.ModelResource):
     norm_sverliln = Field()
     norm_rastoch_p = Field()
     norm_rastoch = Field()
+    count_avail = Field()
     
        
     
@@ -136,6 +137,12 @@ class OrderResource(resources.ModelResource):
         
         export_order = ('tool', 'count', 'exp_date','firm')
         import_id_fields = ('tool','firm')
+
+
+    def dehydrate_count_avail(self, order): 
+        if order.tool: return order.tool.count
+
+
     def dehydrate_norm_lentopil_p(self, order): 
         if order.tool: return order.tool.norm_lentopil_p
     def dehydrate_status(self, order):  
