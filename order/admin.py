@@ -128,6 +128,9 @@ class OrderResource(resources.ModelResource):
     norm_sverliln = Field()
     norm_rastoch_p = Field()
     norm_rastoch = Field()
+
+    tool_material = Field()
+    tool_stocksizes= Field()
     
     
        
@@ -142,6 +145,10 @@ class OrderResource(resources.ModelResource):
 
     def dehydrate_count_avail(self, order): 
         if order.tool: return order.tool.count
+    def dehydrate_tool_material(self, order): 
+        if order.tool: return order.tool.material
+    def dehydrate_tool_stocksizes(self, order): 
+        if order.tool: return order.tool.stock_sizes
 
 
     def dehydrate_norm_lentopil_p(self, order): 
