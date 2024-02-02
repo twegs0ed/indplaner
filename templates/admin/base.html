@@ -11,6 +11,7 @@
 
   <script src="{% static 'js/guarded_admin.js' %}"></script>
   <script src="{% static 'js/Chart.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}" defer></script>
 {% endif %}
 {% block extrastyle %}{% endblock %}
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
