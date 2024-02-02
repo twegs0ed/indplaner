@@ -18,16 +18,16 @@ def get_text_messages(message):
             t='*'+str(order.tool.title)+'*\ '+'-'+str(order.count)+'шт., запущено '+str(order.exp_date)
             t+='. '+'на складе '+str(order.tool.count)
             bot.send_message(message.from_user.id, t)
-            bot.send_message(message.from_user.id, 'Изготовление:')
+            bot.send_message(message.from_user.id, 'Изготовление:', parse_mode="Markdown")
             
-            works=Work.objects.filter(tool__title__contains=message.text)[:15]
-            for work in works:
-                t=''
-                t+=str(work.user.first_name)+' '+str(work.user.last_name)+' - '+str(work.date)+'. Станки: '
-                for  m in work.user.stanprofile.machines.all():
-                    t+=str(m.name)
-                t+='. '+str(work.count)+' шт.'
-                bot.send_message(message.from_user.id, t)
+        works=Work.objects.filter(tool__title__contains=message.text)[:15]
+        for work in works:
+            t=''
+            t+=str(work.user.first_name)+' '+str(work.user.last_name)+' - '+str(work.date)+'. Станки: '
+            for  m in work.user.stanprofile.machines.all():
+                t+=str(m.name)
+            t+='. '+str(work.count)+' шт.'
+            bot.send_message(message.from_user.id, t)
                     
 
     else:
