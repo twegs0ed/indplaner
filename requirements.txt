@@ -20,3 +20,4 @@ qrcode
 pillow
 django-colorfield
 plotly
+pytelegrambotapi
