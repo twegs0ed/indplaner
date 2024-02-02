@@ -12,7 +12,7 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, "Напиши привет")
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")'''
-    orders=Order.objects.filter(tool__title__contains=message.text)[:10]
+    orders=Order.objects.filter(tool__title__contains=message.text.upper()).order_by('-order_date_worker')[:10]
     if orders:
         for order in orders:
             t='*'+str(order.tool.title)+'*'+'-'+str(order.count)+'шт., запущено '+str(order.exp_date)
@@ -21,7 +21,7 @@ def get_text_messages(message):
     else:
         bot.send_message(message.from_user.id, "Не найдено")        
             
-    works=Work.objects.filter(tool__title__contains=message.text)[:15]
+    works=Work.objects.filter(tool__title__contains=message.text.upper()).order_by('-date')[:15]
     if works:
         bot.send_message(message.from_user.id, 'Изготовление:')
         for work in works:
