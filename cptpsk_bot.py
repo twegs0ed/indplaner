@@ -15,10 +15,10 @@ def get_text_messages(message):
     orders=Order.objects.filter(tool__title__contains=message.text)[:10]
     if orders:
         for order in orders:
-            t='*'+str(order.tool.title)+'*\ '+'-'+str(order.count)+'шт., запущено '+str(order.exp_date)
+            t='*'+str(order.tool.title)+'*'+'-'+str(order.count)+'шт., запущено '+str(order.exp_date)
             t+='. '+'на складе '+str(order.tool.count)
-            bot.send_message(message.from_user.id, t)
-            bot.send_message(message.from_user.id, 'Изготовление:', parse_mode="Markdown")
+            bot.send_message(message.from_user.id, t, parse_mode="Markdown")
+            bot.send_message(message.from_user.id, 'Изготовление:')
             
         works=Work.objects.filter(tool__title__contains=message.text)[:15]
         for work in works:
