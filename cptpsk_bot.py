@@ -18,9 +18,12 @@ def get_text_messages(message):
             t='*'+str(order.tool.title)+'*'+'-'+str(order.count)+'шт., запущено '+str(order.exp_date)
             t+='. '+'на складе '+str(order.tool.count)
             bot.send_message(message.from_user.id, t, parse_mode="Markdown")
-            bot.send_message(message.from_user.id, 'Изготовление:')
+    else:
+        bot.send_message(message.from_user.id, "Не найдено")        
             
-        works=Work.objects.filter(tool__title__contains=message.text)[:15]
+    works=Work.objects.filter(tool__title__contains=message.text)[:15]
+    if works:
+        bot.send_message(message.from_user.id, 'Изготовление:')
         for work in works:
             t=''
             t+=str(work.user.first_name)+' '+str(work.user.last_name)+' - '+str(work.date)+'. Станки: '
@@ -28,10 +31,8 @@ def get_text_messages(message):
                 t+=str(m.name)
             t+='. '+str(work.count)+' шт.'
             bot.send_message(message.from_user.id, t)
-                    
-
     else:
-        bot.send_message(message.from_user.id, "Не найдено")
+        bot.send_message(message.from_user.id, "Не изготавливалось")
 
 
 
