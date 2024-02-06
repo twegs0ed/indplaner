@@ -303,11 +303,12 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 class FirmAdmin(admin.ModelAdmin):
+    
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored)
-    list_editable = ['count', 'date', 'exp_date']
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys')
+    list_editable = ['count', 'date', 'exp_date', 'ready']
     search_fields = ['title']
     ordering = ['-date', 'exp_date']
     def show_firm_url(self, obj):
@@ -316,6 +317,16 @@ class FirmAdmin(admin.ModelAdmin):
         verbose_name_plural = 'Изделия(заказы)'
         return format_html("<a href='/order/order/?firm__id__exact={url}'>Детали</a>", url=obj.pk)
     show_firm_url.short_description = 'Все детали'  
+    
+    def readys(self, obj):
+        orders = Order.objects.filter(firm=obj).all().count()
+        orders_ready = Order.objects.filter(firm=obj).filter(status='CM').all().count()
+        if orders:
+            result =  (orders_ready/orders)*100
+            result = str(round(result,1))+'%'
+        else: result='нет дет.'
+        return result
+    readys.short_description = "Готовность"
 
 
 class LogEntryAdmin(admin.ModelAdmin):
