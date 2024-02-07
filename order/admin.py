@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Order, Firm, Orderformed
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
-from tools.models import Toolsonwarehouse
+from tools.models import Toolsonwarehouse, Tools
 from django.contrib.admin.models import LogEntry
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
@@ -131,6 +131,7 @@ class OrderResource(resources.ModelResource):
 
     tool_material = Field()
     tool_stocksizes= Field()
+    getout = Field()
     
     
        
@@ -198,6 +199,17 @@ class OrderResource(resources.ModelResource):
         if order.tool: return order.tool.norm_rastoch_p
     def dehydrate_norm_rastoch(self, order):  
         if order.tool: return order.count*order.tool.norm_rastoch
+    def dehydrate_getout(self, obj):  
+        w=Tools.objects.filter(tool=obj.tool).order_by('-giveout_date').all()[:3]
+        t=""
+        for l in w: 
+            name=l.worker.bio+' '
+            
+            t+=name
+            t+=datetime.strftime(l.giveout_date, '%d.%m.%Y')
+            t+=' - '+str(l.count)+' шт. '
+        t+=' место: '+str(obj.tool.workplace)+' - '+str(obj.tool.count)+' шт.'
+        return format_html(t)
 
             
 
@@ -208,7 +220,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms')
+    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
@@ -216,11 +228,29 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
     ordering = ['exp_date','-status']
+
+
+    def getout(self, obj):
+        w=Tools.objects.filter(tool=obj.tool).order_by('-giveout_date').all()[:3]
+        t=""
+        for l in w: 
+            name=l.worker.bio+' '
+            
+            t+='<a href="/tools/toolsonwarehouse/?q='+l.tool.title+'"><p style="background-color:;"><font color=""><b>'+name+'</b></font> '
+            t+=datetime.strftime(l.giveout_date, '%d.%m.%Y')
+            t+=' - '+str(l.count)+' шт. '
+            t+='<br></p></a>'
+        t+='</br>место: '+str(obj.tool.workplace)+' - '+str(obj.tool.count)+' шт.'
+        return format_html(t)
+    getout.short_description = "Выдача"
+
     def printmk(self, obj):
         url = '/order/printmk'
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
+
+
     def norms(self, obj):
         t=''
         if obj.tool:
