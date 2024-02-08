@@ -72,7 +72,7 @@ class Toolsonwarehouse(models.Model):
     
 
     def save(self, *args, **kwargs):
-        
+        #m, created = Material.objects.get_or_create(title = self.material)
         if self.id is None:
             self.title=self.title.upper()
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
@@ -121,6 +121,7 @@ class Tools(models.Model):
         self.save()
     
     def save(self):
+        #
         if self.and_priem:
             priem=Priem()
             priem.tool=self.tool
