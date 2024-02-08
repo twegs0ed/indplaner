@@ -6,9 +6,10 @@ elems.forEach(function(btn) {
     // Вешаем событие клик
     
     btn.addEventListener('click', function(e) {
+      elems.forEach(function(btn) {
         btn.hidden = true;
         sleep(2000).then(() => { btn.hidden = false; });
-       
+      })
     })
   })
   function sleep(ms) {
