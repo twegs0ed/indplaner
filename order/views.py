@@ -60,8 +60,8 @@ def printmk(request, id):
         ws.cell(row=4, column=2).value= format(order.exp_date, '%d.%m.%Y')
     else:
         ws.cell(row=4, column=2).value= ' '
-    if order.tool.material != None:
-        ws.cell(row=3, column=7).value= str(order.tool.material)
+    if order.tool.material_n != None:
+        ws.cell(row=3, column=7).value= str(order.tool.material_n)
     else:
         ws.cell(row=3, column=7).value= ' '
     if order.tool.stock_sizes != None:
