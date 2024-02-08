@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'profiles',
     'workplace',
     'order',
+    'material',
     'rangefilter',
     'import_export',
     'info',

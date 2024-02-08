@@ -81,7 +81,7 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     resource_class = ToolsonwarehouseResource
-    #autocomplete_fields = ['tool']
+    autocomplete_fields = ['material_n']
     #readonly_fields = ('need_count',)
     list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover', 'firms', 'material')
     list_filter = ('workplace',)

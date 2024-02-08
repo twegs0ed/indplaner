@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone, dateformat
 from profiles.models import Profile
 from workplace.models import Workplace
+from material.models import Material
 import order
 from django.db.models import Q
 from django.core.exceptions import ValidationError
@@ -25,6 +26,7 @@ class Toolsonwarehouse(models.Model):
     count = models.IntegerField(default=0,blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
     workplace = models.ForeignKey(Workplace, blank=True, on_delete=models.CASCADE, verbose_name="Место хранения", null=True, )#Работник, который получил детали
     material = models.TextField(max_length=500, blank=True, null=True, verbose_name="Материал" )
+    material_n = models.ForeignKey(Material, blank=True, on_delete=models.CASCADE, verbose_name="Материал", null=True, )#Работник, который получил детали
     stock_sizes = models.CharField(max_length=20, blank=True, null=True, verbose_name="Габариты заготовки" )
     count_in_one_stock = models.CharField(max_length=20, blank=True, null=True, verbose_name="Кол-во деталей из одной заготовки" )
     cover = models.BooleanField(default=False, verbose_name="Покрывается" )
