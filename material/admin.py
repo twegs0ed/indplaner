@@ -4,7 +4,7 @@ from .models import Material
 # Register your models here.
 
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ['title']
+    list_display = ['title', 'text']
     search_fields = ['title',]
     
 admin.site.register(Material, MaterialAdmin)
