@@ -66,7 +66,7 @@ class ToolsonwarehouseResource(resources.ModelResource):
     class Meta:
         model = Toolsonwarehouse
         #skip_unchanged=False
-        fields = ('title', 'count', 'workplace__name','material', 'stock_sizes', 'count_in_one_stock', 'cover', 
+        fields = ('title', 'count', 'workplace__name','material_n', 'stock_sizes', 'count_in_one_stock', 'cover', 
                   'norm_lentopil_p','norm_lentopil','norm_plazma_p','norm_plazma','norm_turn_p','norm_turn','norm_mill_p',
                   'norm_mill','norm_turnun_p','norm_turnun','norm_millun_p',
                   'norm_millun','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
@@ -80,10 +80,11 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
+    exclude=['material']
     resource_class = ToolsonwarehouseResource
     autocomplete_fields = ['material_n']
     #readonly_fields = ('need_count',)
-    list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover', 'firms', 'material')
+    list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover', 'firms', 'material_n')
     list_filter = ('workplace',)
     search_fields = ['title']
     ordering = ['title', 'created_date']

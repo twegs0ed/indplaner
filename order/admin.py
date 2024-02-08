@@ -129,7 +129,7 @@ class OrderResource(resources.ModelResource):
     norm_rastoch_p = Field()
     norm_rastoch = Field()
 
-    tool_material = Field()
+    tool_material_n = Field()
     tool_stocksizes= Field()
     getout = Field()
     
@@ -146,8 +146,8 @@ class OrderResource(resources.ModelResource):
 
     def dehydrate_count_avail(self, order): 
         if order.tool: return order.tool.count
-    def dehydrate_tool_material(self, order): 
-        if order.tool: return order.tool.material
+    def dehydrate_tool_material_n(self, order): 
+        if order.tool: return order.tool.material_n
     def dehydrate_tool_stocksizes(self, order): 
         if order.tool: return order.tool.stock_sizes
 
@@ -221,7 +221,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     }
     resource_class = OrderResource
     list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout')
-    list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'tool__material')
+    list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'tool__material_n')
     search_fields = ['tool__title', 'firm__title']
     ordering = ['tool__title']
     autocomplete_fields = [ 'tool', 'firm']
