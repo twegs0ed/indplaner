@@ -223,11 +223,10 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'tool__material_n')
     search_fields = ['tool__title', 'firm__title']
-    ordering = ['-date','tool__title']
     autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
-    ordering = ['exp_date','-status']
+    ordering = ['-order_date_worker', 'exp_date','-status']
 
 
     def getout(self, obj):
