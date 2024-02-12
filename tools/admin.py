@@ -11,6 +11,7 @@ from import_export.widgets import ForeignKeyWidget, CharWidget
 from django.db import models
 from django.forms import TextInput, Textarea
 import re
+from material.models import Material
 
 
 def order_it(modeladmin, request, queryset):
@@ -53,6 +54,7 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
             return self.model.objects.create(**{self.field: value})
         
 class ToolsonwarehouseResource(resources.ModelResource):
+    material_n = Field(column_name='material_n',attribute='material_n',widget=ForeignKeyWidgetWithCreation(model=Material, field='title'))
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }

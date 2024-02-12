@@ -16,6 +16,8 @@ from django.contrib.admin.models import LogEntry
 from datetime import datetime
 from work.models import Work
 from django.contrib.auth import get_user_model
+from material.models import Material
+
 
 
 #Меняем статус заказа на  заказано
@@ -107,6 +109,7 @@ class OrderResource(resources.ModelResource):
     tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
     count_avail = Field()
     firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    
     
     norm_lentopil_p = Field()
     norm_lentopil = Field()
@@ -202,13 +205,14 @@ class OrderResource(resources.ModelResource):
     def dehydrate_getout(self, obj):  
         w=Tools.objects.filter(tool=obj.tool).order_by('-giveout_date').all()[:3]
         t=""
-        for l in w: 
-            name=l.worker.bio+' '
-            
-            t+=name
-            t+=datetime.strftime(l.giveout_date, '%d.%m.%Y')
-            t+=' - '+str(l.count)+' шт. '
-        t+=' место: '+str(obj.tool.workplace)+' - '+str(obj.tool.count)+' шт.'
+        if w:
+            for l in w: 
+                name=l.worker.bio+' '
+                
+                t+=name
+                t+=datetime.strftime(l.giveout_date, '%d.%m.%Y')
+                t+=' - '+str(l.count)+' шт. '
+            t+=' место: '+str(obj.tool.workplace)+' - '+str(obj.tool.count)+' шт.'
         return format_html(t)
 
             
