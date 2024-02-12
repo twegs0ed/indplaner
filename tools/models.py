@@ -74,7 +74,7 @@ class Toolsonwarehouse(models.Model):
     def save(self, *args, **kwargs):
         #m, created = Material.objects.get_or_create(title = self.material)
         #self.material_n = m
-        self.material = self.material_n.title
+        #self.material = self.material_n.title
         if self.id is None:
             self.title=self.title.upper()
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
