@@ -112,6 +112,11 @@ def getouts(request, firm):
     orders = Order.objects.filter(firm=firm).all()
     firm_obj = Firm.objects.get(id=firm)
     tools=[]
+    '''for order in orders:
+        if order not in temp:
+            temp.append(order)
+    orders=temp
+    print(orders)'''
     for order in orders:
         t=Tools.objects.filter(tool=order.tool).filter(giveout_date__gte=firm_obj.date).all()
         if t:
@@ -124,6 +129,11 @@ def getouts(request, firm):
             t_c.giveout_date = '<p style="background-color: #FF1820; color: #293133">не выдавалось</p>'
             t_c.text = str(order.count)+' запущено, '+str(order.tool.count)+' на складе'
             tools.append(t_c)
+    temp=[]
+    for tool in tools:
+        if tool not in temp:
+            temp.append(tool)
+    tools=temp
     tmp = {'tools':tools, 'firm':firm_obj}
     return render(request, 'getouts.html', tmp )
     
