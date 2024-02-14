@@ -1,0 +1,56 @@
+{% extends "admin/base_site.html" %}
+
+ {% block nav-global %}
+
+     {{ block.super }}
+ {% endblock %}
+
+
+
+
+  
+   
+ 
+
+
+ {% block content %}
+ 
+{{firm.title}}
+
+<br>Запуск {{firm.date}}
+
+
+ <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детали на складе <a href="/tools/toolsonwarehouse/add/" class="button" style = "font-size: 12px;">Добавить</a></h2></b>
+ <table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Кол-во выдано</th>
+      <th scope="col">Прим.</th>
+      <th scope="col">Кому выдано</th>
+      <th scope="col">Дата выдачи</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for tool in tools %}
+  <tr>
+  <th scope="row"><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.tool.title }}</a></th>
+ <td>{{ tool.count }}</td>
+ <td>{{ tool.text }}</td>
+ <td>{{ tool.worker }}</td>
+ <td>{% autoescape off %}{{ tool.giveout_date }}{% endautoescape %}</td>
+ 
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+     {{ block.super }}
+ {% endblock %}

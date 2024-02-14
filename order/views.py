@@ -3,10 +3,13 @@ from django.http import HttpResponse
 from openpyxl import load_workbook
 import io
 import os
-from order.models import Order
+from order.models import Order, Firm
 import qrcode
 import openpyxl
 import uuid
+from tools.models import Tools, Toolsonwarehouse
+from django.views.generic import ListView
+from datetime import datetime, timedelta
 #from django.contrib.sites.models import Site
 
 # Create your views here.
@@ -104,4 +107,22 @@ def printmk(request, id):
     if os.path.isfile('static/xls/'+name+'.gif'): os.remove('static/xls/'+name+'.gif')
 
     return response
+
+def getouts(request, firm):
+    orders = Order.objects.filter(firm=firm).all()
+    firm_obj = Firm.objects.get(id=firm)
+    tools=[]
+    for order in orders:
+        t=Tools.objects.filter(tool=order.tool).filter(giveout_date__gte=firm_obj.date).all()
+        if t:
+            for t_c in t:
+                tools.append(t_c)
+        else:
+            t_c=Tools()
+            t_c.tool = order.tool
+            t_c.giveout_date = '<p style="background-color: #FF1820; color: #293133">не выдавалось</p>'
+            t_c.text = str(order.count)+' запущено'
+            tools.append(t_c)
+    tmp = {'tools':tools, 'firm':firm_obj}
+    return render(request, 'getouts.html', tmp )
     
