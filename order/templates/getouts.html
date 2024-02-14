@@ -20,7 +20,7 @@
 <br>Запуск {{firm.date}}
 
 
- <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детали на складе <a href="/tools/toolsonwarehouse/add/" class="button" style = "font-size: 12px;">Добавить</a></h2></b>
+ <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Выдача деталей </h2></b>
  <table class="table" style="width: 100%;">
   <thead>
    
@@ -37,7 +37,7 @@
 
   {% for tool in tools %}
   <tr>
-  <th scope="row"><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.tool.title }}</a></th>
+  <th scope="row"><a href="/info/?tool={{ tool.tool.title }}">{{ tool.tool.title }}</a></th>
  <td>{{ tool.count }}</td>
  <td>{{ tool.text }}</td>
  <td>{{ tool.worker }}</td>
