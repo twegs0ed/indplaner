@@ -121,7 +121,7 @@ def getouts(request, firm):
         t=Tools.objects.filter(tool=order.tool).filter(giveout_date__gte=firm_obj.date).all()
         if t:
             for t_c in t:
-                t_c.text = str(order.count)+' запущено, '+str(order.tool.count)+' на складе'
+                t_c.text = str(order.count)+' запущено на партию, '+str(order.tool.count)+' на складе'
                 tools.append(t_c)
         else:
             t_c=Tools()
