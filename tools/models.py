@@ -116,6 +116,8 @@ class Tools(models.Model):
     giveout_date = models.DateTimeField(default=timezone.now, verbose_name="Дата выдачи" )
     and_priem = models.BooleanField(default=False, verbose_name="С приемом на склад" )
     is_cleaned=False
+    order_count=0
+    order_id=None
 
 
     def publish(self):
