@@ -26,10 +26,11 @@
    
     <tr>
       <th scope="col">Деталь</th>
-      <th scope="col">Кол-во выдано</th>
+      
       <th scope="col">Запущено на партию</th>
       <th scope="col">На складе</th>
       <th scope="col">Кому выдано</th>
+      <th scope="col">Кол-во выдано</th>
       <th scope="col">Дата выдачи</th>
       
     </tr>
@@ -40,11 +41,12 @@
   <tr>
   <th scope="row"><a href="/info/?tool={{ tool.tool.title }}">{{ tool.tool.title }}</a></th>
   
- <td><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.count }}</a></td>
+
  <td><a href="/order/order/{{ tool.order_id }}/change/">{{ tool.order_count }}</a></td>
  
  <td><a href="/tools/toolsonwarehouse/{{ tool.tool.id }}/change/">{{ tool.tool.count }}</a></td>
  <td>{{ tool.worker }}</td>
+ <td><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.count }}</a></td>
  <td>{% autoescape off %}{{ tool.giveout_date }}{% endautoescape %}</td>
  
 </tr>
