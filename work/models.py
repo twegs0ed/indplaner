@@ -13,7 +13,7 @@ class Work(models.Model):
     date = models.DateField(default=timezone.now, verbose_name="Дата выполнения работы", null=True,blank=True)#Дата получения на склад
     time = models.TimeField(auto_now_add=True, verbose_name="Время")
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество инструмента на складе
-    ready = models.BooleanField(default=True, verbose_name="Деталь готова?" )
+    ready = models.BooleanField(default=True, verbose_name="Операция завршена и дальнейшие манипуляции с деталью на этой технологической операции не предусмотрены?" )
     machines = models.ManyToManyField(Machine, blank=True, null=True, verbose_name="Станки" )  
     def save(self, *args, **kwargs):
         
