@@ -137,6 +137,7 @@ class OrderResource(resources.ModelResource):
     tool_material_n = Field()
     tool_stocksizes= Field()
     getout = Field()
+    cover = Field()
     
     
        
@@ -218,6 +219,10 @@ class OrderResource(resources.ModelResource):
                 t+=' - '+str(l.count)+' шт. '
             t+=' место: '+str(obj.tool.workplace)+' - '+str(obj.tool.count)+' шт.'
         return format_html(t)
+    def dehydrate_cover(self, order):  
+        if order.tool: 
+            if order.tool.cover: return 1
+            else: return 0
 
             
 
