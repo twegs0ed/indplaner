@@ -7,7 +7,7 @@ from import_export.admin import ExportActionMixin, ImportExportModelAdmin
 from import_export import resources
 from import_export.fields import Field
 from django.utils.html import format_html
-from import_export.widgets import ForeignKeyWidget, CharWidget
+from import_export.widgets import ForeignKeyWidget, CharWidget, ManyToManyWidget
 from django.db import models
 from django.forms import TextInput, Textarea
 import re
@@ -59,7 +59,7 @@ class ToolsonwarehouseResource(resources.ModelResource):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     #tool = Field(attribute='title', column_name='title', widget=CharWidget(),)
-    
+    similar = Field()
     workplace = Field(
         column_name='workplace',
         attribute='workplace',
@@ -68,7 +68,7 @@ class ToolsonwarehouseResource(resources.ModelResource):
     class Meta:
         model = Toolsonwarehouse
         #skip_unchanged=False
-        fields = ('title', 'count', 'workplace__name','material_n', 'stock_sizes', 'count_in_one_stock', 'cover', 
+        fields = ('title', 'count', 'workplace__name','material_n' ,'similar','stock_sizes', 'count_in_one_stock', 'cover', 
                   'norm_lentopil_p','norm_lentopil','norm_plazma_p','norm_plazma','norm_turn_p','norm_turn','norm_mill_p',
                   'norm_mill','norm_turnun_p','norm_turnun','norm_millun_p',
                   'norm_millun','norm_electro_p','norm_electro','norm_slesarn','norm_sverliln_p','norm_sverliln','norm_rastoch_p','norm_rastoch')
@@ -76,22 +76,26 @@ class ToolsonwarehouseResource(resources.ModelResource):
         export_order = ('title','count', 'workplace')
         import_id_fields=['title']
         #import_id_field = 'title'
+    def dehydrate_similar(self, tool): 
+        res=''
+        if tool.similar:
+            for t in tool.similar.all():
+                res+=t.title+', '
+        return res
+
     
         
 class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
-    }
+    formfield_overrides = {models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},}
     exclude=['material']
     resource_class = ToolsonwarehouseResource
-    autocomplete_fields = ['material_n']
-    #readonly_fields = ('need_count',)
-    list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover', 'firms', 'material_n')
+    autocomplete_fields = ['material_n', 'similar']
+    list_display = ('title', 'count', 'workplace', 'created_date', 'text', 'cover', 'firms', 'material_n', 'similar_c')
     list_filter = ('workplace',)
     search_fields = ['title']
     ordering = ['title', 'created_date']
-    #actions = [order_it]
     list_editable = ['text']
+    
     def get_search_results(self, request, queryset, search_term):
         search_term=str(search_term).upper()
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
@@ -112,6 +116,15 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
     firms.short_description = "Изделия"
+    
+    def similar_c(self,obj):
+        res=''
+        if obj.similar:
+            for t in obj.similar.all():
+                
+                res+=' <a href = "/tools/toolsonwarehouse/'+str(t.id)+'">'+t.title+'</a> '+'</br>'+', '
+        return format_html(res)
+    similar_c.short_description = "Похожие"
 
 
 class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
