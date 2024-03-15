@@ -29,7 +29,7 @@ def count_c(det,det_in_zag, lenght, ws):
         lenght=int(lenght)
     except:
         return {'ws' : ws, 'count' : ''}
-
+    if not det_in_zag:det_in_zag=1
     if det/det_in_zag < 1:
         lenght=((lenght-30)/det_in_zag)*det+30
         ws.cell(row=4, column=7).value= str(int(lenght))
