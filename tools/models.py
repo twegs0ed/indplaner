@@ -30,7 +30,7 @@ class Toolsonwarehouse(models.Model):
     stock_sizes = models.CharField(max_length=20, blank=True, null=True, verbose_name="Габариты заготовки" )
     count_in_one_stock = models.CharField(max_length=20, blank=True, null=True, verbose_name="Кол-во деталей из одной заготовки" )
     cover = models.BooleanField(default=False, verbose_name="Покрывается" )
-    similar = models.ManyToManyField('self', verbose_name="Похожие" )
+    similar = models.ManyToManyField('self',blank=True, null=True, verbose_name="Похожие" )
 
     norm_lentopil_p = models.FloatField(default=0,blank=True, verbose_name="Ленточнопильная п/з, ч." )
     norm_lentopil = models.FloatField(default=0,blank=True, verbose_name="Ленточнопильная, ч." )
@@ -75,6 +75,17 @@ class Toolsonwarehouse(models.Model):
 
     def save(self, *args, **kwargs):
         
+        ts=[]
+        ts.append(self)
+        for t in self.similar.all():
+            ts.append(t)
+            
+        self.similar.set(ts)
+        
+        print(ts)
+        print('!!!!!!!!!!!')
+                
+       
         
         
 
