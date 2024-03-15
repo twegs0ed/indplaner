@@ -79,8 +79,15 @@ class Toolsonwarehouse(models.Model):
         ts.append(self)
         for t in self.similar.all():
             ts.append(t)
+
+
+
+        for t in ts:
             
-        self.similar.set(ts)
+            for t_c in ts:
+                print(t_c)
+                t.similar.add(t_c)
+            
         
         print(ts)
         print('!!!!!!!!!!!')
