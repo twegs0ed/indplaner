@@ -29,6 +29,7 @@
       <th scope="col">Деталь</th>
       <th scope="col">Кол-во на складе</th>
       <th scope="col">Место хранения</th>
+      <th scope="col">Похожие</th>
       <th scope="col">Комментарии</th>
     </tr>
   </thead>
@@ -39,6 +40,13 @@
   <th scope="row"><a href="/tools/toolsonwarehouse/{{ tool.id }}/change/">{{ tool.title }}</a></th>
  <td>{{ tool.count }}</td>
  <td>{{ tool.workplace }}</td>
+ <td>
+  {% for t in tool.similar.all %}
+  {{ t.title }}</br>
+{% endfor %}
+  
+
+</td>
  <td>{{ tool.text }}</td>
 </tr>
   {% endfor %}
