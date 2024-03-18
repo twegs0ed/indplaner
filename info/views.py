@@ -25,30 +25,10 @@ def info(request):
         priems = Priem.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         orders = Order.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
 
-
-
         for ord in orders:
-            
-
             logs = LogEntry.objects.filter(content_type__app_label='order', object_id = ord.id).order_by('-action_time').first()#or you can filter, etc.
-            if logs: ord.log=logs.action_time
-        '''t=""
-        for l in logs: 
-            try:
-                name=l.user.last_name+' '+l.user.first_name[0]
-            except IndexError:
-                name=l.user.last_name+' '+l.user.first_name
-            t+='<p style="background-color:;"><font color=""><b>'+name+'</b></font>'
-            t+=" "
-            if l.action_flag==1:t+="добавил "
-            if l.action_flag==2:t+="изменил "
-            if l.action_flag==3:t+="удалил "
-            t+=datetime.strftime(l.action_time, '%d.%m.%Y')
-            t+='<br></p>'''
-
-
-
-
+            if logs: 
+                ord.log=logs.action_time
 
         works = Work.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         return render(request, 'info.html', {'tools':tools, 'toolsv':toolsv, 'priems':priems, 'orders':orders, 'works':works, 'form':form})
