@@ -77,23 +77,6 @@ class Toolsonwarehouse(models.Model):
         
         ts=[]
         ts.append(self)
-        if self.similar.all():
-            for t in self.similar.all():
-                ts.append(t)
-
-
-
-        for t in ts:
-            
-            for t_c in ts:
-                
-                t.similar.add(t_c)
-            
-        
-        
-                
-       
-        
         
 
 
@@ -101,6 +84,13 @@ class Toolsonwarehouse(models.Model):
             self.title=self.title.upper()
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
         else:
+            for t in self.similar.all():
+                ts.append(t)
+
+            for t in ts:
+                
+                for t_c in ts:
+                    t.similar.add(t_c)
             self.title=self.title.upper()
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
     
