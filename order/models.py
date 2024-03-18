@@ -54,6 +54,7 @@ class Order(models.Model):
     ORDERED = 'OR'
     PAYED = 'PD'
     COM = 'CM'
+    log = 'none'
 
     ORDER_CHOICES = [
         (ORDERED_BY_WORKER, 'В запуске'),

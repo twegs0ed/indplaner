@@ -142,7 +142,7 @@
  <td>
   {% for mykey,myvalue in order.ORDER_CHOICES %}
     {% if mykey == order.status %}
-      {{myvalue}}</div>
+      {{myvalue}} {{order.log}}</div>
       {% endif %}
     {% endfor %}
   

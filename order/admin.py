@@ -281,7 +281,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
         
         return format_html(t)
-    norms.short_description = "Нормы"
+    norms.short_description = "Нормы" 
     def log(self, obj):
         logs = LogEntry.objects.filter(content_type__app_label='order', object_id = obj.id).order_by('action_time').all()#or you can filter, etc.
         t=""
