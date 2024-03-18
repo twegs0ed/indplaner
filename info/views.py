@@ -31,7 +31,7 @@ def info(request):
             
 
             logs = LogEntry.objects.filter(content_type__app_label='order', object_id = ord.id).order_by('-action_time').first()#or you can filter, etc.
-            ord.log=logs.action_time
+            if logs: ord.log=logs.action_time
         '''t=""
         for l in logs: 
             try:
