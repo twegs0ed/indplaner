@@ -25,6 +25,7 @@ class Firm(models.Model):
     color2 = ColorField(samples=COLOR_PALETTE)
     ready = models.BooleanField(default=False, verbose_name="Готов" )
     #tools = models.ManyToManyField(Toolsonwarehouse)
+    folder = models.CharField(max_length=2000,blank=True, null=True, verbose_name="Folder")
 
     def publish(self):
         self.published_date = timezone.now()
@@ -46,6 +47,7 @@ class Order(models.Model):
     exp_date = models.DateField(default=None, verbose_name="Срок изготовления", null=True,blank=True)#Дата получения на склад
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Кол-во" ) # Количество инструмента на складе
     order_date_worker = models.DateTimeField(default=timezone.now, verbose_name="Дата запуска", null=True,blank=True)
+    folder = models.CharField(max_length=2000,blank=True, null=True, verbose_name="pdf")
     
     #def get_tools(self):
         #return "\n".join([p.title for p in self.tool.all()])

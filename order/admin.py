@@ -233,7 +233,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout')
+    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout', 'folder1')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'tool__material_n')
     search_fields = ['tool__title', 'firm__title']
     autocomplete_fields = [ 'tool', 'firm']
@@ -261,6 +261,13 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
+    def folder1(self, obj):
+        if obj.folder:
+            url=obj.folder
+            return format_html('<button type="button" onclick="copyToClipboard(\'{}\')">  &dArr;  </button>', url,)
+            return format_html('<a href="{}" class="button">  &dArr;  </a>', url)
+        return 'Нет'
+    folder1.short_description = "pdf"
     
 
 
@@ -350,7 +357,7 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'printmkall')
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'printmkall', 'folder1')
     list_editable = ['count', 'date', 'exp_date', 'ready']
     search_fields = ['title']
     ordering = ['-date', 'exp_date']
@@ -379,6 +386,12 @@ class FirmAdmin(admin.ModelAdmin):
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmkall.short_description = "МК"
+    def folder1(self, obj):
+        if obj.folder:
+            url=obj.folder
+            return format_html('<button type="button" onclick="copyToClipboard(\' {} \')">  &dArr;  </button>', url,)
+        return 'Нет'
+    folder1.short_description = "folder"
 
 
 class LogEntryAdmin(admin.ModelAdmin):
