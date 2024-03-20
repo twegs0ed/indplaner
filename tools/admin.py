@@ -78,9 +78,10 @@ class ToolsonwarehouseResource(resources.ModelResource):
         #import_id_field = 'title'
     def dehydrate_similar(self, tool): 
         res=''
-        if tool.similar:
-            for t in tool.similar.all():
-                res+=t.title+', '
+        if tool.id:
+            if tool.similar:
+                for t in tool.similar.all():
+                    res+=t.title+', '
         return res
 
     
