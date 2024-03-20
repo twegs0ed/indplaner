@@ -261,6 +261,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
+    
 
 
     def norms(self, obj):
@@ -349,7 +350,7 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts')
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'printmkall')
     list_editable = ['count', 'date', 'exp_date', 'ready']
     search_fields = ['title']
     ordering = ['-date', 'exp_date']
@@ -370,10 +371,14 @@ class FirmAdmin(admin.ModelAdmin):
         return result
     readys.short_description = "Готовность"
     def getouts(self, obj):
-
-        
         return format_html("<a href='/order/getouts/{url}'>Выдача</a>", url=obj.id)
     getouts.short_description = "Выдача"
+
+    def printmkall(self, obj):
+        url = '/order/printmkall'
+        url = url + '/'+str(obj.id)
+        return format_html('<a href="{}" class="button">&#128438;</a>', url)
+    printmkall.short_description = "МК"
 
 
 class LogEntryAdmin(admin.ModelAdmin):
