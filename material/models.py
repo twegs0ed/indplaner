@@ -11,3 +11,6 @@ class Material(models.Model):
             verbose_name_plural = 'Материал'
     def __str__(self):
         return self.title
+    def save(self, *args, **kwargs):
+        self.title=self.title.upper()
+        return super(Material, self).save(*args, **kwargs)
