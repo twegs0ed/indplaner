@@ -26,7 +26,10 @@ class Firm(models.Model):
     ready = models.BooleanField(default=False, verbose_name="Готов" )
     #tools = models.ManyToManyField(Toolsonwarehouse)
     folder = models.CharField(max_length=2000,blank=True, null=True, verbose_name="Folder")
-
+    def save(self, *args, **kwargs):
+        self.title=self.title.upper()
+        return super(Firm, self).save(*args, **kwargs)
+       
     def publish(self):
         self.published_date = timezone.now()
         self.save()

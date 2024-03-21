@@ -144,7 +144,7 @@ class OrderResource(resources.ModelResource):
     
     class Meta:
         model = Order
-        fields = ('tool', 'count','exp_date', 'firm', 'status')
+        fields = ('tool', 'count','exp_date', 'firm', 'status', 'folder')
         
         export_order = ('tool', 'count', 'exp_date','firm')
         import_id_fields = ('tool','firm')
