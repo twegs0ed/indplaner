@@ -264,8 +264,9 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def folder1(self, obj):
         if obj.folder:
             url=obj.folder
+            url= url.replace('"', '')
+            url= url.replace('\\', '\\\\')
             return format_html('<button type="button" onclick="copyToClipboard(\'{}\')">  &dArr;  </button>', url,)
-            return format_html('<a href="{}" class="button">  &dArr;  </a>', url)
         return 'Нет'
     folder1.short_description = "pdf"
     
@@ -389,6 +390,8 @@ class FirmAdmin(admin.ModelAdmin):
     def folder1(self, obj):
         if obj.folder:
             url=obj.folder
+            url= url.replace('"', '')
+            url= url.replace('\\', '\\\\')
             return format_html('<button type="button" onclick="copyToClipboard(\' {} \')">  &dArr;  </button>', url,)
         return 'Нет'
     folder1.short_description = "folder"
