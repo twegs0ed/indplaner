@@ -17,13 +17,25 @@ elems.forEach(function(btn) {
   }
 
   function copyToClipboard(txt) {
+    const textArea = document.createElement("textarea");
+    textArea.value = txt;
+    document.body.appendChild(textArea);
+    textArea.focus({preventScroll: true})
+    textArea.select();
+    try {
+       document.execCommand('copy');
+    } catch (err) {
+       console.error('Unable to copy to clipboard', err);
+    }
+    document.body.removeChild(textArea);
+
+
+/*
     navigator.clipboard.writeText(txt).then(() => {
       console.log('Content copied to clipboard');
-      /* Resolved - text copied to clipboard successfully */
     },() => {
       console.error('Failed to copy');
-      /* Rejected - text failed to copy to the clipboard */
-    });
+    });*/
   
   }
 
