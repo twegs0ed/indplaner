@@ -16,7 +16,7 @@ from django.contrib.admin.models import LogEntry
 from datetime import datetime
 from work.models import Work
 from django.contrib.auth import get_user_model
-from material.models import Material
+
 
 
 
@@ -229,6 +229,7 @@ class OrderResource(resources.ModelResource):
 
 
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+       
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }

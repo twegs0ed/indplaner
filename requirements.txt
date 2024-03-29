@@ -21,3 +21,4 @@ pillow
 django-colorfield
 plotly
 pytelegrambotapi
+django-easy-select2

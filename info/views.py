@@ -319,19 +319,6 @@ def gantt(request):
 
 
 
-
-class ToolAutocompleteView(View):
-    def get(self, request, *args, **kwargs):
-        term = request.GET.get('term')
-        cities = Firm.objects.filter(name__icontains=term)
-        results = []
-        for city in cities:
-            city_json = {}
-            city_json['id'] = city.id
-            city_json['label'] = city.name
-            city_json['value'] = city.name
-            results.append(city_json)
-        return JsonResponse(results, safe=False)
     
     
         
