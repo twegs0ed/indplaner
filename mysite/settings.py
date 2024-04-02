@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'info',
     'work',
     'colorfield',
-    'django_select2',
 ]
 SITE_ID = 1
 MIDDLEWARE = [
