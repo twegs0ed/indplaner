@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from openpyxl import load_workbook
+from openpyxl.styles import Font
 import io
 import os
 from order.models import Order, Firm
@@ -220,4 +221,59 @@ def printmkall(request, id):
     for f in gifs:
         if os.path.isfile(f): os.remove(f)
     if os.path.isfile('static/xls/XLS.zip'): os.remove('static/xls/XLS.zip')
+    return response
+
+
+
+
+def printpr(request, id):
+    firm = Firm.objects.get(pk=id)
+    orders=Order.objects.filter(firm = firm).all()
+    assems=firm.assem.all()
+    
+    files=[]
+    gifs=[]
+    row=2
+    wb = load_workbook(filename = 'static/xls/pr.xlsx')
+    ws = wb.active
+    
+    for assem in assems:
+        ws.cell(row=row, column=1).value=str(assem.title)
+        ws.cell(row=row, column=1).font = Font(bold=True)
+        
+        for tool in assem.tool.all():
+            row+=1
+            ws.cell(row=row, column=1).value=str(tool.title)
+            order = Order.objects.filter(firm = firm).filter(tool = tool)
+            n=0
+            for or_c in order:
+                print(orders)
+                n+=or_c.count
+                print(or_c.tool.title)
+                print(or_c.count)
+                print('!!!!!!!!!!!!')
+                print(orders)
+            
+            else:
+                count = 'error'
+            ws.cell(row=row, column=2).value=str(n)
+            
+            pass
+        row+=1
+        pass
+        row+=1
+
+
+    name = re.sub(r'[^а-яА-Яa-zA-Z0-9.\s]+', '', firm.title)
+    wb.save('static/xls/'+name+'.xlsx')
+
+    file = io.open('static/xls/'+name+'.xlsx', "rb", buffering = 1024*256)
+    file.seek(0)
+    response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename= '+name+'.xlsx'
+    
+    file.close()
+    if os.path.isfile('static/xls/'+name+'.xlsx'): os.remove('static/xls/'+name+'.xlsx')
+    if os.path.isfile('static/xls/'+name+'.gif'): os.remove('static/xls/'+name+'.gif')
+
     return response

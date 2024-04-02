@@ -140,6 +140,7 @@ class Tools(models.Model):
         #
         if self.and_priem:
             priem=Priem()
+            priem.place = self.tool.workplace
             priem.tool=self.tool
             priem.count=self.count
             priem.save()
@@ -149,15 +150,18 @@ class Tools(models.Model):
         if self.id is None:
             self.tool.count-=self.count
         else:
+            workplace = self.tool.workplace
             #print(self.count)#что ввели
             count_c = self.count#сохраняем что ввели
             del self.count
             self.count#берем из базы
             count_cc = self.count#сохраняем из базы
             self.count = count_c#возвращаем то, что ввели
+            self.tool.workplace = workplace
             #print(count_cc)
             #print(self.count)
-            self.tool.count+=(count_cc-self.count)#новое значение = старое значение + (старое изменение - новое изменение
+            self.tool.count+=(count_cc-self.count)#новое значение = старое значение + (старое изменение - новое изменение)
+            
         self.tool.save()
         return super(Tools, self).save()
     def clean(self):

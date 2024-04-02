@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, Firm, Orderformed
+from .models import Order, Firm, Orderformed, Assem
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from tools.models import Toolsonwarehouse, Tools
@@ -359,10 +359,11 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'printmkall', 'folder1')
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'printmkall','printpr', 'folder1', 'assems')
     list_editable = ['count', 'date', 'exp_date', 'ready']
     search_fields = ['title']
     ordering = ['-date', 'exp_date']
+    autocomplete_fields = ['assem', ]
     def show_firm_url(self, obj):
         #return format_html("{% url 'order' order_id=obj.id %}")
         verbose_name = 'Изделия(заказы)'
@@ -382,12 +383,25 @@ class FirmAdmin(admin.ModelAdmin):
     def getouts(self, obj):
         return format_html("<a href='/order/getouts/{url}'>Выдача</a>", url=obj.id)
     getouts.short_description = "Выдача"
+    def assems(self, obj):
+        t=''
+        if obj.assem.all():
+            for asms in obj.assem.all():
+                t+=asms.title+'</br>'
+        return format_html(t)
+    assems.short_description = "Сборки"
 
     def printmkall(self, obj):
         url = '/order/printmkall'
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmkall.short_description = "МК"
+
+    def printpr(self, obj):
+        url = '/order/printpr'
+        url = url + '/'+str(obj.id)
+        return format_html('<a href="{}" class="button">&#128438;</a>', url)
+    printpr.short_description = "ПР"
     def folder1(self, obj):
         if obj.folder:
             url=obj.folder
@@ -396,6 +410,20 @@ class FirmAdmin(admin.ModelAdmin):
             return format_html('<button type="button" onclick="copyToClipboard(\' {} \')">  &dArr;  </button>', url,)
         return 'Нет'
     folder1.short_description = "folder"
+class AssemAdmin(admin.ModelAdmin):
+    search_fields= ['title']
+    list_display = ('title', 'text', 'tools')
+    autocomplete_fields = ['tool', ]
+    
+    def tools(self, obj):
+        t=''
+        if obj.tool.all():
+            for t_c in obj.tool.all():
+                t+=str(t_c.title)+'</br>'
+        return format_html(t)
+    tools.short_description = "Детали"
+    
+    
 
 
 class LogEntryAdmin(admin.ModelAdmin):
@@ -407,4 +435,5 @@ admin.site.register(LogEntry, LogEntryAdmin)
 
 admin.site.register(Firm, FirmAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Assem, AssemAdmin)
 #admin.site.register(Orderformed, OrderformedAdmin)

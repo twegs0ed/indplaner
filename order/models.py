@@ -7,6 +7,27 @@ from django.utils.html import format_html
 from colorfield.fields import ColorField
 
 
+class Assem(models.Model):
+    title = models.CharField(max_length=200, verbose_name="Сборочный узел" )#Наименование инструмента
+    tool = models.ManyToManyField(Toolsonwarehouse, blank = True, null=True, verbose_name="Детали" )  # Работник, который получил инструмент
+    count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Кол-во" )
+    text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
+
+    '''def save(self, *args, **kwargs):
+        self.title=self.title.upper()
+        return super(Firm, self).save(*args, **kwargs)'''
+       
+    '''def publish(self):
+        self.published_date = timezone.now()
+        self.save()'''
+    
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Сборочные узлы'
+        verbose_name_plural = 'Сборочные узлы'
 
 
 
@@ -26,6 +47,7 @@ class Firm(models.Model):
     ready = models.BooleanField(default=False, verbose_name="Готов" )
     #tools = models.ManyToManyField(Toolsonwarehouse)
     folder = models.CharField(max_length=2000,blank=True, null=True, verbose_name="Folder")
+    assem = models.ManyToManyField(Assem, null=True, verbose_name="Сборки" )  # сборки
     def save(self, *args, **kwargs):
         self.title=self.title.upper()
         return super(Firm, self).save(*args, **kwargs)
@@ -145,4 +167,5 @@ class Orderformed(models.Model):
 class Get0rder():
     def getorder():
         return Order;
+
 
