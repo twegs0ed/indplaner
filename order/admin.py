@@ -138,6 +138,7 @@ class OrderResource(resources.ModelResource):
     tool_stocksizes= Field()
     getout = Field()
     cover = Field()
+    firms = Field()
     
     
        
@@ -224,6 +225,14 @@ class OrderResource(resources.ModelResource):
             if order.tool.cover: return 1
             else: return 0
 
+    def dehydrate_firms(self, obj):
+        orders=Order.objects.filter(tool=obj.tool).order_by('-order_date_worker').all()[:10]
+        t=""
+        for l in orders: 
+            t+=l.firm.title+';' if l.firm else 'нет'
+            
+        return t
+
             
 
 
@@ -234,7 +243,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout', 'folder1')
+    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout', 'firms', 'folder1')
     list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'tool__material_n')
     search_fields = ['tool__title', 'firm__title']
     autocomplete_fields = [ 'tool', 'firm']
@@ -256,6 +265,14 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         t+='</br>место: '+str(obj.tool.workplace)+' - '+str(obj.tool.count)+' шт.'
         return format_html(t)
     getout.short_description = "Выдача"
+    def firms(self, obj):
+        orders=Order.objects.filter(tool=obj.tool).order_by('-order_date_worker').all()[:10]
+        t=""
+        for l in orders: 
+            t+=l.firm.title+'</br>' if l.firm else 'нет'
+            
+        return format_html(t)
+    firms.short_description = "др.изд."
 
     def printmk(self, obj):
         url = '/order/printmk'
