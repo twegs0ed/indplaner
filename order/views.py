@@ -8,7 +8,7 @@ from order.models import Order, Firm
 import qrcode
 import openpyxl
 import uuid
-from tools.models import Tools, Toolsonwarehouse
+from tools.models import Tools, Toolsonwarehouse, Priem
 from django.views.generic import ListView
 from datetime import datetime, timedelta
 import zipfile
@@ -144,6 +144,41 @@ def getouts(request, firm):
     tools=temp
     tmp = {'tools':tools, 'firm':firm_obj}
     return render(request, 'getouts.html', tmp )
+
+
+
+def priems(request, firm):
+    orders = Order.objects.filter(firm=firm).all()
+    firm_obj = Firm.objects.get(id=firm)
+    tools=[]
+    '''for order in orders:
+        if order not in temp:
+            temp.append(order)
+    orders=temp
+    print(orders)'''
+    for order in orders:
+        t=Priem.objects.filter(tool=order.tool).filter(giveout_date__gte=firm_obj.date).all()
+        if t:
+            for t_c in t:
+                t_c.tool = order.tool
+                t_c.order_count=order.count
+                t_c.order_id=order.id
+                tools.append(t_c)
+        else:
+            t_c=Tools()
+            t_c.tool = order.tool
+            t_c.order_count=order.count
+            t_c.order_id=order.id
+            t_c.giveout_date = '<p style="background-color: #FF1820; color: #293133">не принималось</p>'
+            tools.append(t_c)
+        
+    temp=[]
+    for tool in tools:
+        if tool not in temp:
+            temp.append(tool)
+    tools=temp
+    tmp = {'tools':tools, 'firm':firm_obj}
+    return render(request, 'priems.html', tmp )
 
 def printmkall(request, id):
     firm = Firm.objects.get(pk=id)

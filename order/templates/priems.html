@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %}
+
+ {% block nav-global %}
+
+     {{ block.super }}
+ {% endblock %}
+
+
+
+
+  
+   
+ 
+
+
+ {% block content %}
+ 
+{{firm.title}}
+
+<br>Запуск {{firm.date}}
+
+
+ <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Прием деталей на склад</h2></b>
+ <table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      
+      <th scope="col">Запущено на партию</th>
+      <th scope="col">На складе</th>
+      <th scope="col">От кого принято</th>
+      <th scope="col">Кол-во принято</th>
+      <th scope="col">Дата приема</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for tool in tools %}
+  <tr>
+  <th scope="row"><a href="/info/?tool={{ tool.tool.title }}">{{ tool.tool.title }}</a></th>
+  
+
+ <td><a href="/order/order/{{ tool.order_id }}/change/">{{ tool.order_count }}</a></td>
+ 
+ <td><a href="/tools/toolsonwarehouse/{{ tool.tool.id }}/change/">{{ tool.tool.count }}</a></td>
+ <td>{{ tool.worker }}</td>
+ <td><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.count }}</a></td>
+ <td>{% autoescape off %}{{ tool.giveout_date }}{% endautoescape %}</td>
+ 
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+     {{ block.super }}
+ {% endblock %}
