@@ -150,9 +150,15 @@ class Tools(models.Model):
         if self.id is None:
             self.tool.count-=self.count
         else:
+            c_t = Tools.objects.get(pk=self.id)
             workplace = self.tool.workplace
-            #print(self.count)#что ввели
-            count_c = self.count#сохраняем что ввели
+            self.tool.workplace = workplace
+            self.tool.count = c_t.tool.count+(c_t.count - self.count)# на складе + (было - стало)
+
+
+
+
+            '''count_c = self.count#сохраняем что ввели
             del self.count
             self.count#берем из базы
             count_cc = self.count#сохраняем из базы
@@ -160,7 +166,7 @@ class Tools(models.Model):
             self.tool.workplace = workplace
             #print(count_cc)
             #print(self.count)
-            self.tool.count+=(count_cc-self.count)#новое значение = старое значение + (старое изменение - новое изменение)
+            self.tool.count+=(count_cc-self.count)'''#новое значение = старое значение + (старое изменение - новое изменение)
             
         self.tool.save()
         return super(Tools, self).save()
