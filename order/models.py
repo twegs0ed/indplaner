@@ -36,7 +36,6 @@ class Firm(models.Model):
         ("#FFFFFF", "white", ),
         ("#000000", "black", ),
     ]
-    
     title = models.CharField(max_length=200, verbose_name="Изделие" )#Наименование инструмента
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество изделий

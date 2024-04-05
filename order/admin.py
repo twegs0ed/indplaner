@@ -376,8 +376,9 @@ class FirmAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
+    list_filter = (('exp_date', DateRangeFilter),'ready', )
     list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'priems', 'printmkall','printpr', 'folder1', 'assems')
-    list_editable = ['count', 'date', 'exp_date', 'ready']
+    list_editable = ['count', 'date', 'exp_date', 'ready', 'text']
     search_fields = ['title']
     ordering = ['-date', 'exp_date']
     autocomplete_fields = ['assem', ]
