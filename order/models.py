@@ -46,7 +46,7 @@ class Firm(models.Model):
     ready = models.BooleanField(default=False, verbose_name="Готов" )
     #tools = models.ManyToManyField(Toolsonwarehouse)
     folder = models.CharField(max_length=2000,blank=True, null=True, verbose_name="Folder")
-    assem = models.ManyToManyField(Assem, null=True, verbose_name="Сборки" )  # сборки
+    assem = models.ManyToManyField(Assem, null=True,blank=True, verbose_name="Сборки" )  # сборки
     def save(self, *args, **kwargs):
         self.title=self.title.upper()
         return super(Firm, self).save(*args, **kwargs)
