@@ -14,6 +14,7 @@ def get_text_messages(message):
             t=' '+str(order.tool.title)+' '+'-*'+str(order.count)+' шт.*, запущено '+str(order.exp_date)
             t+='. '+'на складе '+str(order.tool.count)+'('+str(order.tool.workplace)+')'
             t+=' Изделие:*'+order.firm.title+'*.\n'
+            t+=order.get_status
             bot.send_message(message.from_user.id, t, parse_mode="Markdown")
     else:
         bot.send_message(message.from_user.id, "Не найдено запуска")        

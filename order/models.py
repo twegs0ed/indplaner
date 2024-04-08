@@ -88,6 +88,16 @@ class Order(models.Model):
         (PAYED, 'на стороне'),
         (COM, 'изготовлено'),
     ]
+    def get_status(self):
+        if self.status == 'OW':
+            return 'В запуске'
+        if self.status == 'OR':
+            return 'Запущено'
+        if self.status == 'PD':
+            return 'На стороне'
+        if self.status == 'CM':
+            return 'Изготовлено'
+        return 'не установлен'
     status = models.CharField(
         max_length=2,
         choices=ORDER_CHOICES ,
