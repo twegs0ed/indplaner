@@ -11,7 +11,7 @@ def get_text_messages(message):
     bot.send_message(message.from_user.id, "Запуск:") 
     if orders:
         for order in orders:
-            t=' '+str(order.tool.title)+' '+'-'+str(order.count)+'шт., запущено '+str(order.exp_date)
+            t=' '+str(order.tool.title)+' '+'-*'+str(order.count)+' шт.*, запущено '+str(order.exp_date)
             t+='. '+'на складе '+str(order.tool.count)+'('+str(order.tool.workplace)+')'
             t+=' Изделие:*'+order.firm.title+'*.\n'
             bot.send_message(message.from_user.id, t, parse_mode="Markdown")
