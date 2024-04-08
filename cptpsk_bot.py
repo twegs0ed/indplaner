@@ -7,7 +7,7 @@ bot = telebot.TeleBot('6532461428:AAFo13Xq6NAsy8y5JTlDJQsWFIy6HZE4IWA');
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     
-    orders=Order.objects.filter(tool__title__contains=message.text.upper()).order_by('-order_date_worker')[:10]
+    orders=Order.objects.filter(tool__title__contains=message.text.upper()).order_by('-order_date_worker')[:6]
     bot.send_message(message.from_user.id, "Запуск:") 
     if orders:
         for order in orders:
