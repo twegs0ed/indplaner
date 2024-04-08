@@ -11,9 +11,9 @@ def get_text_messages(message):
     bot.send_message(message.from_user.id, "Запуск:") 
     if orders:
         for order in orders:
-            t=' '+str(order.tool.title)+' '+'-*'+str(order.count)+' шт.*, \n запущено '+str(order.exp_date)
-            t+='. '+' \n на складе '+str(order.tool.count)+'('+str(order.tool.workplace)+')'
-            t+=' \n Изделие:*'+order.firm.title+'*.\n'
+            t=' '+str(order.tool.title)+' '+'-*'+str(order.count)+' шт.*, \nзапущено '+str(order.exp_date)
+            t+='. '+' \nна складе '+str(order.tool.count)+'('+str(order.tool.workplace)+')'
+            t+=' \nИзделие:*'+order.firm.title+'*.\n'
             t+=order.get_status()
             bot.send_message(message.from_user.id, t, parse_mode="Markdown")
     else:
@@ -24,7 +24,7 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, 'Изготовление:')
         for work in works:
             t=''
-            t+=str(work.user.first_name)+' '+str(work.user.last_name)+' - '+str(work.date)+'. Станки: '
+            t+=str(work.user.first_name)+' '+str(work.user.last_name)+' - '+str(work.date)+'.\nСтанки: '
             for  m in work.user.stanprofile.machines.all():
                 t+=str(m.name)
             t+='. '+str(work.count)+' шт.'
