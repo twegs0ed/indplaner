@@ -140,6 +140,7 @@ class Tools(models.Model):
         #
         if self.and_priem:
             priem=Priem()
+            
             priem.place = self.tool.workplace
             priem.tool=self.tool
             priem.count=self.count
@@ -305,50 +306,18 @@ class Priem(models.Model):
     def save(self):
 
         if self.id is None:
-            '''
-            title_c=self.tool.title.split (' ',1)[0]
-            alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
-            count_all=0
-            if alltools:
-                for item in alltools:
-                    count_all+=int(item.count or 0)
-                    if not item.pk == self.tool.pk:
-                        self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(item.workplace)+'\n'+str(self.tool.text)
-                        for v in Tools.objects.filter(tool=item):
-                            v.tool=self.tool
-                            v.save()
-                        for p in Priem.objects.filter(tool=item):
-                            if not p == self:
-                                p.tool=self.tool
-                                p.save()
-                        item.delete()
-                        '''
+            
             self.tool.count+=int(self.count or 0)
             
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
             
-            Priem.order_f(self)
+            
             
             #order_c.save()
         else:
-            '''
-            title_c=self.tool.title.split (' ',1)[0]
-            alltools = Toolsonwarehouse.objects.filter(Q(title__icontains=title_c.lower()) | Q(title__icontains=title_c.upper()))
-            count_all=0
-            if alltools:
-                for item in alltools:
-                    count_all+=int(item.count or 0)
-                    if not item.pk == self.tool.pk:
-                        self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(item.workplace)+'\n'+str(self.tool.text)
-                        for v in Tools.objects.filter(tool=item):
-                            v.tool=self.tool
-                            v.save()
-                        
-                            
-                        item.delete()
-                        '''
+            
             pr=Priem.objects.filter(pk=self.id).first()
             if pr:
                 previous_count = pr.count
@@ -360,6 +329,7 @@ class Priem(models.Model):
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
+        Priem.order_f(self)
         self.tool.save()
        
         return super(Priem, self).save()
