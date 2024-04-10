@@ -13,7 +13,7 @@ def get_text_messages(message):
         for order in orders:
             t=' '+str(order.tool.title)+' '+'-*'+str(order.count)+' шт.*, \nзапущено '+str(order.exp_date)
             t+='. '+' \nна складе '+str(order.tool.count)+'('+str(order.tool.workplace)+')'
-            t+=' \nИзделие:*'+order.firm.title+'*.\n'
+            t+=' \nИзделие:*'+order.firm.title+' - '+order.firm.count+'шт.'+'*.\n'
             t+=order.get_status()
             bot.send_message(message.from_user.id, t, parse_mode="Markdown")
     else:

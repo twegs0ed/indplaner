@@ -54,10 +54,13 @@ def count_c(det,det_in_zag, lenght, ws):
     l_fin = l_zag * det
     return {'ws' : ws, 'count' : float(det/det_in_zag)}
 def printmk(request, id):
-
+    first_name = [x+'.' for x in request.user.first_name if x.isupper()]
+    fio = request.user.last_name+' '+''.join(first_name)
     order=Order.objects.get(pk=id)
     wb = load_workbook(filename = 'static/xls/mk.xlsx')
     ws = wb.active
+    ws.cell(row=21, column=8).value=str(fio)
+
     if order.firm != None:
         ws.cell(row=2, column=2).value=str(order.firm)
     else:
