@@ -184,6 +184,12 @@ def priems(request, firm):
     return render(request, 'priems.html', tmp )
 
 def printmkall(request, id):
+
+
+    first_name = [x+'.' for x in request.user.first_name if x.isupper()]
+    fio = request.user.last_name+' '+''.join(first_name)
+
+
     firm = Firm.objects.get(pk=id)
     orders=Order.objects.filter(firm = firm)
     
@@ -192,6 +198,8 @@ def printmkall(request, id):
     for order in orders:
         wb = load_workbook(filename = 'static/xls/mk.xlsx')
         ws = wb.active
+        ws.cell(row=21, column=8).value=str(fio)
+
         if order.firm != None:
             ws.cell(row=2, column=2).value=str(order.firm)
         else:
