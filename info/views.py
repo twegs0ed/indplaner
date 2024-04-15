@@ -41,6 +41,7 @@ def gantt(request):
         t_title=request.GET.get('tool')
         #project=Firm.objects.filter(title__icontains  = request.GET.get('tool')).first()
         project=Firm.objects.get(pk = int(request.GET.get('tool')))
+        t_title = project.title
         form = GanttForm(initial=request.GET)
         projects = Order.objects.filter(firm= project).all()
         if not projects :

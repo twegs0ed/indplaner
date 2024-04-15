@@ -377,7 +377,7 @@ class FirmAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     list_filter = (('exp_date', DateRangeFilter),'ready', )
-    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'priems', 'printmkall','printpr', 'folder1', 'assems')
+    list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'priems', 'printmkall','printpr', 'folder1', 'gant', 'assems')
     list_editable = ['count', 'date', 'exp_date', 'ready', 'text']
     search_fields = ['title']
     ordering = ['-date', 'exp_date']
@@ -398,6 +398,9 @@ class FirmAdmin(admin.ModelAdmin):
         else: result='нет дет.'
         return result
     readys.short_description = "Готовность"
+    def gant(self, obj):
+        return format_html("<a href='/info/gantt?tool={url}&turnscnc=1&millscnc=1&turnunscnc=1&millunscnc=1'>gnt</a>", url=obj.id)
+    gant.short_description = "График"
     def getouts(self, obj):
         return format_html("<a href='/order/getouts/{url}'>Выдача</a>", url=obj.id)
     getouts.short_description = "Выдача"
