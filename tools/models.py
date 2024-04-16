@@ -294,7 +294,31 @@ class Priem(models.Model):
             order_cf.text='Сформировано из "Приема"'
             order_cf.status = order.models.Order.COM
             order_cf.save()
-   
+    def order_re(self, diff_count):
+        order_cf = order.models.Order.objects.filter(tool=self.tool).filter(
+                status=order.models.Order.COM).order_by(
+                'order_date_worker').first()
+        if not order_cf:
+            return None
+        users=User.objects.all()
+        mails=[]
+        for u in users:
+            if u.groups.filter(name='tehnolog').exists():
+                if u.email:
+                    mails.append(u.email)
+        send_mail(
+        'Прием изменен',
+        'Деталь: '+order_cf.tool.title+
+        '\nКол-во: '+str(self.count)+
+        '\nПредыдущее кол-во: '+str(self.count-diff_count)+
+        '\nИзменение: '+str(diff_count),
+        settings.EMAIL_FROM_ADRESS,
+        mails,
+        fail_silently=False,
+        )
+        
+
+
         
         
     tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Детали")
@@ -305,31 +329,30 @@ class Priem(models.Model):
     text = models.TextField(blank=True, null=True, verbose_name="Примечание")  # Описание
     def save(self):
 
-        if self.id is None:
-            
+        if not self.id:
             self.tool.count+=int(self.count or 0)
             
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
             
-            
+            Priem.order_f(self)
             
             #order_c.save()
-        else:
+        else:#if self.id:
             
-            pr=Priem.objects.filter(pk=self.id).first()
+            pr=Priem.objects.get(pk=self.id)
             if pr:
                 previous_count = pr.count
             else:
                 previous_count=self.count
             
-            diff_count=self.count - previous_count# то, что ввели минус то, что в базе
+            diff_count=self.count - previous_count# то, что ввели минус то, что в базе. Если уменьшилось, то отрицательное
             self.tool.count +=  diff_count# новое значение = старое значение + (старое изменение - новое изменение///// то, что ввели - то, что в базе
             if not self.tool.workplace==self.place:
                 self.tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(self.tool.workplace)+'\n'+str(self.tool.text)
             self.tool.workplace=self.place
-        Priem.order_f(self)
+            Priem.order_re(self, diff_count)
         self.tool.save()
        
         return super(Priem, self).save()
