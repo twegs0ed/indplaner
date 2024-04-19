@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Order, Firm, Orderformed, Assem
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from import_export import resources
 from tools.models import Toolsonwarehouse, Tools
 from django.contrib.admin.models import LogEntry
@@ -16,6 +16,7 @@ from django.contrib.admin.models import LogEntry
 from datetime import datetime
 from work.models import Work
 from django.contrib.auth import get_user_model
+from django.shortcuts import render
 
 
 
@@ -367,15 +368,40 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         }
         js = ('js/guarded_admin.js',)
     
-
-
-
-
-class FirmAdmin(admin.ModelAdmin):
+class FirmResource(resources.ModelResource):
     
+   
+
+    class Meta:
+        model = Firm
+        
+        #fields = ('tool__title', 'count','worker__bio', 'giveout_date')
+        #export_order = ('tool__title', 'worker__bio', 'count')
+
+class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
+
+    def clean(self, value, row=None, *args, **kwargs):
+        try:
+            return super(ForeignKeyWidgetWithCreation, self).clean(value, row, *args, **kwargs)
+        except:
+            return self.model.objects.create(**{self.field: value})
+
+def svod_action(modeladmin, request, queryset):
+    orders=[]
+    for firm_c in queryset:
+        orders_c=[]
+        for ords_c in Order.objects.filter(firm=firm_c).all():
+            orders.append(ords_c)
+        
+    return render(request, 'orders.html', {'orders': orders,'title':u'Изменение категории'})
+svod_action.short_description = "Сводная"#заяввка
+
+class FirmAdmin(ExportActionMixin,admin.ModelAdmin):
+    actions = [svod_action]
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
+    resource_class = FirmResource
     list_filter = (('exp_date', DateRangeFilter),'ready', )
     list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'priems', 'printmkall','printpr', 'folder1', 'gant', 'assems')
     list_editable = ['count', 'date', 'exp_date', 'ready', 'text']
