@@ -146,12 +146,9 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         #queryset |= self.model.objects.filter(tool__title=search_term)
         return queryset, use_distinct
-    
-    
-
     pass
     def firms(self, obj):
-        orders=Order.objects.filter(tool=obj.tool)
+        orders=Order.objects.filter(tool=obj.tool).order_by('-order_date_worker')[:15]
         t=''
         f=[]
         for o in orders:
