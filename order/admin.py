@@ -107,11 +107,17 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
     
 
 class OrderResource(resources.ModelResource):
-
-    tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidgetWithCreation(model=Toolsonwarehouse, field='title'))
+    def before_import_row(self, row, **kwargs):
+        Firm.objects.get_or_create(
+            title=row.get('firm')
+        )
+        Toolsonwarehouse.objects.get_or_create(
+            title=row.get('tool')
+        )
+    tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidget(model=Toolsonwarehouse, field='title'))
     count_avail = Field()
     place = Field()
-    firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidget(model=Firm, field='title'))
     
     
     norm_lentopil_p = Field()
