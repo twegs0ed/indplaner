@@ -12,6 +12,7 @@ from django.db import models
 from django.forms import TextInput, Textarea
 import re
 from material.models import Material
+from django.shortcuts import render
 
 
 def order_it(modeladmin, request, queryset):
@@ -197,19 +198,28 @@ class PriemResource(resources.ModelResource):
         f=[]
         for o in orders:
             if o.firm:
-                f.append(o.firm.title)
+                f.append(o.firm)
             pass
         for x in f: 
             if f.count(x) > 1: 
                 f.remove(x) 
         for x in f:
             if x:
-                t+=x+'\n'
+                t+=x.title+' - '+str(x.count)+' шт.'+'\n'
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
     dehydrate_firms.short_description = "Изделия"
-
+def svod_action(modeladmin, request, queryset):
+    orders=[]
+    for priem in queryset:
+        for order_c in Order.objects.filter(tool=priem.tool).all():
+            orders.append([order_c, priem])
+    print(orders[0][0].tool)
+        
+    return render(request, 'priem.html', {'orders': orders,'title':u'Прием на склад'})
+svod_action.short_description = "Сводная"#заяввка
 class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    actions = [svod_action]
     resource_class = PriemResource
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},

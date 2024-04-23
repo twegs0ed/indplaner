@@ -1,0 +1,63 @@
+{% extends "admin/base_site.html" %}
+
+ {% block nav-global %}
+
+     {{ block.super }}
+ {% endblock %}
+
+
+
+
+ 
+
+
+ {% block content %}
+ 
+{{firm.title}}
+
+
+   
+<br>Прием {{firm.date}}
+
+
+ <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детли по изделиям</h2></b>
+ <table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      
+      <th scope="col">Запущено на партию</th>
+      <th scope="col">Получено на склад</th>
+      <th scope="col">Изделие</th>
+      <th scope="col">Запущено изделий</th>
+
+     
+      
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for order in orders %}
+  <tr>
+  <th scope="row">{{ order.0.tool }}</th>
+
+ <td>{{ order.0.count }}</td>
+ <td>{{ order.1.count }}</td>
+ 
+ <td>{% if order.0.firm %} {{ order.0.firm }}{% endif %}</td>
+ <td>{{ order.0.firm.count }}</td>
+
+
+ 
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+     {{ block.super }}
+ {% endblock %}
