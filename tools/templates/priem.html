@@ -26,9 +26,9 @@
    
     <tr>
       <th scope="col">Деталь</th>
-      
-      <th scope="col">Запущено на партию</th>
       <th scope="col">Получено на склад</th>
+      <th scope="col">Запущено на партию</th>
+      
       <th scope="col">Изделие</th>
       <th scope="col">Запущено изделий</th>
 
@@ -41,9 +41,9 @@
   {% for order in orders %}
   <tr>
   <th scope="row">{{ order.0.tool }}</th>
-
+  <td>{{ order.1.count }}</td>
  <td>{{ order.0.count }}</td>
- <td>{{ order.1.count }}</td>
+ 
  
  <td>{% if order.0.firm %} {{ order.0.firm }}{% endif %}</td>
  <td>{{ order.0.firm.count }}</td>
