@@ -175,6 +175,7 @@ class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
 class ToolsdeficiteAdmin(admin.ModelAdmin):
     pass
 class PriemResource(resources.ModelResource):
+    firms = Field()
     tool = Field(
         column_name='tool',
         attribute='tool',
@@ -186,16 +187,33 @@ class PriemResource(resources.ModelResource):
     class Meta:
         model = Priem
 
-        fields = ('tool', 'count','place','giveout_date','text')
+        fields = ('tool', 'count','place','giveout_date','text', 'firms')
         export_order = ('tool', 'count')
         exclude = ('id',)
         import_id_fields = ('tool', 'count')
+    def dehydrate_firms(self, obj):
+        orders=Order.objects.filter(tool=obj.tool).order_by('-order_date_worker')[:15]
+        t=''
+        f=[]
+        for o in orders:
+            if o.firm:
+                f.append(o.firm.title)
+            pass
+        for x in f: 
+            if f.count(x) > 1: 
+                f.remove(x) 
+        for x in f:
+            if x:
+                t+=x+'\n'
+            #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
+        return format_html(t)
+    dehydrate_firms.short_description = "Изделия"
 
 class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = PriemResource
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
-    }
+    } 
     autocomplete_fields = ['tool', 'place','worker']
     list_display = ('tool', 'count', 'giveout_date', 'text', 'firms')
     #list_filter = (('giveout_date', DateRangeFilter))
