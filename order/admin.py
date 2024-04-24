@@ -394,12 +394,12 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
 
 def svod_action(modeladmin, request, queryset):
     orders=[]
+    
     for firm_c in queryset:
-        orders_c=[]
         for ords_c in Order.objects.filter(firm=firm_c).all():
             orders.append(ords_c)
         
-    return render(request, 'orders.html', {'orders': orders,'title':u'Изменение категории'})
+    return render(request, 'orders.html', {'orders': orders, 'title':u'Изменение категории'})
 svod_action.short_description = "Сводная"#заяввка
 
 class FirmAdmin(ExportActionMixin,admin.ModelAdmin):
@@ -408,7 +408,7 @@ class FirmAdmin(ExportActionMixin,admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     resource_class = FirmResource
-    list_filter = (('exp_date', DateRangeFilter),'ready', )
+    list_filter = (('exp_date', DateRangeFilter),'ready', ('date', DateRangeFilter))
     list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'priems', 'printmkall','printpr', 'folder1', 'gant', 'assems')
     list_editable = ['count', 'date', 'exp_date', 'ready', 'text']
     search_fields = ['title']

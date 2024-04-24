@@ -14,10 +14,61 @@
  {% block content %}
  
 {{firm.title}}
-
+{% for firm in firms %}
+{{ firm.title }} - {{ firm.count }} шт - {{ firm.exp_date }}</br>
+{% endfor %}
 
    
 <br>Прием {{firm.date}}
+
+
+
+
+
+<table class="table" style="width: 100%;">
+  <thead>
+   
+    <tr>
+      <th scope="col">Деталь</th>
+      <th scope="col">Запущено</th>
+      <th scope="col">Процент</th>
+      <th scope="col">Изделие</th>
+      <th scope="col">Кол-во изд.</th>
+      
+ 
+
+     
+      
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for order in orders_c %}
+  <tr>
+  <th scope="row">{{ order.tool }}</th>
+  <td>{{ order.count }}</td>
+ <td>{{ order.percent }}</td>
+ <td>{{ order.firm }}</td>
+ <td>{{ order.firm.count }}</td>
+ 
+ 
+
+
+
+ 
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
 
 
  <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детли по изделиям</h2></b>

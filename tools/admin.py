@@ -13,6 +13,7 @@ from django.forms import TextInput, Textarea
 import re
 from material.models import Material
 from django.shortcuts import render
+import datetime
 
 
 def order_it(modeladmin, request, queryset):
@@ -211,13 +212,61 @@ class PriemResource(resources.ModelResource):
     dehydrate_firms.short_description = "Изделия"
 def svod_action(modeladmin, request, queryset):
     orders=[]
-    for priem in queryset:
+    firms = []
+    priems = queryset
+    for priem in priems:
         for order_c in Order.objects.filter(tool=priem.tool).all():
             orders.append([order_c, priem])
-    print(orders[0][0].tool)
+            if order_c.firm not in firms:
+                if not order_c.firm:
+                    break
+                if not order_c.firm.exp_date:
+                    order_c.firm.exp_date = datetime.date.today()
+                firms.append(order_c.firm)
+    firms = get_firms_for_priem(request, firms)
+    orders_c = get_result_for_period(firms, priems)
         
-    return render(request, 'priem.html', {'orders': orders,'title':u'Прием на склад'})
+    return render(request, 'priem.html', {'orders_c': orders_c,'orders': orders,'firms': firms,'title':u'Прием на склад'})
 svod_action.short_description = "Сводная"#заяввка
+
+def get_firms_for_priem(request, firms):
+    start_date=datetime.datetime.strptime(request.GET.get('giveout_date__range__gte'), '%d.%m.%Y').date()
+    end_date=datetime.datetime.strptime(request.GET.get('giveout_date__range__lte'), '%d.%m.%Y').date()
+    firms.sort(key=lambda x: x.exp_date)
+    firms = list(filter(lambda x: x.exp_date > (start_date-datetime.timedelta(40)), firms))
+    return firms
+def get_result_for_period(firms, priems):
+    orders = []
+    orders_c=[]
+    for firm in firms:
+        for order in Order.objects.filter(firm=firm).all():
+            orders.append(order)
+            pass
+    priems=list(priems)
+    for priem in priems.copy():
+        while priem.count > 0:
+            for order in orders:
+                if order.tool == priem.tool:
+                    if order.count < priem.count:
+                        order.percent = 100
+                        priem.count-=order.count
+                    elif order.count == priem.count:
+                        order.percent = 100
+                        priem.count=0
+                        priems.remove(priem)
+                        break
+                    elif order.count > priem.count:
+                        order.percent = priem.count/order.count*100
+                        priem.count=0
+                        priems.remove(priem)
+                        break
+                    #print(order.tool,order.percent, order.firm)
+            
+            break
+        
+    
+    return orders
+
 class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     actions = [svod_action]
     resource_class = PriemResource
