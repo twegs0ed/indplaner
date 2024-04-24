@@ -21,45 +21,84 @@
    
 <br>Прием 
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+$( function() {
+  $( "#accordion" ).accordion({active: true});
+  
+} );
+</script>
 
-
-
-<table class="table" style="width: 100%;">
-  <thead>
-   
-    <tr>
-      <th scope="col">Деталь</th>
-      <th scope="col">Запущено</th>
-      <th scope="col">Процент</th>
-      <th scope="col">Изделие</th>
-      <th scope="col">Кол-во изд.</th>
-      
- 
-
-     
-      
+<div id="accordion">
+  <h3>Прием по изделиям в зависимости от срока</h3>
+  <div>
+    <table class="table" style="width: 100%;">
+      <thead>
+        <tr>
+          <th scope="col">Деталь</th>
+          <th scope="col">Запущено</th>
+          <th scope="col">Процент</th>
+          <th scope="col">Изделие</th>
+          <th scope="col">Кол-во изд.</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for order in orders_c %}
+      <tr>
+      <th scope="row">{{ order.tool }}</th>
+      <td>{{ order.count }}</td>
+     <td>{{ order.percent }}</td>
+     <td>{{ order.firm }}</td>
+     <td>{{ order.firm.count }}</td>
     </tr>
-  </thead>
-  <tbody>
-
-  {% for order in orders_c %}
-  <tr>
-  <th scope="row">{{ order.tool }}</th>
-  <td>{{ order.count }}</td>
- <td>{{ order.percent }}</td>
- <td>{{ order.firm }}</td>
- <td>{{ order.firm.count }}</td>
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+  <h3>Прием по изделиям</h3>
+  <div>
+    <table class="table" style="width: 100%;">
+      <thead>
+       
+        <tr>
+          <th scope="col">Деталь</th>
+          <th scope="col">Получено на склад</th>
+          <th scope="col">Запущено на партию</th>
+          
+          <th scope="col">Изделие</th>
+          <th scope="col">Запущено изделий</th>
+    
+         
+          
+        </tr>
+      </thead>
+      <tbody>
+    
+      {% for order in orders %}
+      <tr>
+      <th scope="row">{{ order.0.tool }}</th>
+      <td>{{ order.1.count }}</td>
+     <td>{{ order.0.count }}</td>
+     
+     
+     <td>{% if order.0.firm %} {{ order.0.firm }}{% endif %}</td>
+     <td>{{ order.0.firm.count }}</td>
+    
+    
+     
+    </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+  
+</div>
  
  
-
-
-
  
-</tr>
-  {% endfor %}
-</tbody>
-</table>
-
 
 
 
@@ -71,39 +110,7 @@
 <!--
 
  <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детли по изделиям</h2></b>
- <table class="table" style="width: 100%;">
-  <thead>
-   
-    <tr>
-      <th scope="col">Деталь</th>
-      <th scope="col">Получено на склад</th>
-      <th scope="col">Запущено на партию</th>
-      
-      <th scope="col">Изделие</th>
-      <th scope="col">Запущено изделий</th>
-
-     
-      
-    </tr>
-  </thead>
-  <tbody>
-
-  {% for order in orders %}
-  <tr>
-  <th scope="row">{{ order.0.tool }}</th>
-  <td>{{ order.1.count }}</td>
- <td>{{ order.0.count }}</td>
  
- 
- <td>{% if order.0.firm %} {{ order.0.firm }}{% endif %}</td>
- <td>{{ order.0.firm.count }}</td>
-
-
- 
-</tr>
-  {% endfor %}
-</tbody>
-</table>
 
 -->
 
