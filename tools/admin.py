@@ -14,6 +14,7 @@ import re
 from material.models import Material
 from django.shortcuts import render
 import datetime
+#import copy
 
 
 def order_it(modeladmin, request, queryset):
@@ -213,9 +214,16 @@ class PriemResource(resources.ModelResource):
 def svod_action(modeladmin, request, queryset):
     orders=[]
     firms = []
-    priems = queryset
+    #priems = queryset
+    priems = list(queryset)
+    for priem in priems:
+        for pr in priems:
+            if pr.tool==priem.tool and pr.giveout_date!=priem.giveout_date:
+                priem.count+=pr.count
+                priems.remove(pr)
     for priem in priems:
         for order_c in Order.objects.filter(tool=priem.tool).all():
+            priem.c_count=priem.count
             orders.append([order_c, priem])
             if order_c.firm not in firms:
                 if not order_c.firm:
@@ -223,9 +231,20 @@ def svod_action(modeladmin, request, queryset):
                 if not order_c.firm.exp_date:
                     order_c.firm.exp_date = datetime.date.today()
                 firms.append(order_c.firm)
+
+
     firms = get_firms_for_priem(request, firms)
     orders_c = get_result_for_period(firms, priems)
+    
+
+    '''i=0
+    for order in orders:
+        print(order[0].tool,'-',order[0].count,'заказ')
+        print(order[1].tool,'-',order[1].count,'прием')
+        i+=1
+        if i==5: break'''
         
+
     return render(request, 'priem.html', {'orders_c': orders_c,'orders': orders,'firms': firms,'title':u'Прием на склад'})
 svod_action.short_description = "Сводная"#заяввка
 
@@ -233,11 +252,11 @@ def get_firms_for_priem(request, firms):
     start_date=datetime.datetime.strptime(request.GET.get('giveout_date__range__gte'), '%d.%m.%Y').date()
     end_date=datetime.datetime.strptime(request.GET.get('giveout_date__range__lte'), '%d.%m.%Y').date()
     firms.sort(key=lambda x: x.exp_date)
+    firms = list(filter(lambda x: x.exp_date < (end_date+datetime.timedelta(40)), firms))
     firms = list(filter(lambda x: x.exp_date > (start_date-datetime.timedelta(40)), firms))
     return firms
 def get_result_for_period(firms, priems):
     orders = []
-    orders_c=[]
     for firm in firms:
         for order in Order.objects.filter(firm=firm).all():
             orders.append(order)

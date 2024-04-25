@@ -69,7 +69,8 @@ class Order(models.Model):
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Кол-во" ) # Количество инструмента на складе
     order_date_worker = models.DateTimeField(default=timezone.now, verbose_name="Дата запуска", null=True,blank=True)
     folder = models.CharField(max_length=2000,blank=True, null=True, verbose_name="pdf")
-    percents=0
+    percent=0
+    c_count=0
     #def get_tools(self):
         #return "\n".join([p.title for p in self.tool.all()])
 

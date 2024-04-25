@@ -43,16 +43,20 @@ $( function() {
           <th scope="col">Процент</th>
           <th scope="col">Изделие</th>
           <th scope="col">Кол-во изд.</th>
+          <th scope="col">Дата запуска</th>
+          <th scope="col">Срок изготовления</th>
         </tr>
       </thead>
       <tbody>
       {% for order in orders_c %}
       <tr>
-      <th scope="row">{{ order.tool }}</th>
+      <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
       <td>{{ order.count }}</td>
      <td>{{ order.percent }}</td>
-     <td>{{ order.firm }}</td>
+     <td><a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm }}</a></td>
      <td>{{ order.firm.count }}</td>
+     <td>{{ order.firm.date }}</td>
+     <td>{{ order.firm.exp_date }}</td>
     </tr>
       {% endfor %}
     </tbody>
@@ -70,6 +74,8 @@ $( function() {
           
           <th scope="col">Изделие</th>
           <th scope="col">Запущено изделий</th>
+          <th scope="col">Дата запуска</th>
+          <th scope="col">Срок изготовления</th>
     
          
           
@@ -79,13 +85,16 @@ $( function() {
     
       {% for order in orders %}
       <tr>
+        
       <th scope="row">{{ order.0.tool }}</th>
-      <td>{{ order.1.count }}</td>
+      <td>{{ order.1.c_count }}</td>
      <td>{{ order.0.count }}</td>
      
      
      <td>{% if order.0.firm %} {{ order.0.firm }}{% endif %}</td>
      <td>{{ order.0.firm.count }}</td>
+     <td>{{ order.0.firm.date }}</td>
+     <td>{{ order.0.firm.exp_date }}</td>
     
     
      
