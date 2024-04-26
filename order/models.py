@@ -46,6 +46,8 @@ class Firm(models.Model):
     ready = models.BooleanField(default=False, verbose_name="Готов" )
     folder = models.CharField(max_length=2000,blank=True, null=True, verbose_name="Folder")
     assem = models.ManyToManyField(Assem, null=True,blank=True, verbose_name="Сборки" )  # сборки
+    report=models.BooleanField(default=False, verbose_name="Для расчетов")
+    percents=0
     
        
     '''def publish(self):

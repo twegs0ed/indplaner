@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from .forms import GanttForm, SearchtoolForm
+from .forms import GanttForm, SearchtoolForm, GetFirms
 from django.http import HttpResponseRedirect
 from tools.models import Toolsonwarehouse, Tools, Priem
 from order.models import Order, Firm
 from work.models import Work
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.utils.dateformat import format
 import pandas as pd
 from plotly.offline import plot
@@ -318,7 +318,69 @@ def gantt(request):
     return render(request, 'gantt.html', context)
 
 
+def report(request):
+    if request.POST.get('firms'):
+        form = GetFirms(request.POST)
+        firms = request.POST.getlist('firms')
+        firms = Firm.objects.filter(pk__in=firms).all()
+        
 
+
+        datestart = request.POST.get('datestart')
+        dateend = request.POST.get('dateend')
+        
+        priems = Priem.objects.filter(giveout_date__gte=datestart, giveout_date__lte=dateend)
+        orders=get_result_for_period(firms, priems)
+        
+
+
+        vars = {
+            'firms':firms,
+            'form':form,
+            'title':'Отчет за период',
+            'orders':orders
+            }
+        
+        return render(request, 'report.html', vars)
+    form = GetFirms()
+    vars = {
+            'form':form,
+            'title':'Отчет за период'
+            }
+    
+    return render(request, 'report.html', vars)
+
+
+def get_result_for_period(firms, priems):
+    orders = []
+    for firm in firms:
+        for order in Order.objects.filter(firm=firm).all():
+            orders.append(order)
+            pass
+    priems=list(priems)
+    for priem in priems.copy():
+        while priem.count > 0:
+            for order in orders:
+                if order.tool == priem.tool:
+                    if order.count < priem.count:
+                        order.percent = 100
+                        priem.count-=order.count
+                    elif order.count == priem.count:
+                        order.percent = 100
+                        priem.count=0
+                        priems.remove(priem)
+                        break
+                    elif order.count > priem.count:
+                        order.percent = priem.count/order.count*100
+                        priem.count=0
+                        priems.remove(priem)
+                        break
+                    #print(order.tool,order.percent, order.firm)
+            
+            break
+        
+    
+    return orders
 
     
     
