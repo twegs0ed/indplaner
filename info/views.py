@@ -322,7 +322,7 @@ def report(request):
     if request.POST.get('firms'):
         form = GetFirms(request.POST)
         firms = request.POST.getlist('firms')
-        firms = Firm.objects.filter(pk__in=firms).all()
+        firms = Firm.objects.filter(pk__in=firms).order_by('exp_date').all()
 
         datestart = request.POST.get('datestart')
         dateend = request.POST.get('dateend')
