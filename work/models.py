@@ -12,6 +12,7 @@ class Work(models.Model):
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     date = models.DateField(default=timezone.now, verbose_name="Дата выполнения работы", null=True,blank=True)#Дата получения на склад
     time = models.TimeField(auto_now_add=True, verbose_name="Время")
+    work_time = models.IntegerField(null=True,blank=True, verbose_name="Время выполнения одной детали на данной операции, мин")
     count = models.IntegerField(default=0, blank=True, null=True, verbose_name="Количество" ) # Количество инструмента на складе
     ready = models.BooleanField(default=True, verbose_name="Опер. завершена?" )
     machines = models.ManyToManyField(Machine, blank=True, null=True, verbose_name="Станки" )  
@@ -29,7 +30,7 @@ class WorkForm(ModelForm):
     
     class Meta:
         model = Work
-        fields = ['tool', 'user','text','date','count', 'ready']
+        fields = ['tool', 'user','text','date','count', 'ready', 'work_time']
         #exclude = ['user']
     
     
