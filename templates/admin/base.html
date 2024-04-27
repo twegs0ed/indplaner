@@ -43,8 +43,9 @@
         {% block usertools %}
         {% if has_permission %}
         <div id="user-tools">
-          <a href="/info/report">Отчет за период</a>
           <a href="/info">Сводная по детали</a>
+          <a href="/info/report">Отчет за период</a>
+          
           <a href="/info/gantt">График Ганта</a>
             {% block welcome-msg %}
                 {% translate 'Welcome,' %}
