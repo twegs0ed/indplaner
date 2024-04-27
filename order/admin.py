@@ -408,7 +408,7 @@ class FirmAdmin(ExportActionMixin,admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
     resource_class = FirmResource
-    list_filter = (('exp_date', DateRangeFilter),'ready', ('date', DateRangeFilter))
+    list_filter = (('exp_date', DateRangeFilter),'ready', ('date', DateRangeFilter), 'report')
     list_display = ('title', 'text', 'count', 'date', 'exp_date', 'show_firm_url', status_colored, 'ready', 'readys', 'getouts', 'priems', 'printmkall','printpr', 'folder1', 'gant', 'assems')
     list_editable = ['count', 'date', 'exp_date', 'ready', 'text']
     search_fields = ['title']
