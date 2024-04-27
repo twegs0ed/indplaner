@@ -15,6 +15,25 @@
 
  {% block content %}
 
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Изделие</th>
+      <th scope="col">кол-во</th>
+      <th scope="col">Процент</th>
+      
+    </tr>
+  </thead>
+
+  {% for firm, value in count.items %}
+ 
+<tr>
+ <th><b><a href="/order/firm/{{firm.id}}/change/"> {{firm.title}} </a> </b></th>
+  <th>{{firm.count}} </th>
+  <th>{{value}} %</th>
+</tr>
+  {% endfor %}
+</table>
 
  <form action="" method="post">
   {% csrf_token %}

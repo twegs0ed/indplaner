@@ -323,8 +323,6 @@ def report(request):
         form = GetFirms(request.POST)
         firms = request.POST.getlist('firms')
         firms = Firm.objects.filter(pk__in=firms).all()
-        
-
 
         datestart = request.POST.get('datestart')
         dateend = request.POST.get('dateend')
@@ -332,13 +330,30 @@ def report(request):
         priems = Priem.objects.filter(giveout_date__gte=datestart, giveout_date__lte=dateend)
         orders=get_result_for_period(firms, priems)
         
+        count={}
+        for firm in firms:
+            orders_count=0
+            percents=0
+            for order in orders:
+                if order.firm == firm:
+                    orders_count+=1
+                    percents+=order.percent
+
+            count[firm]=round (percents/orders_count, 2)
+        print(count)
+            
+                    
+
+
+        
 
 
         vars = {
             'firms':firms,
             'form':form,
             'title':'Отчет за период',
-            'orders':orders
+            'orders':orders,
+            'count':count
             }
         
         return render(request, 'report.html', vars)
@@ -357,6 +372,8 @@ def get_result_for_period(firms, priems):
         for order in Order.objects.filter(firm=firm).all():
             orders.append(order)
             pass
+    for order in orders:
+            order.count = order.count*order.firm.count
     priems=list(priems)
     for priem in priems.copy():
         while priem.count > 0:

@@ -20,7 +20,9 @@ class GetFirms(forms.Form):
     firms = forms.ModelMultipleChoiceField(
         widget = forms.CheckboxSelectMultiple,
         queryset = Firm.objects.filter(report = True).all(),
-        initial = 0
+        initial = 0,
+        label = 'Изделия для расчета',
+        required=True, 
         )
     datestart = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),label='Начало периода')
     dateend = forms.DateTimeField( widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),label='Конец периода')
