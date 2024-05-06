@@ -42,6 +42,7 @@ class WorkResource(resources.ModelResource):
     machines = ManyToManyWidget(Machine, separator=', ')
     firm = Field()
     machines = Field()
+    #work_time = Field()
     
 
     def before_export(self, queryset, *args, **kwargs):
@@ -49,7 +50,7 @@ class WorkResource(resources.ModelResource):
         return self
     class Meta:
         model = Work
-        fields = ('tool__title', 'user__first_name', 'user__last_name', 'date', 'user__stanprofile__operation__name','count', 'firm','machines')
+        fields = ('tool__title', 'user__first_name', 'user__last_name', 'date', 'user__stanprofile__operation__name','count', 'firm','machines', 'work_time')
         export_order = fields
         #Eexclude = ('id',)
         #skip_unchanged=True
@@ -79,7 +80,7 @@ class WorkResource(resources.ModelResource):
 class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = WorkResource
     form = WorkForm
-    list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'get_machines', 'text', 'ready', 'ord')
+    list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'get_machines', 'text', 'ready', 'ord', 'work_time')
     list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation', 'machines' ,'user')
     search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
     autocomplete_fields = ('user', 'tool' )
