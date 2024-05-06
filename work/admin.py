@@ -50,7 +50,7 @@ class WorkResource(resources.ModelResource):
         return self
     class Meta:
         model = Work
-        fields = ('tool__title', 'user__first_name', 'user__last_name', 'date', 'user__stanprofile__operation__name','count', 'firm','machines', 'work_time')
+        fields = ('tool__title', 'user__first_name', 'user__last_name', 'date', 'user__stanprofile__operation__name','count', 'firm','machines', 'work_time', 'numb_ust')
         export_order = fields
         #Eexclude = ('id',)
         #skip_unchanged=True
@@ -80,8 +80,8 @@ class WorkResource(resources.ModelResource):
 class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = WorkResource
     form = WorkForm
-    list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'get_machines', 'text', 'ready', 'ord', 'work_time')
-    list_filter = (('date', DateRangeFilter), 'ready', 'user__stanprofile__operation', 'machines' ,'user')
+    list_display = ('tool', full_name, 'count', 'date', 'time', get_operation, 'get_machines',  'ord', 'work_time', 'numb_ust', 'text')
+    list_filter = (('date', DateRangeFilter), 'user__stanprofile__operation', 'machines' ,'user')
     search_fields = ['user__username', 'user__first_name','user__last_name', 'tool__title']
     autocomplete_fields = ('user', 'tool' )
     def get_machines(self, obj):

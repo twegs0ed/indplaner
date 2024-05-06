@@ -32,6 +32,8 @@ class Toolsonwarehouse(models.Model):
     cover = models.BooleanField(default=False, verbose_name="Покрывается" )
     similar = models.ManyToManyField('self',blank=True, null=True, verbose_name="Похожие" )
 
+    
+
     norm_lentopil_p = models.FloatField(default=0,blank=True, verbose_name="Ленточнопильная п/з, ч." )
     norm_lentopil = models.FloatField(default=0,blank=True, verbose_name="Ленточнопильная, ч." )
     
