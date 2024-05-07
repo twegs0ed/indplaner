@@ -1,5 +1,5 @@
 from django.db import models
-from tools.models import Toolsonwarehouse
+from tools.models import Toolsonwarehouse, Norms
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.utils import timezone
@@ -29,6 +29,30 @@ class Work(models.Model):
     numb_ust = models.IntegerField(default=0, blank=False, null=False, verbose_name="Номер установа", choices=NUMB_CHOICES) # 
 
     def save(self, *args, **kwargs):
+        tool=self.tool
+        try:
+            norms, _ = Norms.objects.get_or_create(tool = tool)
+            
+
+        except Norms.MultipleObjectsReturned:
+            pass
+        if self.user.stanprofile.operation.name =='Фрезерная с ЧПУ':
+            if self.numb_ust==1:norms.cncmill1 = self.work_time
+            elif self.numb_ust==2:norms.cncmill2 = self.work_time
+            elif self.numb_ust==3:norms.cncmill3 = self.work_time
+            elif self.numb_ust==4:norms.cncmill4 = self.work_time
+            elif self.numb_ust==5:norms.cncmill5 = self.work_time
+            elif self.numb_ust==6:norms.cncmill6 = self.work_time
+            elif self.numb_ust==7:norms.cncmill7 = self.work_time
+        elif self.user.stanprofile.operation.name =='Токарная с ЧПУ':
+            if self.numb_ust==1:norms.cncturn1 = self.work_time
+            elif self.numb_ust==2:norms.cncturn2 = self.work_time
+            elif self.numb_ust==3:norms.cncturn3 = self.work_time
+            elif self.numb_ust==4:norms.cncturn4 = self.work_time
+            elif self.numb_ust==5:norms.cncturn5 = self.work_time
+            elif self.numb_ust==6:norms.cncturn6 = self.work_time
+            elif self.numb_ust==7:norms.cncturn7 = self.work_time
+        norms.save()
         
         super(Work, self).save(*args, **kwargs)
         self.machines.set(self.user.stanprofile.machines.all())

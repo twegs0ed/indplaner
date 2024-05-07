@@ -1,6 +1,6 @@
 from django.contrib import admin
 from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
-from .models import Toolsonwarehouse, Tools, Rec_Tools, Priem, Workplace
+from .models import Toolsonwarehouse, Tools, Rec_Tools, Priem, Workplace, Norms
 from profiles.models import Profile
 from order.models import Order, Firm
 from import_export.admin import ExportActionMixin, ImportExportModelAdmin
@@ -327,8 +327,40 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
     firms.short_description = "Изделия"
+class NormsAdmin(ExportActionMixin, admin.ModelAdmin):
+    #autocomplete_fields = ['tool','worker']
+    #resource_class = ToolsResource
+    list_display = ('tool','cncturn1', 'cncturn2','cncturn3','cncturn4','cncturn5','cncturn6','cncturn7','cncmill1','cncmill2','cncmill3','cncmill4','cncmill5','cncmill6','cncmill7')
+    #list_filter = (('giveout_date', DateRangeFilter), 'worker')
+    #search_fields = ['tool__title', 'worker__bio']
+    #ordering = ['-giveout_date']
+    #list_editable = ['text']
+    def get_search_results(self, request, queryset, search_term):
+        #search_term=re.sub("[^\d\.]", "", str(search_term))
+        search_term=str(search_term).upper()
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        #queryset |= self.model.objects.filter(tool__title=search_term)
+        return queryset, use_distinct
+    pass
+    def firms(self, obj):
+        orders=Order.objects.filter(tool=obj.tool).order_by('-order_date_worker')[:15]
+        t=''
+        f=[]
+        for o in orders:
+            if o.firm:
+                f.append(o.firm.title)
+            pass
+        for x in f: 
+            if f.count(x) > 1: 
+                f.remove(x) 
+        for x in f:
+            t+=' <a href = "/order/order/?q='+x+'">'+x+'</a> '+'</br>'
+            #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
+        return format_html(t)
+    firms.short_description = "Нормы"
 
 admin.site.register(Tools, ToolsAdmin)
 admin.site.register(Priem, PriemAdmin)
+admin.site.register(Norms, NormsAdmin)
 admin.site.register(Toolsonwarehouse, ToolsonwarehouseAdmin)
 #admin.site.register(Rec_Tools, Rec_ToolsAdmin)

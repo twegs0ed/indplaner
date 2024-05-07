@@ -364,3 +364,25 @@ class Priem(models.Model):
     class Meta:
         verbose_name = 'прием'
         verbose_name_plural = 'прием деталей на склад'
+
+class Norms(models.Model):
+    tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Деталь")
+    cncturn1 = models.IntegerField(null=True, verbose_name="ток. чпу 1 уст.")
+    cncturn2 = models.IntegerField(null=True, verbose_name="ток. чпу 2 уст.")
+    cncturn3 = models.IntegerField(null=True, verbose_name="ток. чпу 3 уст.")
+    cncturn4 = models.IntegerField(null=True, verbose_name="ток. чпу 4 уст.")
+    cncturn5 = models.IntegerField(null=True, verbose_name="ток. чпу 5 уст.")
+    cncturn6 = models.IntegerField(null=True, verbose_name="ток. чпу 6 уст.")
+    cncturn7 = models.IntegerField(null=True, verbose_name="ток. чпу 7 уст.")
+
+    cncmill1 = models.IntegerField(null=True, verbose_name="фрез. чпу 1 уст.")
+    cncmill2 = models.IntegerField(null=True, verbose_name="фрез. чпу 2 уст.")
+    cncmill3 = models.IntegerField(null=True, verbose_name="фрез. чпу 3 уст.")
+    cncmill4 = models.IntegerField(null=True, verbose_name="фрез. чпу 4 уст.")
+    cncmill5 = models.IntegerField(null=True, verbose_name="фрез. чпу 5 уст.")
+    cncmill6 = models.IntegerField(null=True, verbose_name="фрез. чпу 6 уст.")
+    cncmill7 = models.IntegerField(null=True, verbose_name="фрез. чпу 7 уст.")
+
+    class Meta:
+        verbose_name = 'Нормы времени'
+        verbose_name_plural = 'Нормы времени'
