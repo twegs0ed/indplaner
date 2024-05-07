@@ -116,6 +116,7 @@ class OrderResource(resources.ModelResource):
         )
     tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidget(model=Toolsonwarehouse, field='title'))
     count_avail = Field()
+    count_avail_all = Field()
     place = Field()
     firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidget(model=Firm, field='title'))
     
@@ -160,6 +161,11 @@ class OrderResource(resources.ModelResource):
 
     def dehydrate_count_avail(self, order): 
         if order.tool: return order.tool.count
+    def dehydrate_count_avail_all(self, order): 
+        count = order.tool.count
+        for t_c in order.tool.similar.all():
+            if order.tool.title != t_c.title:count+=t_c.count
+        return count
     def dehydrate_place(self, order): 
         if order.tool: return order.tool.workplace
     def dehydrate_tool_material_n(self, order): 
