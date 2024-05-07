@@ -16,7 +16,7 @@ from django.db.models import Q
 
 
 def full_name(obj):
-    return "%s %s" % (obj.user.last_name, obj.user.first_name)
+    return format_html("<a href='/profiles/stanprofile/%s/change/'>%s %s</a>" % (obj.user.stanprofile.id,obj.user.last_name, obj.user.first_name))
 full_name.short_description='Исполнитель'
 def get_operation(obj):
     return obj.user.stanprofile.operation
