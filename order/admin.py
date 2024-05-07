@@ -250,8 +250,8 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'c_count', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout', 'firms', 'folder1')
-    list_filter = (('exp_date', DateRangeFilter),'status', 'firm', 'tool__material_n')
+    list_display = ('tool','count', 'c_count', 'c_count_all', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout', 'firms', 'folder1')
+    list_filter = (('exp_date', DateRangeFilter),'status', )
     search_fields = ['tool__title', 'firm__title']
     autocomplete_fields = [ 'tool', 'firm']
     actions = [make_ordered, make_payed, make_com, make_ordered_by_worker]
@@ -354,6 +354,20 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         return format_html(t)
     work.short_description = "Изгот-е"
+    def c_count_all(self, obj):
+        if obj.tool:
+            title=obj.tool.title
+            count=obj.tool.count
+            for t_c in obj.tool.similar.all():
+                if title != t_c.title:count+=t_c.count
+            
+        else: 
+            title='1'
+            count='0'
+        t=str(count)
+        return format_html(t)
+    c_count_all.short_description = "На скл. все шифры"
+
     def c_count(self, obj):
         if obj.tool:
             title=obj.tool.title
