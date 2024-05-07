@@ -367,6 +367,7 @@ class Priem(models.Model):
 
 class Norms(models.Model):
     tool = models.ForeignKey(Toolsonwarehouse, on_delete=models.CASCADE, null=True, verbose_name="Деталь")
+    cncturn0 = models.IntegerField(null=True, verbose_name="ток. чпу 0 уст.")
     cncturn1 = models.IntegerField(null=True, verbose_name="ток. чпу 1 уст.")
     cncturn2 = models.IntegerField(null=True, verbose_name="ток. чпу 2 уст.")
     cncturn3 = models.IntegerField(null=True, verbose_name="ток. чпу 3 уст.")
@@ -375,6 +376,7 @@ class Norms(models.Model):
     cncturn6 = models.IntegerField(null=True, verbose_name="ток. чпу 6 уст.")
     cncturn7 = models.IntegerField(null=True, verbose_name="ток. чпу 7 уст.")
 
+    cncmill0 = models.IntegerField(null=True, verbose_name="фрез. чпу 0 уст.")
     cncmill1 = models.IntegerField(null=True, verbose_name="фрез. чпу 1 уст.")
     cncmill2 = models.IntegerField(null=True, verbose_name="фрез. чпу 2 уст.")
     cncmill3 = models.IntegerField(null=True, verbose_name="фрез. чпу 3 уст.")
@@ -382,6 +384,35 @@ class Norms(models.Model):
     cncmill5 = models.IntegerField(null=True, verbose_name="фрез. чпу 5 уст.")
     cncmill6 = models.IntegerField(null=True, verbose_name="фрез. чпу 6 уст.")
     cncmill7 = models.IntegerField(null=True, verbose_name="фрез. чпу 7 уст.")
+
+    turn0 = models.IntegerField(null=True, verbose_name="ток. ун. 0 уст.")
+    turn1 = models.IntegerField(null=True, verbose_name="ток. ун. 1 уст.")
+    turn2 = models.IntegerField(null=True, verbose_name="ток. ун. 2 уст.")
+    turn3 = models.IntegerField(null=True, verbose_name="ток. ун. 3 уст.")
+    turn4 = models.IntegerField(null=True, verbose_name="ток. ун. 4 уст.")
+    turn5 = models.IntegerField(null=True, verbose_name="ток. ун. 5 уст.")
+    turn6 = models.IntegerField(null=True, verbose_name="ток. ун. 6 уст.")
+    turn7 = models.IntegerField(null=True, verbose_name="ток. ун. 7 уст.")
+
+    mill0 = models.IntegerField(null=True, verbose_name="фрез. ун. 0 уст.")
+    mill1 = models.IntegerField(null=True, verbose_name="фрез. ун. 1 уст.")
+    mill2 = models.IntegerField(null=True, verbose_name="фрез. ун. 2 уст.")
+    mill3 = models.IntegerField(null=True, verbose_name="фрез. ун. 3 уст.")
+    mill4 = models.IntegerField(null=True, verbose_name="фрез. ун. 4 уст.")
+    mill5 = models.IntegerField(null=True, verbose_name="фрез. ун. 5 уст.")
+    mill6 = models.IntegerField(null=True, verbose_name="фрез. ун. 6 уст.")
+    mill7 = models.IntegerField(null=True, verbose_name="фрез. ун. 7 уст.")
+
+    eroz0 = models.IntegerField(null=True, verbose_name="эроз 0 уст.")
+    eroz1 = models.IntegerField(null=True, verbose_name="эроз 1 уст.")
+    eroz2 = models.IntegerField(null=True, verbose_name="эроз 2 уст.")
+    eroz3 = models.IntegerField(null=True, verbose_name="эроз 3 уст.")
+    eroz4 = models.IntegerField(null=True, verbose_name="эроз 4 уст.")
+    eroz5 = models.IntegerField(null=True, verbose_name="эроз 5 уст.")
+    eroz6 = models.IntegerField(null=True, verbose_name="эроз 6 уст.")
+    eroz7 = models.IntegerField(null=True, verbose_name="эроз 7 уст.")
+
+    lentopil = models.IntegerField(null=True, verbose_name="пила")
 
     class Meta:
         verbose_name = 'Нормы времени'

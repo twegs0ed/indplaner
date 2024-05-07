@@ -330,7 +330,13 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 class NormsAdmin(ExportActionMixin, admin.ModelAdmin):
     #autocomplete_fields = ['tool','worker']
     #resource_class = ToolsResource
-    list_display = ('tool','cncturn1', 'cncturn2','cncturn3','cncturn4','cncturn5','cncturn6','cncturn7','cncmill1','cncmill2','cncmill3','cncmill4','cncmill5','cncmill6','cncmill7')
+    list_display = ('tool',
+                    'cncturn0','cncturn1', 'cncturn2','cncturn3','cncturn4','cncturn5','cncturn6','cncturn7',
+                    'cncmill0','cncmill1','cncmill2','cncmill3','cncmill4','cncmill5','cncmill6','cncmill7',
+                    'turn0','turn1', 'turn2','turn3','turn4','turn5','turn6','turn7',
+                    'mill0','mill1','mill2','mill3','mill4','mill5','mill6','mill7',
+                    'eroz0','eroz1','eroz2','eroz3','eroz4','eroz5','eroz6','eroz7',
+                    'lentopil')
     #list_filter = (('giveout_date', DateRangeFilter), 'worker')
     #search_fields = ['tool__title', 'worker__bio']
     #ordering = ['-giveout_date']
