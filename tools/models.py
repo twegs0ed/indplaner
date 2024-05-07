@@ -412,7 +412,7 @@ class Norms(models.Model):
     eroz6 = models.IntegerField(null=True, blank=True, verbose_name="эроз 6 уст.")
     eroz7 = models.IntegerField(null=True, blank=True, verbose_name="эроз 7 уст.")
 
-    lentopil = models.IntegerField(null=True, verbose_name="пила")
+    lentopil = models.IntegerField(null=True, blank=True, verbose_name="пила")
 
     class Meta:
         verbose_name = 'Нормы времени'
