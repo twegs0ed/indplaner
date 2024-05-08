@@ -368,7 +368,7 @@ class NormsAdmin(ExportActionMixin, admin.ModelAdmin):
                     'eroz0','eroz1','eroz2','eroz3','eroz4','eroz5','eroz6','eroz7',
                     'lentopil')
     #list_filter = (('giveout_date', DateRangeFilter), 'worker')
-    #search_fields = ['tool__title', 'worker__bio']
+    search_fields = ['tool__title']
     #ordering = ['-giveout_date']
     #list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
