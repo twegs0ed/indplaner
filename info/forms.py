@@ -18,7 +18,7 @@ class GetFirms(forms.Form):
         super(GetFirms, self).__init__(*args, **kwargs)
         self.fields['firms'] = forms.ModelMultipleChoiceField(queryset=Firm.objects.filter(report = True).all(),       widget=forms.CheckboxSelectMultiple())'''
     firms = forms.ModelMultipleChoiceField(
-        widget = forms.CheckboxSelectMultiple,
+        widget = forms.CheckboxSelectMultiple(attrs={'checked':True}),
         queryset = Firm.objects.filter(report = True).all(),
         initial = 0,
         label = 'Изделия для расчета',
