@@ -14,6 +14,7 @@ import re
 from material.models import Material
 from django.shortcuts import render
 import datetime
+from work.models import Work
 #import copy
 
 
@@ -327,10 +328,39 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
     firms.short_description = "Изделия"
+
+
+class NormsResource(resources.ModelResource):
+    works = Field()
+    
+    #firm = Field(
+        #column_name='firm',
+        #attribute='firm',
+        #widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    class Meta:
+        model = Norms
+
+        fields = ('tool__title', 'works',
+                    'cncturn0','cncturn1', 'cncturn2','cncturn3','cncturn4','cncturn5','cncturn6','cncturn7',
+                    'cncmill0','cncmill1','cncmill2','cncmill3','cncmill4','cncmill5','cncmill6','cncmill7',
+                    'turn0','turn1', 'turn2','turn3','turn4','turn5','turn6','turn7',
+                    'mill0','mill1','mill2','mill3','mill4','mill5','mill6','mill7',
+                    'eroz0','eroz1','eroz2','eroz3','eroz4','eroz5','eroz6','eroz7',
+                    'lentopil')
+    def dehydrate_works(self, obj):
+        works = Work.objects.filter(tool=obj.tool).order_by('-date')[:2]
+        t=''
+        for o in works:
+            t+=str(o.date)+' - '+str(o.count)+' шт. - '+o.user.get_full_name()+'\n'
+            #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
+        return format_html(t)
+    dehydrate_works.short_description = "Изделия"
+
+
 class NormsAdmin(ExportActionMixin, admin.ModelAdmin):
     #autocomplete_fields = ['tool','worker']
-    #resource_class = ToolsResource
-    list_display = ('tool',
+    resource_class = NormsResource
+    list_display = ('tool', 'works',
                     'cncturn0','cncturn1', 'cncturn2','cncturn3','cncturn4','cncturn5','cncturn6','cncturn7',
                     'cncmill0','cncmill1','cncmill2','cncmill3','cncmill4','cncmill5','cncmill6','cncmill7',
                     'turn0','turn1', 'turn2','turn3','turn4','turn5','turn6','turn7',
@@ -348,22 +378,14 @@ class NormsAdmin(ExportActionMixin, admin.ModelAdmin):
         #queryset |= self.model.objects.filter(tool__title=search_term)
         return queryset, use_distinct
     pass
-    def firms(self, obj):
-        orders=Order.objects.filter(tool=obj.tool).order_by('-order_date_worker')[:15]
+    def works(self, obj):
+        works = Work.objects.filter(tool=obj.tool).order_by('-date')[:2]
         t=''
-        f=[]
-        for o in orders:
-            if o.firm:
-                f.append(o.firm.title)
-            pass
-        for x in f: 
-            if f.count(x) > 1: 
-                f.remove(x) 
-        for x in f:
-            t+=' <a href = "/order/order/?q='+x+'">'+x+'</a> '+'</br>'
+        for o in works:
+            t+=str(o.date)+' - '+str(o.count)+' шт. - '+o.user.get_full_name()+'\n'
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
-    firms.short_description = "Нормы"
+    works.short_description = "Работы"
 
 admin.site.register(Tools, ToolsAdmin)
 admin.site.register(Priem, PriemAdmin)

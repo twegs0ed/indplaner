@@ -162,10 +162,12 @@ class OrderResource(resources.ModelResource):
     def dehydrate_count_avail(self, order): 
         if order.tool: return order.tool.count
     def dehydrate_count_avail_all(self, order): 
-        count = order.tool.count
-        for t_c in order.tool.similar.all():
-            if order.tool.title != t_c.title:count+=t_c.count
-        return count
+        if order.tool:
+            count = order.tool.count
+            for t_c in order.tool.similar.all():
+                if order.tool.title != t_c.title:count+=t_c.count
+            return count
+        return 0
     def dehydrate_place(self, order): 
         if order.tool: return order.tool.workplace
     def dehydrate_tool_material_n(self, order): 
