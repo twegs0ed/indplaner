@@ -29,13 +29,35 @@ class Work(models.Model):
     numb_ust = models.IntegerField(default=0, blank=False, null=False, verbose_name="Номер установа", choices=NUMB_CHOICES) # 
 
     def save(self, *args, **kwargs):
-        tool=self.tool
-        try:
+        setnormstotool(self.tool, self)
+        for t_c in self.tool.similar.all():
+            print(t_c.title)
+            setnormstotool(t_c, self)
+
+            pass
+        
+        super(Work, self).save(*args, **kwargs)
+        self.machines.set(self.user.stanprofile.machines.all())
+
+    class Meta:
+        verbose_name = 'Выполненные работы'
+        verbose_name_plural = 'Выполненные работы'
+
+
+class WorkForm(ModelForm):
+    
+    class Meta:
+        model = Work
+        fields = ['tool', 'user','text','date','count', 'ready', 'work_time', 'numb_ust']
+        #exclude = ['user']
+def setnormstotool(tool, self):
+    try:
             norms, _ = Norms.objects.get_or_create(tool = tool)
             
 
-        except Norms.MultipleObjectsReturned:
-            pass
+    except Norms.MultipleObjectsReturned:
+        pass
+    if self.user.stanprofile.operation:
         if self.user.stanprofile.operation.name =='Фрезерная с ЧПУ':
             if self.numb_ust==0:norms.cncmill0 = self.work_time
             elif self.numb_ust==1:norms.cncmill1 = self.work_time
@@ -83,22 +105,7 @@ class Work(models.Model):
             elif self.numb_ust==7:norms.eroz7 = self.work_time
         elif self.user.stanprofile.operation.name =='Ленточнопильная':
             norms.lentopil = self.work_time
-            
-        norms.save()
         
-        super(Work, self).save(*args, **kwargs)
-        self.machines.set(self.user.stanprofile.machines.all())
-
-    class Meta:
-        verbose_name = 'Выполненные работы'
-        verbose_name_plural = 'Выполненные работы'
-
-
-class WorkForm(ModelForm):
-    
-    class Meta:
-        model = Work
-        fields = ['tool', 'user','text','date','count', 'ready', 'work_time', 'numb_ust']
-        #exclude = ['user']
+    norms.save()
     
     
