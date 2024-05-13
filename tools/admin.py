@@ -331,7 +331,13 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 class NormsResource(resources.ModelResource):
+    def before_import_row(self, row, **kwargs):
+        
+        Toolsonwarehouse.objects.get_or_create(
+            title=row.get('tool')
+        )
     works = Field()
+    tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidget(model=Toolsonwarehouse, field='title'))
     
     #firm = Field(
         #column_name='firm',
@@ -340,24 +346,28 @@ class NormsResource(resources.ModelResource):
     class Meta:
         model = Norms
 
-        fields = ('tool__title', 'works',
+        fields = ('tool', 'works',
                     'cncturn0','cncturn1', 'cncturn2','cncturn3','cncturn4','cncturn5','cncturn6','cncturn7',
                     'cncmill0','cncmill1','cncmill2','cncmill3','cncmill4','cncmill5','cncmill6','cncmill7',
                     'turn0','turn1', 'turn2','turn3','turn4','turn5','turn6','turn7',
                     'mill0','mill1','mill2','mill3','mill4','mill5','mill6','mill7',
                     'eroz0','eroz1','eroz2','eroz3','eroz4','eroz5','eroz6','eroz7',
                     'lentopil')
+        #export_order = ('tool')
+        import_id_fields = ('tool',)
+
+        
+        
     def dehydrate_works(self, obj):
         works = Work.objects.filter(tool=obj.tool).order_by('-date')[:2]
         t=''
         for o in works:
-            t+=str(o.date)+' - '+str(o.count)+' шт. - '+o.user.get_full_name()+'\n'
+            t+=str(o.date)+' - '+str(o.count)+' шт. - '+o.user.get_full_name()+'-'
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
-    dehydrate_works.short_description = "Изделия"
 
 
-class NormsAdmin(ExportActionMixin, admin.ModelAdmin):
+class NormsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     #autocomplete_fields = ['tool','worker']
     resource_class = NormsResource
     list_display = ('tool', 'works',

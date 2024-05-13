@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Order, Firm, Orderformed, Assem
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from import_export import resources
-from tools.models import Toolsonwarehouse, Tools
+from tools.models import Toolsonwarehouse, Tools, Norms
 from django.contrib.admin.models import LogEntry
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
@@ -121,7 +121,7 @@ class OrderResource(resources.ModelResource):
     firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidget(model=Firm, field='title'))
     
     
-    norm_lentopil_p = Field()
+    '''norm_lentopil_p = Field()
     norm_lentopil = Field()
     norm_plazma_p = Field()
     norm_plazma = Field()
@@ -140,13 +140,16 @@ class OrderResource(resources.ModelResource):
     norm_sverliln_p = Field()
     norm_sverliln = Field()
     norm_rastoch_p = Field()
-    norm_rastoch = Field()
+    norm_rastoch = Field()'''
 
     tool_material_n = Field()
     tool_stocksizes= Field()
     getout = Field()
     cover = Field()
     firms = Field()
+
+    norm_turn_cnc = Field()
+    
     
     
        
@@ -183,11 +186,33 @@ class OrderResource(resources.ModelResource):
         if order.status == 'OR' : return 'Запущено'
         if order.status == 'PD' : return 'На стороне'
         if order.status == 'CM' : return 'Изготовлено'
-
+    
+    
+    def dehydrate_norm_turn_cnc(self, order): 
+        
+        try:
+            norms = Norms.objects.get(tool=order.tool)
+        except Norms.DoesNotExist:
+            return 0
+        
+        t=int(norms.cncturn1 or 0)+int(norms.cncturn2 or 0)+int(norms.cncturn3 or 0)+int(norms.cncturn4 or 0)+int(norms.cncturn5 or 0)+int(norms.cncturn6 or 0)+int(norms.cncturn7 or 0)
+        t=t*order.count
+        t_pz=0
+        if norms.cncturn1:t_pz+=40
+        if norms.cncturn2:t_pz+=40
+        if norms.cncturn3:t_pz+=40
+        if norms.cncturn4:t_pz+=40
+        if norms.cncturn5:t_pz+=40
+        if norms.cncturn6:t_pz+=40
+        if norms.cncturn7:t_pz+=40
+        t+=t_pz
+        t=t*1.1
+        return t
+        
 
             
         
-    def dehydrate_norm_lentopil(self, order):  
+    '''def dehydrate_norm_lentopil(self, order):  
         if order.tool: return order.count*order.tool.norm_lentopil
     def dehydrate_norm_plazma_p(self, order):  
         if order.tool: return order.tool.norm_plazma_p
@@ -222,7 +247,10 @@ class OrderResource(resources.ModelResource):
     def dehydrate_norm_rastoch_p(self, order):  
         if order.tool: return order.tool.norm_rastoch_p
     def dehydrate_norm_rastoch(self, order):  
-        if order.tool: return order.count*order.tool.norm_rastoch
+        if order.tool: return order.count*order.tool.norm_rastoch'''
+
+
+
     def dehydrate_getout(self, obj):  
         w=Tools.objects.filter(tool=obj.tool).order_by('-giveout_date').all()[:3]
         t=""
