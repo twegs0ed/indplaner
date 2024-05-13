@@ -149,6 +149,7 @@ class OrderResource(resources.ModelResource):
     firms = Field()
 
     norm_turn_cnc = Field()
+    norm_mill_cnc = Field()
     
     
     
@@ -205,6 +206,26 @@ class OrderResource(resources.ModelResource):
         if norms.cncturn5:t_pz+=40
         if norms.cncturn6:t_pz+=40
         if norms.cncturn7:t_pz+=40
+        t+=t_pz
+        t=t*1.1
+        return t
+    def dehydrate_norm_mill_cnc(self, order): 
+        
+        try:
+            norms = Norms.objects.get(tool=order.tool)
+        except Norms.DoesNotExist:
+            return 0
+        
+        t=int(norms.cncmill1 or 0)+int(norms.cncmill2 or 0)+int(norms.cncmill3 or 0)+int(norms.cncmill4 or 0)+int(norms.cncmill5 or 0)+int(norms.cncmill6 or 0)+int(norms.cncmill7 or 0)
+        t=t*order.count
+        t_pz=0
+        if norms.cncmill1:t_pz+=40
+        if norms.cncmill2:t_pz+=40
+        if norms.cncmill3:t_pz+=40
+        if norms.cncmill4:t_pz+=40
+        if norms.cncmill5:t_pz+=40
+        if norms.cncmill6:t_pz+=40
+        if norms.cncmill7:t_pz+=40
         t+=t_pz
         t=t*1.1
         return t
