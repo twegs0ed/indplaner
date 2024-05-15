@@ -91,6 +91,16 @@ class ToolsonwarehouseResource(resources.ModelResource):
     
         
 class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        form.save_m2m()
+        obj.similar.add(obj)
+            
+        for t in obj.similar.all():
+            t.similar.set(obj.similar.all())
+
+        #from this point on the tags are accessible
+        #print obj.tags.all()
     formfield_overrides = {models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},}
     exclude=['material']
     resource_class = ToolsonwarehouseResource

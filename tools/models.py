@@ -76,24 +76,20 @@ class Toolsonwarehouse(models.Model):
  
 
     def save(self, *args, **kwargs):
-        
-        ts=[]
-        ts.append(self)
-        
-
 
         if self.id is None:
             self.title=self.title.upper()
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
         else:
-            for t in self.similar.all():
-                ts.append(t)
-
-            for t in ts:
-                
-                for t_c in ts:
-                    t.similar.add(t_c)
+            
             self.title=self.title.upper()
+            
+            self.similar.add(self)
+            super(Toolsonwarehouse, self).save(*args, **kwargs)
+            
+            for t in self.similar.all():
+                t.similar.set(self.similar.all())
+                super(Toolsonwarehouse, t).save(*args, **kwargs)
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
     
 
