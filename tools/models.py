@@ -104,6 +104,43 @@ class Toolsonwarehouse(models.Model):
             raise ValidationError(f"Названия должны быть прописными буквами({self.tool.title})")
         if self.count<0:
                 raise ValidationError(f"Отрицательное количество")
+    def getcncnorms(self, count=1):
+        try:
+            norms = Norms.objects.get(tool = self)
+        except Norms.DoesNotExist:
+            turn_norms = 0
+            mill_norms = 0
+            return turn_norms, mill_norms
+        #print (self, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        
+        turn_norms = int(norms.cncturn1 or 0)+int(norms.cncturn2 or 0)+int(norms.cncturn3 or 0)+int(norms.cncturn4 or 0)+int(norms.cncturn5 or 0)+int(norms.cncturn6 or 0)+int(norms.cncturn7 or 0)
+        mill_norms = int(norms.cncmill1 or 0)+int(norms.cncmill2 or 0)+int(norms.cncmill3 or 0)+int(norms.cncmill4 or 0)+int(norms.cncmill5 or 0)+int(norms.cncmill6 or 0)+int(norms.cncmill7 or 0)
+        turn_norms = turn_norms*count
+        mill_norms = mill_norms*count
+        t_pz=0
+        if norms.cncturn1:t_pz+=40
+        if norms.cncturn2:t_pz+=40
+        if norms.cncturn3:t_pz+=40
+        if norms.cncturn4:t_pz+=40
+        if norms.cncturn5:t_pz+=40
+        if norms.cncturn6:t_pz+=40
+        if norms.cncturn7:t_pz+=40
+        turn_norms+=t_pz
+        turn_norms=turn_norms*1
+
+        t_pz=0
+        if norms.cncmill1:t_pz+=40
+        if norms.cncmill2:t_pz+=40
+        if norms.cncmill3:t_pz+=40
+        if norms.cncmill4:t_pz+=40
+        if norms.cncmill5:t_pz+=40
+        if norms.cncmill6:t_pz+=40
+        if norms.cncmill7:t_pz+=40
+        mill_norms+=t_pz
+        mill_norms=mill_norms*1
+
+        return turn_norms, mill_norms
+        
     
         
         

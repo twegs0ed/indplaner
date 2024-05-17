@@ -104,7 +104,8 @@ class ForeignKeyWidgetWithCreation (ForeignKeyWidget):
             return super(ForeignKeyWidgetWithCreation, self).clean(value, row, *args, **kwargs)
         except:
             return self.model.objects.create(**{self.field: value})
-    
+#получить нормы ПЗ для детали токарной с ЧПУ
+
 
 class OrderResource(resources.ModelResource):
     def before_import_row(self, row, **kwargs):
@@ -120,27 +121,7 @@ class OrderResource(resources.ModelResource):
     place = Field()
     firm = Field(column_name='firm',attribute='firm',widget=ForeignKeyWidget(model=Firm, field='title'))
     
-    
-    '''norm_lentopil_p = Field()
-    norm_lentopil = Field()
-    norm_plazma_p = Field()
-    norm_plazma = Field()
-    norm_turn_p = Field()
-    norm_turn = Field()
-    norm_turnun_p = Field()
-    norm_turnun = Field()
-    norm_mill_p = Field()
-    norm_mill = Field()
-    norm_millun_p = Field()
-    norm_millun = Field()
-    norm_electro_p = Field()
-    norm_electro = Field()
-    norm_slesarn = Field()
-    norm_slesarn = Field()
-    norm_sverliln_p = Field()
-    norm_sverliln = Field()
-    norm_rastoch_p = Field()
-    norm_rastoch = Field()'''
+
 
     tool_material_n = Field()
     tool_stocksizes= Field()
@@ -198,14 +179,7 @@ class OrderResource(resources.ModelResource):
         
         t=int(norms.cncturn1 or 0)+int(norms.cncturn2 or 0)+int(norms.cncturn3 or 0)+int(norms.cncturn4 or 0)+int(norms.cncturn5 or 0)+int(norms.cncturn6 or 0)+int(norms.cncturn7 or 0)
         t=t*order.count
-        t_pz=0
-        if norms.cncturn1:t_pz+=40
-        if norms.cncturn2:t_pz+=40
-        if norms.cncturn3:t_pz+=40
-        if norms.cncturn4:t_pz+=40
-        if norms.cncturn5:t_pz+=40
-        if norms.cncturn6:t_pz+=40
-        if norms.cncturn7:t_pz+=40
+        t_pz=get_turn_tpz(order)
         t+=t_pz
         t=t*1.1
         return t
@@ -218,14 +192,7 @@ class OrderResource(resources.ModelResource):
         
         t=int(norms.cncmill1 or 0)+int(norms.cncmill2 or 0)+int(norms.cncmill3 or 0)+int(norms.cncmill4 or 0)+int(norms.cncmill5 or 0)+int(norms.cncmill6 or 0)+int(norms.cncmill7 or 0)
         t=t*order.count
-        t_pz=0
-        if norms.cncmill1:t_pz+=40
-        if norms.cncmill2:t_pz+=40
-        if norms.cncmill3:t_pz+=40
-        if norms.cncmill4:t_pz+=40
-        if norms.cncmill5:t_pz+=40
-        if norms.cncmill6:t_pz+=40
-        if norms.cncmill7:t_pz+=40
+        t_pz=get_mill_tpz(order)
         t+=t_pz
         t=t*1.1
         return t
@@ -233,44 +200,7 @@ class OrderResource(resources.ModelResource):
 
             
         
-    '''def dehydrate_norm_lentopil(self, order):  
-        if order.tool: return order.count*order.tool.norm_lentopil
-    def dehydrate_norm_plazma_p(self, order):  
-        if order.tool: return order.tool.norm_plazma_p
-    def dehydrate_norm_plazma(self, order):  
-        if order.tool: return order.count*order.tool.norm_plazma
-    def dehydrate_norm_turn_p(self, order):  
-        if order.tool: return order.tool.norm_turn_p
-    def dehydrate_norm_turn(self, order):  
-        if order.tool: return order.count*order.tool.norm_turn
-    def dehydrate_norm_mill_p(self, order):  
-        if order.tool: return order.tool.norm_mill_p
-    def dehydrate_norm_mill(self, order):  
-        if order.tool: return order.count*order.tool.norm_mill
-    def dehydrate_norm_turnun_p(self, order):  
-        if order.tool: return order.tool.norm_turnun_p
-    def dehydrate_norm_turnun(self, order):  
-        if order.tool: return order.count*order.tool.norm_turnun
-    def dehydrate_norm_millun_p(self, order):  
-        if order.tool: return order.tool.norm_millun_p
-    def dehydrate_norm_millun(self, order):  
-        if order.tool: return order.count*order.tool.norm_millun
-    def dehydrate_norm_electro_p (self, order):  
-        if order.tool: return order.tool.norm_electro_p
-    def dehydrate_norm_electro(self, order):  
-        if order.tool: return order.count*order.tool.norm_electro
-    def dehydrate_norm_slesarn(self, order):  
-        if order.tool: return order.count*order.tool.norm_slesarn
-    def dehydrate_norm_sverliln_p(self, order):  
-        if order.tool: return order.tool.norm_sverliln_p
-    def dehydrate_norm_sverliln(self, order):  
-        if order.tool: return order.count*order.tool.norm_sverliln
-    def dehydrate_norm_rastoch_p(self, order):  
-        if order.tool: return order.tool.norm_rastoch_p
-    def dehydrate_norm_rastoch(self, order):  
-        if order.tool: return order.count*order.tool.norm_rastoch'''
-
-
+ 
 
     def dehydrate_getout(self, obj):  
         w=Tools.objects.filter(tool=obj.tool).order_by('-giveout_date').all()[:3]
@@ -315,7 +245,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_editable = ['firm', 'count','exp_date', 'text', 'status']
     ordering = ['-order_date_worker', 'exp_date','-status']
 
-
+#вывод выдачи в admin/order
     def getout(self, obj):
         w=Tools.objects.filter(tool=obj.tool).order_by('-giveout_date').all()[:3]
         t=""
@@ -329,6 +259,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         t+='</br>место: '+str(obj.tool.workplace)+' - '+str(obj.tool.count)+' шт.'
         return format_html(t)
     getout.short_description = "Выдача"
+#вывод фирм в которые еще входит деталь
     def firms(self, obj):
         orders=Order.objects.filter(tool=obj.tool).order_by('-order_date_worker').all()[:10]
         t=""
@@ -337,12 +268,13 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             
         return format_html(t)
     firms.short_description = "др.изд."
-
+#печать маршрутки
     def printmk(self, obj):
         url = '/order/printmk'
         url = url + '/'+str(obj.id)
         return format_html('<a href="{}" class="button">&#128438;</a>', url)
     printmk.short_description = "МК"
+#путь до чертежа детали на сервере
     def folder1(self, obj):
         if obj.folder:
             url=obj.folder
@@ -353,11 +285,19 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     folder1.short_description = "pdf"
     
 
-
+#вывод норм в админ order
     def norms(self, obj):
         t=''
+        norms_cnc_turn, norms_cnc_mill = obj.tool.getcncnorms(obj.count)
+
+        
         if obj.tool:
-            t=str(obj.tool.title)+'</br>'
+            #t=str(obj.tool.title)+'</br>'
+
+            t+='ток.чпу.:'+str(norms_cnc_turn)+'</br>'
+            t+='фрез.чпу:'+str(norms_cnc_mill)+'</br>'
+
+            '''
             t+='Ленточнопильная:'+str(obj.tool.norm_lentopil)+'</br>'
             t+='Плазма:'+str(obj.tool.norm_plazma)+'</br>'
             t+='ток.чпу.:'+str(obj.tool.norm_turn)+'</br>'
@@ -370,6 +310,9 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             t+='электроэроз.:'+str(obj.tool.norm_electro)+'</br>'
             t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
             t+='расточ.:'+str(obj.tool.norm_rastoch)+'</br>'
+        '''
+            
+        
         
         return format_html(t)
     norms.short_description = "Нормы" 
@@ -411,6 +354,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         return format_html(t)
     work.short_description = "Изгот-е"
+#вывести сколько всего деталей с учетом похожих с другим шифром
     def c_count_all(self, obj):
         if obj.tool:
             title=obj.tool.title
@@ -425,6 +369,8 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return format_html(t)
     c_count_all.short_description = "На скл. все шифры"
 
+
+#вывести в admin/order сколько на складе таких деталей
     def c_count(self, obj):
         if obj.tool:
             title=obj.tool.title
