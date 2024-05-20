@@ -179,7 +179,7 @@ class OrderResource(resources.ModelResource):
         
         t=int(norms.cncturn1 or 0)+int(norms.cncturn2 or 0)+int(norms.cncturn3 or 0)+int(norms.cncturn4 or 0)+int(norms.cncturn5 or 0)+int(norms.cncturn6 or 0)+int(norms.cncturn7 or 0)
         t=t*order.count
-        t_pz=get_turn_tpz(order)
+        t_pz=0#get_turn_tpz(order)
         t+=t_pz
         t=t*1.1
         return t
@@ -192,7 +192,7 @@ class OrderResource(resources.ModelResource):
         
         t=int(norms.cncmill1 or 0)+int(norms.cncmill2 or 0)+int(norms.cncmill3 or 0)+int(norms.cncmill4 or 0)+int(norms.cncmill5 or 0)+int(norms.cncmill6 or 0)+int(norms.cncmill7 or 0)
         t=t*order.count
-        t_pz=get_mill_tpz(order)
+        t_pz=0#get_mill_tpz(order)
         t+=t_pz
         t=t*1.1
         return t
