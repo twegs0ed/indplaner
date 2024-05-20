@@ -68,7 +68,6 @@ class Toolsonwarehouse(models.Model):
     norm_rastoch = models.FloatField(default=0,blank=True, verbose_name="Расточная, ч." )
 
 
-
     def publish(self):
         self.published_date = timezone.now()
         self.save()
