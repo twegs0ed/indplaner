@@ -73,8 +73,13 @@ def gantt(request):
     slesarn=0
     sverliln=0
     rastoch=0
+    cncturn_fact = 0
+    cncmill_fact = 0
     for p in projects:
         if p.count:
+            cncturn_fact_c, cncmill_fact_c = p.tool.getcncnorms(p.count)
+            cncturn_fact += cncturn_fact_c/60
+            cncmill_fact += cncmill_fact_c/60
             mill+=(p.tool.norm_mill*p.count)+p.tool.norm_mill_p
             turn+=(p.tool.norm_turn*p.count)+p.tool.norm_turn_p
             millun+=(p.tool.norm_millun*p.count)+p.tool.norm_millun_p
@@ -84,8 +89,8 @@ def gantt(request):
             electro+=(p.tool.norm_electro*p.count)+p.tool.norm_electro_p
             slesarn+=p.tool.norm_slesarn*p.count
             sverliln+=(p.tool.norm_sverliln*p.count)+p.tool.norm_sverliln_p
-    koaf2smen=3/2 #=24/16(из 24 часов только 16 рабочие)
-    koaf1smen=3/1
+    koaf2smen=(3/2)*(3/2) #=24/16(из 24 часов только 16 рабочие) и из 30 дней только 20 рабочие
+    koaf1smen=(3/1)*(3/2)
     mill_d=mill/int(millscnc)*koaf2smen
     turn_d=turn/int(turnscnc)*koaf2smen
     millun_d=mill/int(millunscnc)*koaf2smen
@@ -97,6 +102,8 @@ def gantt(request):
     sverliln_d=sverliln*koaf2smen
     rastoch_d=rastoch*koaf2smen
 
+    cncturn_fact_d = cncturn_fact/int(turnscnc)*koaf2smen
+    cncmill_fact_d = cncmill_fact/int(millscnc)*koaf2smen
   
     def status(x):
         if x=="OW": return "В запуске"
@@ -105,7 +112,21 @@ def gantt(request):
         if x=="CM": return "Изготовлено"
         pass
     projects_data=[]
-    print(mill)
+    if cncturn_fact:
+        projects_data.append({
+            'Операция':'Токарная с ЧПУ фактическая',
+            'Start': project.date,
+            'Finish': project.date+timedelta(hours=cncturn_fact_d),
+            'Общее время': str(cncturn_fact)+' час.'
+        })
+    if cncmill_fact:
+        projects_data.append({
+            'Операция':'Фрезерная с ЧПУ фактическая',
+            'Start': project.date,
+            'Finish': project.date+timedelta(hours=cncmill_fact_d),
+            'Общее время': str(cncmill_fact)+' час.'
+        })
+    
     if mill:
         projects_data.append({
             'Операция':'Фрезерная с ЧПУ',
@@ -214,9 +235,15 @@ def gantt(request):
     slesarn=0.0
     sverliln=0.0
     rastoch=0.0
+    cncturn_fact = 0.0
+    cncmill_fact = 0.0
     for p in projects:
        
         if p.count:
+            cncturn_fact_c, cncmill_fact_c = p.tool.getcncnorms(p.count)
+            cncturn_fact += cncturn_fact_c/60
+            cncmill_fact += cncmill_fact_c/60
+
             lentopil+=(p.tool.norm_lentopil*p.count)
             lentopil+=p.tool.norm_lentopil_p
 
@@ -256,10 +283,20 @@ def gantt(request):
         'slesarn':slesarn,
         'sverliln':sverliln,
         'rastoch':rastoch,
+        'cncturn_fact': cncturn_fact,
+        'cncmill_fact':cncmill_fact
         }
     
 
     projects_data = [
+        {
+            'Операция': "токарная с ЧПУ факт.",
+            'Время, ч': cncturn_fact,
+        }, 
+        {
+            'Операция': "Фрезерная с ЧПУ факт",
+            'Время, ч': cncmill_fact,
+        }, 
         
         {
             'Операция': "Ленточнопильная",
@@ -340,7 +377,6 @@ def report(request):
                     percents+=order.percent
 
             count[firm]=round (percents/orders_count, 2)
-        print(count)
             
                     
 
