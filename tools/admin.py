@@ -353,6 +353,8 @@ class NormsResource(resources.ModelResource):
         #column_name='firm',
         #attribute='firm',
         #widget=ForeignKeyWidgetWithCreation(model=Firm, field='title'))
+    cnc_turn_sum = Field()
+    cnc_mill_sum = Field()
     class Meta:
         model = Norms
 
@@ -375,6 +377,12 @@ class NormsResource(resources.ModelResource):
             t+=str(o.date)+' - '+str(o.count)+' шт. - '+o.user.get_full_name()+'-'
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
+    def dehydrate_cnc_turn_sum(self, obj):
+        turn, mill=obj.tool.getcncnorms(1)
+        return turn
+    def dehydrate_cnc_mill_sum(self, obj):
+        turn, mill=obj.tool.getcncnorms(1)
+        return mill
 
 
 class NormsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
