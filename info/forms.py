@@ -26,4 +26,12 @@ class GetFirms(forms.Form):
         )
     datestart = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),label='Начало периода')
     dateend = forms.DateTimeField( widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),label='Конец периода')
+class GetFirmsforstock(forms.Form):
+    #tool = forms.CharField(label='Изделие', max_length=100)
+    
+    firms = Firm.objects.filter(report = True).all()
+    for firm in firms:
+        locals()['firm%s' % firm.id] = forms.IntegerField(label=firm.title)
+    
+   
     

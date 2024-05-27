@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import GanttForm, SearchtoolForm, GetFirms
+from .forms import GanttForm, SearchtoolForm, GetFirms, GetFirmsforstock
 from django.http import HttpResponseRedirect
 from tools.models import Toolsonwarehouse, Tools, Priem
 from order.models import Order, Firm
@@ -435,6 +435,56 @@ def get_result_for_period(firms, priems):
         
     
     return orders
+
+def stock(request):
+    
+    if request.POST:
+        firms = Firm.objects.filter(report = True).all()
+        orders = Order.objects.none()
+        for firm in firms:
+            firm.count = request.POST.get('firm%s' % firm.id)
+            orders_c = Order.objects.filter(firm=firm).all()
+            for ord in orders_c:
+                ord.count = ord.count*firm.count
+        
+            orders = orders.union(orders_c)
+            #locals()['firm%s' % firm.id]
+        tools={}
+        for order in orders:
+            
+            order.count = order.count * int(request.POST.get('firm%s' % order.firm.id))
+            print(order.count)
+        orders = list(orders)
+        
+        for order in orders:
+            
+            if order.tool.title in tools:
+                tools[order.tool.title] = [tools[order.tool.title][0]+order.count, order.tool.count]
+            else:
+                tools[order.tool.title]=[order.count, order.tool.count]
+            #tools[order.tool.title+order.firm.title]=[order.count, order.tool.count]
+        for key, value in list(tools.items()):
+            if value[0] < 1:
+                del tools[key]
+
+
+
+        form = GetFirmsforstock(request.POST)
+
+        vars = {
+            'form':form,
+            'orders':tools,
+            'title':'Склад',
+            }
+        
+        return render(request, 'stock.html', vars)
+    form = GetFirmsforstock()
+    vars = {
+            'form':form,
+            'title':'Склад'
+            }
+    
+    return render(request, 'stock.html', vars)
 
     
     

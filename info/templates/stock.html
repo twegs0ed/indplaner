@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %}
+
+ {% block nav-global %}
+
+     {{ block.super }}
+ {% endblock %}
+
+
+
+
+  
+   
+ 
+
+
+ {% block content %}
+
+
+
+ <form action="" method="post">
+  {% csrf_token %}
+  <table>
+    {% for field in form %}
+        <tr>
+            <td>{{ field.label}}</td>
+            <td>{{ field }}</td>
+        </tr>
+    {% endfor %}
+</table>
+ </br>
+  <input type="submit" value="Отправить">
+</form>
+
+
+<h3>Прием по изделиям в зависимости от срока</h3>
+  <div>
+    <table class="table" style="width: 100%;">
+      <thead>
+        <tr>
+          <th scope="col">Деталь</th>
+          <th scope="col">Необходимо</th>
+          <th scope="col">На складе</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        
+      {% for tool, count in orders.items %}
+      <tr{% if count.0 > count.1 %} style="background-color: rgba(220, 20, 60, 0.3);" {% endif %}>
+        <th scope="row"> <a href="/info/?tool={{ tool }}">{{ tool }} </a></th>
+      <td>{{ count.0 }}</td>
+      <td >{{ count.1 }}</td>
+     
+    </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+ 
+
+     {{ block.super }}
+ {% endblock %}
