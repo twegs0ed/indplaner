@@ -453,7 +453,6 @@ def stock(request):
         for order in orders:
             
             order.count = order.count * int(request.POST.get('firm%s' % order.firm.id))
-            print(order.count)
         orders = list(orders)
         
         for order in orders:
@@ -466,6 +465,14 @@ def stock(request):
         for key, value in list(tools.items()):
             if value[0] < 1:
                 del tools[key]
+        for key, value in list(tools.items()):
+            tool_c = Toolsonwarehouse.objects.filter(title = key).first()
+            print(value)
+            #value[2]=list(tool_c.similar.all())
+            for t_c in tool_c.similar.all():
+                if t_c.title not in key:
+                    value[1]+=t_c.count
+            tools[key]=value
 
 
 
