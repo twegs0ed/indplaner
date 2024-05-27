@@ -31,7 +31,7 @@ class GetFirmsforstock(forms.Form):
     
     firms = Firm.objects.filter(report = True).all()
     for firm in firms:
-        locals()['firm%s' % firm.id] = forms.IntegerField(label=firm.title)
+        locals()['firm%s' % firm.id] = forms.IntegerField(label=firm.title, initial=0)
     
    
     
