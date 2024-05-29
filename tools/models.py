@@ -11,6 +11,7 @@ import re
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.models import User, Permission
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 
 
@@ -107,7 +108,7 @@ class Toolsonwarehouse(models.Model):
     def getcncnorms(self, count=1):
         try:
             norms = Norms.objects.get(tool = self)
-        except Norms.DoesNotExist:
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
             turn_norms = 0
             mill_norms = 0
             return turn_norms, mill_norms
