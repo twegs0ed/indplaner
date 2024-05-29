@@ -429,7 +429,6 @@ def get_result_for_period(firms, priems):
                         priem.count=0
                         priems.remove(priem)
                         break
-                    #print(order.tool,order.percent, order.firm)
             
             break
         
@@ -467,7 +466,6 @@ def stock(request):
                 del tools[key]
         for key, value in list(tools.items()):
             tool_c = Toolsonwarehouse.objects.filter(title = key).first()
-            print(value)
             #value[2]=list(tool_c.similar.all())
             for t_c in tool_c.similar.all():
                 if t_c.title not in key:

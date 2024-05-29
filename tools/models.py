@@ -20,7 +20,7 @@ from django.contrib.auth.models import User, Permission
 
 
 class Toolsonwarehouse(models.Model):
-    title = models.CharField(max_length=200, verbose_name="Обозначение" )#Наименование детали
+    title = models.CharField(max_length=200, verbose_name="Обозначение", unique=True)#Наименование детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
     created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата" )#Дата получения на склад
     count = models.IntegerField(default=0,blank=True, null=True, verbose_name="Количество на складе" ) # Количество деталей на складе
