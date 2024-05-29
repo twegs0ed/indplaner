@@ -75,13 +75,14 @@ class Toolsonwarehouse(models.Model):
  
 
     def save(self, *args, **kwargs):
+        self.title=self.title.upper()
+        self.title = self.title.strip()
 
         if self.id is None:
-            self.title=self.title.upper()
+            
             return super(Toolsonwarehouse, self).save(*args, **kwargs)
         else:
             
-            self.title=self.title.upper()
             
             self.similar.add(self)
             super(Toolsonwarehouse, self).save(*args, **kwargs)
