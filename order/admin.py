@@ -393,6 +393,16 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     
 class FirmResource(resources.ModelResource):
     
+    ready = Field()
+    def dehydrate_ready(self, obj):  
+        orders = Order.objects.filter(firm=obj).all().count()
+        orders_ready = Order.objects.filter(firm=obj).filter(status='CM').all().count()
+        if orders:
+            result =  (orders_ready/orders)*100
+            result = str(round(result,1))+'%'
+        else: result='нет дет.'
+        return result
+
    
 
     class Meta:
