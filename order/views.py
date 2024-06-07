@@ -79,7 +79,7 @@ def printmk(request, id):
     else:
         ws.cell(row=4, column=7).value= ' '
     if order.tool.count_in_one_stock != None:
-        count_cc = count_c(int(order.count),int(order.tool.count_in_one_stock), order.tool.stock_sizes, ws)
+        count_cc = count_c(int(float(order.count)),int(float(order.tool.count_in_one_stock)), order.tool.stock_sizes, ws)
         ws=count_cc['ws']
         ws.cell(row=5, column=7).value= count_cc['count']
     else:
@@ -218,7 +218,7 @@ def printmkall(request, id):
         else:
             ws.cell(row=4, column=7).value= ' '
         if order.tool.count_in_one_stock != None:
-            count_cc = count_c(int(order.count),int(order.tool.count_in_one_stock), order.tool.stock_sizes, ws)
+            count_cc = count_c(int(float(order.count)),int(float(order.tool.count_in_one_stock)), order.tool.stock_sizes, ws)
             ws=count_cc['ws']
             ws.cell(row=5, column=7).value= count_cc['count']
         else:
