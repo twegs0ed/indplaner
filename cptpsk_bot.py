@@ -52,7 +52,7 @@ def find_files(name):
     for root, dirs, files in os.walk('N:\Home\Электронное КД\Перетяжка'):
         for file in files:
             if name in file and file.endswith('.pdf'):
-                if 'АРХИВНЫЙ ЭКЗЕМПЛЯР' in root: continue
+                #if 'АРХИВНЫЙ ЭКЗЕМПЛЯР' in root: continue
                 return str(os.path.join(root, file))
     for root, dirs, files in os.walk('N:\Vol_Work\Иванов ВВ\КТО'):
         for file in files:

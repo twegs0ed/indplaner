@@ -79,10 +79,8 @@ class Toolsonwarehouse(models.Model):
         self.title=self.title.upper()
         self.title = self.title.strip()
 
-        if self.id is None:
-            
-            return super(Toolsonwarehouse, self).save(*args, **kwargs)
-        else:
+        
+        if self.id:
             
             
             self.similar.add(self)
@@ -91,7 +89,7 @@ class Toolsonwarehouse(models.Model):
             for t in self.similar.all():
                 t.similar.set(self.similar.all())
                 super(Toolsonwarehouse, t).save(*args, **kwargs)
-            return super(Toolsonwarehouse, self).save(*args, **kwargs)
+        return super(Toolsonwarehouse, self).save(*args, **kwargs)
     
 
         #self.need_count = int(self.min_count or 0)-int(self.count or 0)
