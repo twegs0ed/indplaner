@@ -56,6 +56,8 @@ def setnormstotool(tool, self):
             
 
     except Norms.MultipleObjectsReturned:
+        norms = Norms.objects.filter(tool = tool).first()
+        
         pass
     if self.work_time:
         if self.user.stanprofile.operation:
@@ -106,7 +108,6 @@ def setnormstotool(tool, self):
                 elif self.numb_ust==7:norms.eroz7 = self.work_time
             elif self.user.stanprofile.operation.name =='Ленточнопильная':
                 norms.lentopil = self.work_time
-        
     norms.save()
     
     
