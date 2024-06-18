@@ -59,8 +59,8 @@
       </thead>
       <tbody>
       {% for order in orders %}
-      <tr>
-      <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
+      <tr {% if  order.percent < 100 %}style="background-color: RGBA(249, 201, 16, 0.3)"  {% endif %}>
+      <th scope="row"><a href="/info/?tool={{ order.tool.title }}">{{ order.tool }}</a></th>
       <td>{{ order.count }}</td>
      <td>{{ order.percent }}</td>
      <td><a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm }}</a></td>
