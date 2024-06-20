@@ -267,9 +267,9 @@ class Rec_Tools(models.Model):
 
 class Priem(models.Model):
     def order_f(self):
-        order_cf = order.models.Order.objects.filter(tool=self.tool, firm__report=False).filter(
-                Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by(
-                'order_date_worker').first()
+        order_cf = order.models.Order.objects.filter((Q(tool=self.tool) & (Q(firm__isnull=True) | Q( firm__report=False))) & (Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED))).order_by('order_date_worker').first()
+        #order_cf = order.models.Order.objects.filter(tool=self.tool, firm__report=False).filter(Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by('order_date_worker').first()
+        print(order_cf)
         if order_cf:
             safe_self_count = self.count
             while self.count > order_cf.count:
@@ -277,9 +277,9 @@ class Priem(models.Model):
                 self.count-=order_cf.count
                 order_cf.status = order.models.Order.COM  
                 order_cf.save()
-                order_cf = order.models.Order.objects.filter(tool=self.tool, firm__report=False).filter(
-                Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by(
-                'order_date_worker').first()
+                
+                order_cf = order.models.Order.objects.filter((Q(tool=self.tool) & (Q(firm__isnull=True) | Q( firm__report=False))) & (Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED))).order_by('order_date_worker').first()
+
                 if order_cf == None:
                     order_cf=order.models.Order()
                     order_cf.count=self.count
@@ -294,6 +294,7 @@ class Priem(models.Model):
                 order_cf.text=str(order_cf.text)+'\n'+dateformat.format(timezone.now(), 'd-m-Y')+" в запуске было "+str(order_cf.count)+"."
                 order_cf.count-=self.count
                 order_cf.order_date_worker=timezone.now()
+                #print(order_cf.id, '-', order_cf.count, ' шт')
                 order_cf.save()
 
                 users=User.objects.all()
@@ -328,6 +329,7 @@ class Priem(models.Model):
             order_cf.text='Сформировано из "Приема"'
             order_cf.status = order.models.Order.COM
             order_cf.save()
+            print('11111111111111111111111111')
     def order_re(self, diff_count):
         order_cf = order.models.Order.objects.filter(tool=self.tool, firm__report=False).filter(
                 status=order.models.Order.COM).order_by(
