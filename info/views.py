@@ -16,6 +16,7 @@ from django.http import JsonResponse
 from django.views.generic import View
 
 
+
 def info(request):
     if request.GET.get('tool'):
         form = SearchtoolForm(request.GET)

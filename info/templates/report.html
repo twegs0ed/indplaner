@@ -21,6 +21,7 @@
       <th scope="col">Изделие</th>
       <th scope="col">кол-во</th>
       <th scope="col">Процент</th>
+      <th scope="col">кол-во х Процент</th>
       
     </tr>
   </thead>
@@ -31,6 +32,7 @@
  <th><b><a href="/order/firm/{{firm.id}}/change/"> {{firm.title}} </a> </b></th>
   <th>{{firm.count}} </th>
   <th>{{value}} %</th>
+  <th>{% widthratio value 100 firm.count as count %} {{count}} </th>
 </tr>
   {% endfor %}
 </table>
