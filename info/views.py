@@ -413,7 +413,45 @@ def get_result_for_period(firms, priems):
     for order in orders:
             order.count = order.count*order.firm.count
     priems=list(priems)
-    for priem in priems.copy():
+    priems_copy = priems.copy()
+    tools={}
+    for priem in priems_copy:
+        
+        if not priem.tool.title in tools:
+            tools[priem.tool.title]=priem.count
+        else:
+            tools[priem.tool.title]+=priem.count
+
+
+        #создать массив, где перечислены все детали приемов
+        #удалить из массива дубликаты
+        #проитй по этому массиву и найти все приемы с этой деталью
+        #найти все приемы за период, где деталь такая же
+        #Сложить все суммы и добавить в новый массив как один прием.
+        #Этот массив использовать далее для рассчетов
+        pass
+    for priem in list(tools):
+        while tools[priem] > 0:
+            for order in orders:
+                if order.tool.title == priem:
+                    order.priem = tools[priem]
+                    if order.count < tools[priem]:
+                        order.percent = 100
+                        tools[priem]-=order.count
+                    elif order.count == tools[priem]:
+                        order.percent = 100
+                        tools[priem]=0
+                        del tools[priem]
+                        break
+                    elif order.count > tools[priem]:
+                        order.percent = round(tools[priem]/order.count*100, 2)
+                        tools[priem]=0
+                        del tools[priem]
+                        break
+                
+            
+            break
+    '''for priem in priems.copy():
         while priem.count > 0:
             for order in orders:
                 if order.tool == priem.tool:
@@ -431,7 +469,7 @@ def get_result_for_period(firms, priems):
                         priems.remove(priem)
                         break
             
-            break
+            break'''
         
     
     return orders
