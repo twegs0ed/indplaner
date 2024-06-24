@@ -415,25 +415,42 @@ def get_result_for_period(firms, priems):
     priems=list(priems)
     priems_copy = priems.copy()
     tools={}
+
     for priem in priems_copy:
         
         if not priem.tool.title in tools:
             tools[priem.tool.title]=priem.count
         else:
             tools[priem.tool.title]+=priem.count
-
-
-        #создать массив, где перечислены все детали приемов
-        #удалить из массива дубликаты
-        #проитй по этому массиву и найти все приемы с этой деталью
-        #найти все приемы за период, где деталь такая же
-        #Сложить все суммы и добавить в новый массив как один прием.
-        #Этот массив использовать далее для рассчетов
         pass
+
+    
+    for tool in list(tools):
+        tool_c = Toolsonwarehouse.objects.get(title = tool)
+        for tool_similar in tool_c.similar.all():
+            if (tool_similar.title in tools) and (not tool_similar.title == tool):
+                try:
+                    #print(tool, tools[tool])
+                    tools[tool]+=tools[tool_similar.title] 
+                    #print(tool, tools[tool])
+                except:
+                    pass
+                #del tools[tool_similar.title]
+            pass
+        pass
+
+    for order in orders:
+        for tool_similar in order.tool.similar.all():
+            if (tool_similar.title in tools) and (not order.tool.title == tool_similar.title):
+                order.tool = Toolsonwarehouse.objects.get(title = tool_similar.title)
+                #print(tool_similar, ' - ', order.tool.title)
+        pass
+
     for priem in list(tools):
         while tools[priem] > 0:
             for order in orders:
-                if order.tool.title == priem:
+                
+                if (order.tool.title == priem):
                     order.priem = tools[priem]
                     if order.count < tools[priem]:
                         order.percent = 100
@@ -441,15 +458,13 @@ def get_result_for_period(firms, priems):
                     elif order.count == tools[priem]:
                         order.percent = 100
                         tools[priem]=0
-                        del tools[priem]
-                        break
+                        #del tools[priem]
+                        #break
                     elif order.count > tools[priem]:
                         order.percent = round(tools[priem]/order.count*100, 2)
                         tools[priem]=0
-                        del tools[priem]
-                        break
-                
-            
+                        #del tools[priem]
+                        #break
             break
     '''for priem in priems.copy():
         while priem.count > 0:
