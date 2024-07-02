@@ -31,7 +31,7 @@ class Work(models.Model):
     def save(self, *args, **kwargs):
         setnormstotool(self.tool, self)
         for t_c in self.tool.similar.all():
-            print(t_c.title)
+            #print(t_c.title)
             setnormstotool(t_c, self)
 
             pass
