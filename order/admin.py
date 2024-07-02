@@ -131,6 +131,8 @@ class OrderResource(resources.ModelResource):
 
     norm_turn_cnc = Field()
     norm_mill_cnc = Field()
+    norm_turntpz_cnc = Field()
+    norm_milltpz_cnc = Field()
     
     
     
@@ -179,9 +181,6 @@ class OrderResource(resources.ModelResource):
         
         t=int(norms.cncturn1 or 0)+int(norms.cncturn2 or 0)+int(norms.cncturn3 or 0)+int(norms.cncturn4 or 0)+int(norms.cncturn5 or 0)+int(norms.cncturn6 or 0)+int(norms.cncturn7 or 0)
         t=t*order.count
-        t_pz=0#get_turn_tpz(order)
-        t+=t_pz
-        t=t*1.1
         return t
     def dehydrate_norm_mill_cnc(self, order): 
         
@@ -192,10 +191,38 @@ class OrderResource(resources.ModelResource):
         
         t=int(norms.cncmill1 or 0)+int(norms.cncmill2 or 0)+int(norms.cncmill3 or 0)+int(norms.cncmill4 or 0)+int(norms.cncmill5 or 0)+int(norms.cncmill6 or 0)+int(norms.cncmill7 or 0)
         t=t*order.count
-        t_pz=0#get_mill_tpz(order)
-        t+=t_pz
-        t=t*1.1
+        t=t
         return t
+    def dehydrate_norm_turntpz_cnc(self, order): 
+        t = 0
+        try:
+            norms = Norms.objects.get(tool=order.tool)
+        except Norms.DoesNotExist:
+            return 0
+        
+        if norms.cncturn1:t+=1
+        if norms.cncturn2:t+=1
+        if norms.cncturn3:t+=1
+        if norms.cncturn4:t+=1
+        if norms.cncturn5:t+=1
+        if norms.cncturn6:t+=1
+        if norms.cncturn7:t+=1
+        return t*25
+    def dehydrate_norm_milltpz_cnc(self, order): 
+        t = 0
+        try:
+            norms = Norms.objects.get(tool=order.tool)
+        except Norms.DoesNotExist:
+            return 0
+        
+        if norms.cncmill1:t+=1
+        if norms.cncmill2:t+=1
+        if norms.cncmill3:t+=1
+        if norms.cncmill4:t+=1
+        if norms.cncmill5:t+=1
+        if norms.cncmill6:t+=1
+        if norms.cncmill7:t+=1
+        return t*25
         
 
             
@@ -237,7 +264,7 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':15})},
     }
     resource_class = OrderResource
-    list_display = ('tool','count', 'c_count', 'c_count_all', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'norms', 'getout', 'firms', 'folder1')
+    list_display = ('tool','count', 'c_count', 'c_count_all', 'status', 'firm', status_order_colored, 'exp_date','text', 'printmk', tool_cover, 'log', 'work', 'getout', 'firms', 'folder1')
     list_filter = (('exp_date', DateRangeFilter),'status', )
     search_fields = ['tool__title', 'firm__title']
     autocomplete_fields = [ 'tool', 'firm']
