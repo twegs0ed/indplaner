@@ -124,6 +124,7 @@ class Toolsonwarehouse(models.Model):
         if norms.cncturn5:t_pz+=40
         if norms.cncturn6:t_pz+=40
         if norms.cncturn7:t_pz+=40
+        t_pz=0
         turn_norms+=t_pz
         turn_norms=turn_norms*1
 
@@ -135,6 +136,7 @@ class Toolsonwarehouse(models.Model):
         if norms.cncmill5:t_pz+=40
         if norms.cncmill6:t_pz+=40
         if norms.cncmill7:t_pz+=40
+        t_pz=0
         mill_norms+=t_pz
         mill_norms=mill_norms*1
 
@@ -447,6 +449,7 @@ class Norms(models.Model):
     eroz7 = models.IntegerField(null=True, blank=True, verbose_name="эроз 7 уст.")
 
     lentopil = models.IntegerField(null=True, blank=True, verbose_name="пила")
+    
 
     class Meta:
         verbose_name = 'Нормы времени'
