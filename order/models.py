@@ -103,6 +103,12 @@ class Order(models.Model):
         if self.status == 'PD': return 'На стороное'
         if self.status == 'CM': return 'изготовлен'
         return 'null'
+    def get_sizes(self):
+        try:
+            size = round(int(self.tool.stock_sizes or 0)/int(self.tool.count_in_one_stock)*self.count,2)
+        except:
+            size='('+str(self.tool.stock_sizes)+')'+'x'+str(self.count )
+        return size
 
 
 

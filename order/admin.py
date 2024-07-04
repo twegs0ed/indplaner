@@ -21,7 +21,16 @@ from django.shortcuts import render
 
 
 
+def unfinished(modeladmin, request, queryset):
 
+    orders=[]
+    
+    for firm_c in queryset:
+        for ords_c in Order.objects.filter(firm=firm_c).filter(status=Order.ORDERED_BY_WORKER).all():
+            orders.append(ords_c)
+        
+    return render(request, 'unfinished.html', {'orders': orders, 'title':u'Незавершенное производство'})
+    unfinished.short_description = "Незавершенка"#заказано
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
     
@@ -457,7 +466,7 @@ def svod_action(modeladmin, request, queryset):
 svod_action.short_description = "Сводная"#заяввка
 
 class FirmAdmin(ExportActionMixin,admin.ModelAdmin):
-    actions = [svod_action]
+    actions = [svod_action, unfinished]
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
