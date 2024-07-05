@@ -216,8 +216,8 @@ class Tools(models.Model):
             self.count = count_c#возвращаем то, что ввели
             if self.tool.count+(count_cc-self.count)<0 and not self.and_priem:
                 raise ValidationError(f"На складе недостаточно деталей({self.tool.count}) для выдачи указанного количества")
-            if self.count<1:
-                raise ValidationError(f"Отрицательное или нулевое количество")
+            if self.count<0:
+                raise ValidationError(f"Отрицательное количество")
         else:   
             if self.count<1:
                 raise ValidationError(f"Отрицательное или нулевое количество")
