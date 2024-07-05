@@ -17,6 +17,7 @@ from datetime import datetime
 from work.models import Work
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
+from django.db.models import Q
 
 
 
@@ -26,11 +27,11 @@ def unfinished(modeladmin, request, queryset):
     orders=[]
     
     for firm_c in queryset:
-        for ords_c in Order.objects.filter(firm=firm_c).filter(status=Order.ORDERED_BY_WORKER).all():
+        for ords_c in Order.objects.filter(firm=firm_c).filter(Q(status=Order.ORDERED_BY_WORKER) | Q(status=Order.ORDERED)).all():
             orders.append(ords_c)
         
     return render(request, 'unfinished.html', {'orders': orders, 'title':u'Незавершенное производство'})
-    unfinished.short_description = "Незавершенка"#заказано
+unfinished.short_description = "Незавершенка"#заказано
 #Меняем статус заказа на  заказано
 def make_ordered(modeladmin, request, queryset):
     
