@@ -97,7 +97,7 @@ class ToolsonwarehouseznAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = []
     list_display = ('tool', 'count', 'workplace' )
     list_filter = ('workplace',)
-    search_fields = ['tool']
+    search_fields = ['tool__title']
     ordering = ['tool']
     list_editable = []
     
