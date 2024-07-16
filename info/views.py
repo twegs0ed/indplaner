@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import GanttForm, SearchtoolForm, GetFirms, GetFirmsforstock
 from django.http import HttpResponseRedirect
 from tools.models import Toolsonwarehouse, Tools, Priem
+from zink.models import Toolsonwarehousezn, Toolszn, Priemzn
 from order.models import Order, Firm
 from work.models import Work
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
@@ -25,6 +26,9 @@ def info(request):
         toolsv=Tools.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         priems = Priem.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         orders = Order.objects.filter(tool__title__icontains  = result.upper(), firm__report = False).order_by('-id')
+        mezhop = Toolsonwarehousezn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
+        mezhopgetout = Toolszn.objects.filter(tool__tool__title__icontains  = result.upper()).order_by('-id')
+        mezhoppriem = Priemzn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
 
 
         for ord in orders:
@@ -33,7 +37,18 @@ def info(request):
                 ord.log=logs.action_time
 
         works = Work.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
-        return render(request, 'info.html', {'tools':tools, 'toolsv':toolsv, 'priems':priems, 'orders':orders, 'works':works, 'form':form})
+        vars = {
+            'tools':tools, 
+            'toolsv':toolsv, 
+            'priems':priems, 
+            'orders':orders, 
+            'works':works, 
+            'form':form, 
+            'mezhop':mezhop,
+            'mezhopgetout':mezhopgetout,
+            'mezhoppriem':mezhoppriem
+            }
+        return render(request, 'info.html', vars)
     form = SearchtoolForm()
     return render(request, 'info.html', { 'form':form})
 

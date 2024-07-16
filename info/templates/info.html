@@ -14,14 +14,27 @@
 
 
  {% block content %}
+ 
  <form action="" method="get">
   {{ form }}
   <input type="submit" value="Submit">
 </form>
+</br>
+
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
-
- <b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детали на складе <a href="/tools/toolsonwarehouse/add/" class="button" style = "font-size: 12px;">Добавить</a></h2></b>
+ <div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading1">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse1" aria-expanded="false" aria-controls="flush-collapse1">
+        Детали на складе
+      </button>
+    </h2>
+    <div id="flush-collapse1" class="accordion-collapse collapse" aria-labelledby="flush-heading1" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+       <a href="/tools/toolsonwarehouse/add/" class="button" style = "font-size: 12px;">Добавить</a></h7>
  <table class="table" style="width: 100%;">
   <thead>
    
@@ -63,34 +76,55 @@
 </table>
 
 
-<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Выдача деталей <a href="/tools/tools/add/" class="button" style = "font-size: 12px;">Добавить</a></h2></b>
-<table class="table" style="width: 100%;">
-  <thead>
-   
-    <tr>
-      <th scope="col">Деталь</th>
-      <th scope="col">Работник</th>
-      <th scope="col">Количество</th>
-      <th scope="col">Дата выдачи</th>
-      <th scope="col">Комментарии</th>
-    </tr>
-  </thead>
-  <tbody>
-
-  {% for tool in toolsv %}
-  <tr>
-  <th scope="row"><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
- <td>{{ tool.worker }}</td>
- <td>{{ tool.count }}</td>
- <td>{{ tool.giveout_date }}</td>
- <td>{{ tool.text }}</td>
-</tr>
-  {% endfor %}
-</tbody>
-</table>
-
-
-<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Прием деталей на склад <a href="/tools/priem/add/" class="button" style = "font-size: 12px;">Добавить</a></h2></b>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading2">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse2" aria-expanded="false" aria-controls="flush-collapse2">
+        Выдача деталей
+      </button>
+    </h2>
+    <div id="flush-collapse2" class="accordion-collapse collapse" aria-labelledby="flush-heading2" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <a href="/tools/tools/add/" class="button" style = "font-size: 12px;">Добавить</a></h2>
+          <table class="table" style="width: 100%;">
+            <thead>
+             
+              <tr>
+                <th scope="col">Деталь</th>
+                <th scope="col">Работник</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Дата выдачи</th>
+                <th scope="col">Комментарии</th>
+              </tr>
+            </thead>
+            <tbody>
+          
+            {% for tool in toolsv %}
+            <tr>
+            <th scope="row"><a href="/tools/tools/{{ tool.id }}/change/">{{ tool.tool }}</a></th>
+           <td>{{ tool.worker }}</td>
+           <td>{{ tool.count }}</td>
+           <td>{{ tool.giveout_date }}</td>
+           <td>{{ tool.text }}</td>
+          </tr>
+            {% endfor %}
+          </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading3">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse3" aria-expanded="false" aria-controls="flush-collapse3">
+        Прием деталей на склад
+      </button>
+    </h2>
+    <div id="flush-collapse3" class="accordion-collapse collapse" aria-labelledby="flush-heading3" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        
+<a href="/tools/priem/add/" class="button" style = "font-size: 12px;">Добавить</a></h7>
 <table class="table" style="width: 100%;">
   <thead>
    
@@ -117,101 +151,201 @@
   {% endfor %}
 </tbody>
 </table>
+      </div>
+    </div>
+  </div>
 
-
-
-
-
-
-
-<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Детали по изделиям <a href="/order/order/add/" class="button" style = "font-size: 12px;">Добавить</a></h2></b>
- <table class="table" style="width: 100%;">
-  <thead>
-   
-    <tr>
-      <th scope="col">Деталь</th>
-      <th scope="col">Количество</th>
-      <th scope="col">Изделие</th>
-      <th scope="col">Кол-во изд.</th>
-      <th scope="col">Срок изготовления</th>
-      <th scope="col">Дата запуска</th>
-      <th scope="col">Статус</th>
-      <th scope="col">Комментарии</th>
-      <th scope="col">МК</th>
-    </tr>
-  </thead>
-  <tbody>
-
-  {% for order in orders %}
-  <tr>
-  <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
-  <td>{{order.count }}</td>
- <td>{% if order.firm != NONE %}<a href="/order/order/?firm__id__exact={{ order.firm.id }}">{{ order.firm }}</a> {% endif %}</td>
- <td>{% if order.firm != NONE %}<a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm.count }}</a> {% endif %}</td>
- <td>{% if order.exp_date != NONE %}{{ order.exp_date }}{% endif %}</td>
- <td>{{ order.order_date_worker }}</td>
- <td>
-  {% for mykey,myvalue in order.ORDER_CHOICES %}
-    {% if mykey == order.status %}
-      {{myvalue}} {{order.log}}</div>
-      {% endif %}
-    {% endfor %}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading4">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse4" aria-expanded="false" aria-controls="flush-collapse4">
+        Детали по изделиям
+      </button>
+    </h2>
+    <div id="flush-collapse4" class="accordion-collapse collapse" aria-labelledby="flush-heading4" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        
+Детали по изделиям <a href="/order/order/add/" class="button" style = "font-size: 12px;">Добавить</a>
+<table class="table" style="width: 100%;">
+ <thead>
   
- </td>
- <td>{{ order.text }}</td>
- <td> 
-  <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
-</tr>
+   <tr>
+     <th scope="col">Деталь</th>
+     <th scope="col">Количество</th>
+     <th scope="col">Изделие</th>
+     <th scope="col">Кол-во изд.</th>
+     <th scope="col">Срок изготовления</th>
+     <th scope="col">Дата запуска</th>
+     <th scope="col">Статус</th>
+     <th scope="col">Комментарии</th>
+     <th scope="col">МК</th>
+   </tr>
+ </thead>
+ <tbody>
 
-
-  {% endfor %}
-</tbody>
-</table>
-
-
-
-
-<b><h2 style="color: rgb(121, 0, 0); background-color: rgba(255, 235, 205, 0.651);">Изготовление <a href="/work/work/add/" class="button" style = "font-size: 12px;">Добавить</a></h2></b>
- <table class="table" style="width: 100%;">
-  <thead>
-   
-    <tr>
-      <th scope="col">Деталь</th>
-      <th scope="col">Количество</th>
-      <th scope="col">Исполнитель</th>
-      <th scope="col">Дата изготовления</th>
-      <th scope="col">Номер установа</th>
-      <th scope="col">Операция</th>
-      <th scope="col">Станки</th>
-    </tr>
-  </thead>
-  <tbody>
-
-  {% for work in works %}
-  <tr>
-  <th scope="row"><a href="/tools/toolsonwarehouse/{{ work.tool.id }}/change/">{{ work.tool }}</a></th>
-  <td>{{work.count }}</td>
- <td><a href="/auth/user/{{ work.user.id }}/change/">{{ work.user.first_name }} {{ work.user.last_name }}</a> </td>
- <td>{{ work.date }} / {{ work.time }}</td>
- <td>
-  {{ work.numb_ust }}
+ {% for order in orders %}
+ <tr>
+ <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
+ <td>{{order.count }}</td>
+<td>{% if order.firm != NONE %}<a href="/order/order/?firm__id__exact={{ order.firm.id }}">{{ order.firm }}</a> {% endif %}</td>
+<td>{% if order.firm != NONE %}<a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm.count }}</a> {% endif %}</td>
+<td>{% if order.exp_date != NONE %}{{ order.exp_date }}{% endif %}</td>
+<td>{{ order.order_date_worker }}</td>
+<td>
+ {% for mykey,myvalue in order.ORDER_CHOICES %}
+   {% if mykey == order.status %}
+     {{myvalue}} {{order.log}}</div>
+     {% endif %}
+   {% endfor %}
  
-  {% if work.numb_ust == 0 %}&#10060;{% endif %}
-  </td>
- <td>{{ work.user.stanprofile.operation }}</td>
- <td> 
-  {% for myvalue in work.user.stanprofile.machines.all %}
-    {{myvalue}}
-    |
-  {% endfor %}
-  
-  
-  
-  </td>
+</td>
+<td>{{ order.text }}</td>
+<td> 
+ <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
 </tr>
-  {% endfor %}
+
+
+ {% endfor %}
 </tbody>
 </table>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading5">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse5" aria-expanded="false" aria-controls="flush-collapse5">
+        Изготовление
+      </button>
+    </h2>
+    <div id="flush-collapse5" class="accordion-collapse collapse" aria-labelledby="flush-heading5" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        
+Изготовление <a href="/work/work/add/" class="button" style = "font-size: 12px;">Добавить</a>
+<table class="table" style="width: 100%;">
+ <thead>
+  
+   <tr>
+     <th scope="col">Деталь</th>
+     <th scope="col">Количество</th>
+     <th scope="col">Исполнитель</th>
+     <th scope="col">Дата изготовления</th>
+     <th scope="col">Номер установа</th>
+     <th scope="col">Операция</th>
+     <th scope="col">Станки</th>
+   </tr>
+ </thead>
+ <tbody>
+
+ {% for work in works %}
+ <tr>
+ <th scope="row"><a href="/tools/toolsonwarehouse/{{ work.tool.id }}/change/">{{ work.tool }}</a></th>
+ <td>{{work.count }}</td>
+<td><a href="/auth/user/{{ work.user.id }}/change/">{{ work.user.first_name }} {{ work.user.last_name }}</a> </td>
+<td>{{ work.date }} / {{ work.time }}</td>
+<td>
+ {{ work.numb_ust }}
+
+ {% if work.numb_ust == 0 %}&#10060;{% endif %}
+ </td>
+<td>{{ work.user.stanprofile.operation }}</td>
+<td> 
+ {% for myvalue in work.user.stanprofile.machines.all %}
+   {{myvalue}}
+   |
+ {% endfor %}
+ 
+ 
+ 
+ </td>
+</tr>
+ {% endfor %}
+</tbody>
+</table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading6">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse6" aria-expanded="false" aria-controls="flush-collapse6">
+        Детали на межоперационном складе
+      </button>
+    </h2>
+    <div id="flush-collapse6" class="accordion-collapse collapse" aria-labelledby="flush-heading6" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        
+Детали на межоперационном складе <a href="/zink/toolsonwarehousezn/add/" class="button" style = "font-size: 12px;">Добавить</a>
+<table class="table" style="width: 100%;">
+ <thead>
+  
+   <tr>
+     <th scope="col">Деталь</th>
+     <th scope="col">Кол-во на складе</th>
+     <th scope="col">Место хранения</th>
+     <th scope="col">Похожие</th>
+     <th scope="col">Кол-во всего</th>
+     <th scope="col">Комментарии</th>
+   </tr>
+ </thead>
+ <tbody>
+
+ {% for tool in mezhop %}
+ <tr>
+ <th scope="row"><a href="/zink/toolsonwarehousezn/{{ tool.id }}/change/">{{ tool.tool.title }}</a></th>
+<td>{{ tool.count }}</td>
+<td>{{ tool.workplace }}</td>
+<td>
+ {% for t in tool.tool.similar.all %}
+ {{ t.title }}</br>
+{% endfor %}
+ 
+
+</td>
+
+<td>
+ {% for t in tool.tool.similar.all %}
+ {{ t.count }}</br>
+{% endfor %}
+ 
+
+</td>
+<td>{{ tool.text }}</td>
+</tr>
+ {% endfor %}
+</tbody>
+</table>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
