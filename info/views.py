@@ -512,19 +512,22 @@ def stock(request):
         for firm in firms:
             firm.count = request.POST.get('firm%s' % firm.id)
             orders_c = Order.objects.filter(firm=firm).all()
-            for ord in orders_c:
-                ord.count = ord.count*firm.count
-        
+            #for ord in orders_c:
+               #ord.count = ord.count*firm.count
             orders = orders.union(orders_c)
-            #locals()['firm%s' % firm.id]
         tools={}
         for order in orders:
-            
             order.count = order.count * int(request.POST.get('firm%s' % order.firm.id))
-        orders = list(orders)
-        
+        orders=list(orders)
         for order in orders:
-            
+            tool = order.tool
+            for tool_c in tool.similar.all():
+                for or_c in orders:
+                    if (tool_c != order.tool) & (tool_c == or_c.tool):
+                        order.count+=or_c.count
+                        orders.remove(or_c)
+                        #print(tool_c.title, order.firm)
+        for order in orders:
             if order.tool.title in tools:
                 tools[order.tool.title] = [tools[order.tool.title][0]+order.count, order.tool.count]
             else:
@@ -540,6 +543,10 @@ def stock(request):
                 if t_c.title not in key:
                     value[1]+=t_c.count
             tools[key]=value
+
+        
+        
+        
 
 
 
