@@ -40,6 +40,7 @@
           <th scope="col">Деталь</th>
           <th scope="col">Необходимо</th>
           <th scope="col">На складе</th>
+          <th scope="col">Дефицит</th>
          
         </tr>
       </thead>
@@ -50,6 +51,7 @@
         <th scope="row"> <a href="/info/?tool={{ tool }}">{{ tool }} </a></th>
       <td>{{ count.0 }}</td>
       <td >{{ count.1 }}</td>
+      <td >{{ count.2 }}</td>
      
     </tr>
       {% endfor %}

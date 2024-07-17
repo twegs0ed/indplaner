@@ -529,9 +529,9 @@ def stock(request):
                         #print(tool_c.title, order.firm)
         for order in orders:
             if order.tool.title in tools:
-                tools[order.tool.title] = [tools[order.tool.title][0]+order.count, order.tool.count]
+                tools[order.tool.title] = [tools[order.tool.title][0]+order.count, order.tool.count,0]
             else:
-                tools[order.tool.title]=[order.count, order.tool.count]
+                tools[order.tool.title]=[order.count, order.tool.count,0]
             #tools[order.tool.title+order.firm.title]=[order.count, order.tool.count]
         for key, value in list(tools.items()):
             if value[0] < 1:
@@ -543,6 +543,8 @@ def stock(request):
                 if t_c.title not in key:
                     value[1]+=t_c.count
             tools[key]=value
+        for key, value in list(tools.items()):
+            tools[key][2]=tools[key][0]-tools[key][1]
 
         
         
