@@ -15,6 +15,14 @@ from material.models import Material
 from django.shortcuts import render
 import datetime
 from work.models import Work
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side
+import openpyxl
+import uuid
+from io import StringIO
+import io
+from django.http import HttpResponse
+import os
 #import copy
 
 
@@ -130,9 +138,60 @@ class ToolsonwarehouseznAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 res+=' <a href = "/tools/toolsonwarehouse/'+str(t.id)+'">'+t.title+'</a> '+'</br>'+', '
         return format_html(res)
     similar_c.short_description = "Похожие"
+def m15_action(modeladmin, request, queryset):
+    tools = list(queryset)
+    first_name = [x+'.' for x in request.user.first_name if x.isupper()]
+    fio = request.user.last_name+' '+''.join(first_name)
+    wb = load_workbook(filename = 'static/xls/m15.xlsx')
+    ws = wb.active
+    
+    ws.cell(row=9, column=4).value=str(datetime.datetime.now().date().strftime("%d.%m.%Y"))
+    row=17
+    ws.row_dimensions[row].height = 12
+    thins = Side(border_style="medium", color="000000")
+    thin = Side(border_style="thin", color="000000")
+    #ws['B'+str(row)].border = Border(top=thins, bottom=thins, left=thins, right=thins) 
+    for t in tools:
+        ws.insert_rows(row)
+        ws['B'+str(row)].border = Border(top=thins, bottom=thins, left=thins, right=thins) 
+        ws['C'+str(row)].border = Border(top=thins, bottom=thins, left=thins, right=thins)
+        ws['D'+str(row)].border = Border(top=thins, bottom=thins, left=thins, right=thins)
+        ws.row_dimensions[row+1].height = 12
+        ws.merge_cells(start_row=row+1, start_column=4, end_row=row+1, end_column=7)
+        ws.cell(row=row, column=4).value=str(t.tool.tool.title)
+        ws.cell(row=row, column=11).value=str(t.count)
+        ws.cell(row=row, column=12).value=str(t.count)
+        row+=1
+        
+        pass
+    print(row)
+    for col in ws['B17:S'+str(row)]:
+            for cell in col:
+                cell.border = Border(top=thin, bottom=thin, left=thin, right=thin) 
+    ws.delete_rows(row)
+    
+    
 
+   
+    name = str(uuid.uuid4())
+   
+    
+
+    #ws.merge_cells(start_row=3, start_column=1, end_row=3, end_column=4)
+    wb.save('static/xls/'+name+'.xlsx')
+
+    file = io.open('static/xls/'+name+'.xlsx', "rb", buffering = 1024*256)
+    file.seek(0)
+    response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename= '+name+'.xlsx'
+    
+    file.close()
+    if os.path.isfile('static/xls/'+name+'.xlsx'): os.remove('static/xls/'+name+'.xlsx')
+    return response
+m15_action.short_description = "M15"#заяввка
 
 class ToolsznAdmin(ExportActionMixin, admin.ModelAdmin):
+    actions = [m15_action]
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
@@ -151,6 +210,7 @@ class ToolsznAdmin(ExportActionMixin, admin.ModelAdmin):
         #queryset |= self.model.objects.filter(tool__title=search_term)
         return queryset, use_distinct
     pass
+
   
 class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     #raw_id_fields = ('worker', 'tool')
