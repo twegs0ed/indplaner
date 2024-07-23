@@ -27,7 +27,10 @@ def info(request):
         orders = Order.objects.filter(tool__title__icontains  = result.upper(), firm__report = False).order_by('-id')
         mezhop = Toolsonwarehousezn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         for tool in tools:
-            tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = tool).count
+            try:
+                tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = tool).count
+            except Toolsonwarehousezn.DoesNotExist:
+                        pass
             for t_c in tool.similar.all():
                 if t_c != tool:
                     try:
