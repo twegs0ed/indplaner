@@ -157,7 +157,7 @@ class Toolsonwarehouse(models.Model):
         verbose_name_plural = 'Детали на складе'
 
 
-class Tools(models.Model):
+class Tools(models.Model):#выдача деталей
 
     worker = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Работник")#Работник, который получил детали
     tool = models.ForeignKey(Toolsonwarehouse,on_delete=models.CASCADE,null=True, verbose_name="Деталь")  # Работник, который получил детали
@@ -189,11 +189,21 @@ class Tools(models.Model):
 
         if self.id is None:
             self.tool.count-=self.count
+            self.tool.save()
         else:
+            
             c_t = Tools.objects.get(pk=self.id)
+            nasclade = c_t.tool.count#на складе сейчас
+            print(nasclade, 'на складе')
+            vidachabila = c_t.count#выдача была
+            print(vidachabila, 'выдача была')
+            vidachastala = self.count#выдача сейчас
+            print(vidachastala, 'выдача сейча')
             workplace = self.tool.workplace
             self.tool.workplace = workplace
-            self.tool.count = c_t.tool.count+(c_t.count - self.count)# на складе + (было - стало)
+            nasclade = nasclade + (vidachabila - vidachastala)
+            print(nasclade, 'на складе стало')
+            c_t.tool.count = nasclade# на складе + (было - стало)
 
 
 
@@ -208,7 +218,7 @@ class Tools(models.Model):
             #print(self.count)
             self.tool.count+=(count_cc-self.count)'''#новое значение = старое значение + (старое изменение - новое изменение)
             
-        self.tool.save()
+            c_t.tool.save()
         return super(Tools, self).save()
     def clean(self):
         if self.id:
@@ -274,7 +284,6 @@ class Priem(models.Model):
     def order_f(self):
         order_cf = order.models.Order.objects.filter((Q(tool=self.tool) & (Q(firm__isnull=True) | Q( firm__report=False))) & (Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED))).order_by('order_date_worker').first()
         #order_cf = order.models.Order.objects.filter(tool=self.tool, firm__report=False).filter(Q(status=order.models.Order.ORDERED) | Q(status=order.models.Order.ORDERED_BY_WORKER) | Q(status=order.models.Order.PAYED)).order_by('order_date_worker').first()
-        print(order_cf)
         if order_cf:
             safe_self_count = self.count
             while self.count > order_cf.count:
@@ -334,7 +343,6 @@ class Priem(models.Model):
             order_cf.text='Сформировано из "Приема"'
             order_cf.status = order.models.Order.COM
             order_cf.save()
-            print('11111111111111111111111111')
     def order_re(self, diff_count):
         order_cf = order.models.Order.objects.filter(tool=self.tool, firm__report=False).filter(
                 status=order.models.Order.COM).order_by(
