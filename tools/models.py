@@ -20,6 +20,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 
 
+
 class Toolsonwarehouse(models.Model):
     title = models.CharField(max_length=200, verbose_name="Обозначение", unique=True)#Наименование детали
     text = models.TextField(blank=True, null=True, verbose_name="Примечание" )#Описание
@@ -32,6 +33,7 @@ class Toolsonwarehouse(models.Model):
     count_in_one_stock = models.CharField(max_length=20, blank=True, null=True, verbose_name="Кол-во деталей из одной заготовки" )
     cover = models.BooleanField(default=False, verbose_name="Покрывается" )
     similar = models.ManyToManyField('self',blank=True, null=True, verbose_name="Похожие" )
+    count_mezhop=0
 
     
 
@@ -67,6 +69,7 @@ class Toolsonwarehouse(models.Model):
 
     norm_rastoch_p = models.FloatField(default=0,blank=True, verbose_name="Расточная п/з, ч." )
     norm_rastoch = models.FloatField(default=0,blank=True, verbose_name="Расточная, ч." )
+    
 
 
     def publish(self):

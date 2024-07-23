@@ -17,7 +17,6 @@ from django.http import JsonResponse
 from django.views.generic import View
 
 
-
 def info(request):
     if request.GET.get('tool'):
         form = SearchtoolForm(request.GET)
@@ -27,6 +26,17 @@ def info(request):
         priems = Priem.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         orders = Order.objects.filter(tool__title__icontains  = result.upper(), firm__report = False).order_by('-id')
         mezhop = Toolsonwarehousezn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
+        for tool in tools:
+            tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = tool).count
+            for t_c in tool.similar.all():
+                if t_c != tool:
+                    try:
+                        tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = t_c).count
+                    except Toolsonwarehousezn.DoesNotExist:
+                        pass
+
+        
+                
         mezhopgetout = Toolszn.objects.filter(tool__tool__title__icontains  = result.upper()).order_by('-id')
         mezhoppriem = Priemzn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
 

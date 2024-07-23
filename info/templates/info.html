@@ -316,6 +316,7 @@
     <tr>
       <th scope="col">Деталь</th>
       <th scope="col">Кол-во на складе</th>
+     <th scope="col">Кол-во на меж.оп.складе</th>
       <th scope="col">Место хранения</th>
       <th scope="col">Похожие</th>
       <th scope="col">Кол-во всего</th>
@@ -328,6 +329,7 @@
   <tr>
   <th scope="row"><a href="/tools/toolsonwarehouse/{{ tool.id }}/change/">{{ tool.title }}</a></th>
  <td>{{ tool.count }}</td>
+ <td>{{ tool.count_mezhop }}</td>
  <td>{{ tool.workplace }}</td>
  <td>
   {% for t in tool.similar.all %}
@@ -557,6 +559,7 @@
    <tr>
      <th scope="col">Деталь</th>
      <th scope="col">Кол-во на складе</th>
+     <th scope="col">Всего на складе</th>
      <th scope="col">Место хранения</th>
      <th scope="col">Похожие</th>
      
@@ -568,7 +571,7 @@
  {% for tool in mezhop %}
  <tr>
  <th scope="row"><a href="/zink/toolsonwarehousezn/{{ tool.id }}/change/">{{ tool.tool.title }}</a></th>
-<td>{{ tool.count }}</td>
+<td>{{ tool.count }}</td><td>{{ tool.get_mezhop }}</td>
 <td>{{ tool.workplace }}</td>
 <td>
  {% for t in tool.tool.similar.all %}

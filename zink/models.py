@@ -24,6 +24,16 @@ class Toolsonwarehousezn(models.Model):
 
     def __str__(self):
         return self.tool.title
+    def get_mezhop(self):
+        count=self.count
+        for t_c in self.tool.similar.all():
+            try:
+                if self.tool!= t_c:
+                    count+=Toolsonwarehousezn.objects.get(tool = t_c).count
+            except Toolsonwarehousezn.DoesNotExist:
+                pass
+        return count
+        pass
 
     class Meta:
         verbose_name = 'Детали'
@@ -104,6 +114,7 @@ class Toolszn(models.Model):
         #return 'расходник' if self.tool.period == self.tool.SHORTPLAY else 'долгосрочный'
 
     #get_period.short_description = "Срок экспл."
+    
     class Meta:
         verbose_name = 'Выдача'
         verbose_name_plural = 'Выдача деталей'
