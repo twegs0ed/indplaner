@@ -1,0 +1,61 @@
+{% extends "admin/base_site.html" %}
+
+ {% block nav-global %}
+
+     {{ block.super }}
+ {% endblock %}
+
+
+
+
+
+
+ {% block content %}
+
+ <form action="" method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+      <ul>
+       
+       
+        
+          <li>{{ form.user.label_tag }}</li>
+          {{ form.user }}
+          <li>{{ user.get_full_name }}</li>
+
+        
+
+          <li>{{ form.date.label_tag }}</li>
+          <li>{{ form.date }}</li>
+
+          <li>{{ form.text.label_tag }}</li>
+          <li>{{ form.text }}</li>
+         
+         
+         <!-- <li>{{ form.ready.label_tag }}    {{ form.ready }}</li>-->
+          
+
+      </ul>
+  <input id="subbutton" type="submit" value="Отправить">
+</form>
+Предложено:
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Предложение</th>
+    
+      <th scope="col">Дата</th>
+      <th scope="col">Время</th>
+    </tr>
+  </thead>
+{% for work in works %} 
+  <tr>
+<td>{{ work.text}}</td><td> {{ work.date }}</td><td>{{ work.time }}</td>
+</tr>
+
+
+{% endfor %}
+</table>
+
+     {{ block.super }}
+ {% endblock %}

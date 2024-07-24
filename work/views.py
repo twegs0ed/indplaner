@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from tools.models import Toolsonwarehouse
-from .models import WorkForm, Work
+from .models import WorkForm, Work, WorkoptimForm,Workoptim
 from django.shortcuts import redirect
 from django.http import Http404
 
@@ -39,8 +39,31 @@ def add(request, id):
         return render(request, 'work.html', { 'form':form, 'tool' : tool.title, 'user' : request.user, 'works':works})
 def addsclad(request, id):
     
-    print("!!!!!!!!!!")
     return render(request, 'worksclad.html', { 'id':id, })
 def detail(request, pk):
     work=Work.objects.get(pk)
     return render(request, 'work.html', { 'work':work})
+
+def addoptim(request):
+   
+    
+    
+    form_class = WorkForm
+    form = form_class(request.POST or None)
+    if request.method == "POST":
+        form = WorkoptimForm(request.POST)
+        work = form.save(commit=False)
+        work.save()
+        return render(request, 'success.html', { 'form':form})
+    else:
+        form=WorkoptimForm(initial={ 'user':request.user})
+        
+        ''' if request.user.groups.filter(name='worker').exists():'''
+        form.fields['user'].widget.attrs['readonly'] = True 
+        form.fields['user'].widget.attrs['hidden'] = True 
+        '''form.fields['tool'].widget.attrs['readonly'] = True 
+        form.fields['tool'].widget.attrs['hidden'] = True '''
+
+        works = Workoptim.objects.filter(user = request.user).order_by('-date', '-time')[:10]
+            
+        return render(request, 'workoptim.html', { 'form':form,  'user' : request.user, 'works':works})

@@ -50,6 +50,40 @@ class WorkForm(ModelForm):
         model = Work
         fields = ['tool', 'user','text','date','count', 'ready', 'work_time', 'numb_ust']
         #exclude = ['user']
+
+
+
+
+
+class Workoptim(models.Model):
+    
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Исполнитель")
+    text = models.TextField(blank=True, null=True, verbose_name="Предложение" )#Описание
+    date = models.DateField(default=timezone.now, verbose_name="Дата предложения", null=True,blank=True)#Дата получения на склад
+    time = models.TimeField(auto_now_add=True, verbose_name="Время")
+    machines = models.ManyToManyField(Machine, blank=True, null=True, verbose_name="Станки")  
+
+   
+
+    class Meta:
+        verbose_name = 'Рационализаторские предложения'
+        verbose_name_plural = 'Рационализаторские предложения'
+
+
+class WorkoptimForm(ModelForm):
+    
+    class Meta:
+        model = Workoptim
+        fields = [ 'user','text','date',]
+        #exclude = ['user']
+
+
+
+
+
+
+
 def setnormstotool(tool, self):
     try:
             norms, _ = Norms.objects.get_or_create(tool = tool)

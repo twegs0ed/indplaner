@@ -1,6 +1,7 @@
 
 from django.contrib import admin
 from django.urls import include,path
+import requests
 
 admin.site.site_header = 'Учет готовых деталей АО "ЦПТ"'
 admin.site.site_title = 'Учет готовых деталей АО "ЦПТ"'

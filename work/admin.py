@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Work, WorkForm
+from .models import Work, WorkForm, Workoptim, WorkoptimForm
 from rangefilter.filters import DateRangeFilter
 from import_export import resources
 from import_export.widgets import ForeignKeyWidget
@@ -101,6 +101,45 @@ class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         return format_html(t)
     ord.short_description = "Изделие"
+class WorkoptimResource(resources.ModelResource):
+    machines = ManyToManyWidget(Machine, separator=', ')
+    firm = Field()
+    machines = Field()
+    #work_time = Field()
+    
+
+    def before_export(self, queryset, *args, **kwargs):
+        self.firm='1'
+        return self
+    class Meta:
+        model = Work
+        fields = ('tool__title', 'user__first_name', 'user__last_name', 'date', 'user__stanprofile__operation__name','machines')
+        export_order = fields
+        #Eexclude = ('id',)
+        #skip_unchanged=True
+   
+    def dehydrate_machines(self, work):
+        ms=work.machines.all()
+        if ms:
+            t=""
+            for m in ms:
+                t+=m.name+' ()'
+        else: t='отсутствует'
+        
+        return t
+
+class WorkoptimAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = WorkoptimResource
+    form = WorkoptimForm
+    list_display = ('id',full_name, 'date', 'time', get_operation, 'get_machines', 'text')
+    list_filter = (('date', DateRangeFilter), 'user__stanprofile__operation', 'machines' ,'user')
+    search_fields = ['user__username', 'user__first_name','user__last_name']
+    autocomplete_fields = ('user',)
+    def get_machines(self, obj):
+        return ",".join([str(p) for p in obj.machines.all()])
+    get_machines.short_description = "Станки"
+    
 
    
 admin.site.register(Work, WorkAdmin)
+admin.site.register(Workoptim, WorkoptimAdmin)
