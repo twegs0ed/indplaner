@@ -15,9 +15,12 @@ import plotly.express as px
 from django.http import Http404
 from django.http import JsonResponse
 from django.views.generic import View
+from django.urls import reverse
 
 
 def info(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login')) # or http response
     if request.GET.get('tool'):
         form = SearchtoolForm(request.GET)
         result = request.GET.get('tool')

@@ -3,6 +3,8 @@ from tools.models import Toolsonwarehouse
 from .models import WorkForm, Work, WorkoptimForm,Workoptim
 from django.shortcuts import redirect
 from django.http import Http404
+from django.shortcuts import HttpResponseRedirect
+from django.urls import reverse
 
 
 # Create your views here.
@@ -45,7 +47,8 @@ def detail(request, pk):
     return render(request, 'work.html', { 'work':work})
 
 def addoptim(request):
-   
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login')) # or http response
     
     
     form_class = WorkForm

@@ -3,6 +3,26 @@
 */
 
 @import url(fonts.css);
+.call_back{
+   
+    position:fixed; /*фиксированная позиция кнопки при прокрутке*/
+    z-index:999;
+    right: 70px; /*отступ с права*/
+    bottom: 20px; /*отступ сверху*/
+    margin-right:-50px; /*отрицательный отступ справа (чем длиннее название кнопки тем больше должно быть значение данного отступа )*/
+    }
+    /*Стили для ссылки*/
+    .call_back a{
+    color:#ffffff!important; /*цвет ссылки*/
+    display:block;
+    background:#79aec8; /*цвет фона кнопки*/
+    font-size:1.2em; /*размер шрифта*/
+    text-align:center; /*выравнивание по центру*/
+    padding:10px 20px; /*внутренние отступы*/
+    font-weight:bold;/*жирный шрифт*/
+    border-radius:5px; /*радиус скругления углов*/
+    border:1px solid #fff; /*рамка вокруг кнопки*/
+    }
 
 /* VARIABLE DEFINITIONS */
 :root {
