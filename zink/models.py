@@ -155,7 +155,7 @@ class Priemzn(models.Model):
             if not tool.workplace==self.place:
                 tool.text='Пред. место на '+dateformat.format(timezone.now(), 'd-m-Y')+' - '+str(tool.workplace)+'\n'+str(tool.text)
             tool.workplace=self.place
-            Priemzn.order_re(self, diff_count)
+            
         tool.save()
        
         return super(Priemzn, self).save()
