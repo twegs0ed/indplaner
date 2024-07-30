@@ -317,14 +317,17 @@ class Priem(models.Model):
                     if u.groups.filter(name='tehnolog').exists():
                         if u.email:
                             mails.append(u.email)
-                send_mail(
-                'Прием деталей на склад',
-                'Деталь: '+order_cf.tool.title+
-                '\nИзделие: '+str(order_cf.firm),
-                settings.EMAIL_FROM_ADRESS,
-                mails,
-                fail_silently=False,
-            )
+                try:
+                    send_mail(
+                    'Прием деталей на склад',
+                    'Деталь: '+order_cf.tool.title+
+                    '\nИзделие: '+str(order_cf.firm),
+                    settings.EMAIL_FROM_ADRESS,
+                    mails,
+                    fail_silently=False,
+                    )
+                except:
+                    pass
                 order_cf1.pk = None
                 order_cf1.count = self.count
                 order_cf1.status = order.models.Order.COM
