@@ -426,7 +426,10 @@ class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 'css/fancy.css',
             )
         }
-        js = ('js/guarded_admin.js',)
+        js = [
+            'js/guarded_admin.js',
+              'js/list_filter_collapse.js'
+              ]
     
 class FirmResource(resources.ModelResource):
     
@@ -530,6 +533,10 @@ class FirmAdmin(ExportActionMixin,admin.ModelAdmin):
             return format_html('<button type="button" onclick="copyToClipboard(\' {} \')">  &dArr;  </button>', url,)
         return 'Нет'
     folder1.short_description = "folder"
+    class Media:
+        js = [
+              'js/list_filter_collapse.js'
+              ]
 class AssemAdmin(admin.ModelAdmin):
     search_fields= ['title']
     list_display = ('title', 'text', 'tools')

@@ -140,6 +140,10 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 res+=' <a href = "/tools/toolsonwarehouse/'+str(t.id)+'">'+t.title+'</a> '+'</br>'+', '
         return format_html(res)
     similar_c.short_description = "Похожие"
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
 
 
 class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
@@ -177,6 +181,10 @@ class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
     firms.short_description = "Изделия"
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
 class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
     #raw_id_fields = ('worker', 'tool')
     autocomplete_fields = ['worker', 'tool']
@@ -338,6 +346,10 @@ class PriemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
     firms.short_description = "Изделия"
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
 
 
 class NormsResource(resources.ModelResource):

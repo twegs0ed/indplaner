@@ -101,6 +101,10 @@ class WorkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         return format_html(t)
     ord.short_description = "Изделие"
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
 class WorkoptimResource(resources.ModelResource):
     machines = ManyToManyWidget(Machine, separator=', ')
     firm = Field()
@@ -138,6 +142,10 @@ class WorkoptimAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def get_machines(self, obj):
         return ",".join([str(p) for p in obj.machines.all()])
     get_machines.short_description = "Станки"
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
     
 
    

@@ -138,6 +138,10 @@ class ToolsonwarehouseznAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 res+=' <a href = "/tools/toolsonwarehouse/'+str(t.id)+'">'+t.title+'</a> '+'</br>'+', '
         return format_html(res)
     similar_c.short_description = "Похожие"
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
 def m15_action(modeladmin, request, queryset):
     tools = list(queryset)
     first_name = [x+'.' for x in request.user.first_name if x.isupper()]
@@ -209,7 +213,12 @@ class ToolsznAdmin(ExportActionMixin, admin.ModelAdmin):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         #queryset |= self.model.objects.filter(tool__title=search_term)
         return queryset, use_distinct
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
     pass
+
 
   
 class Rec_ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
@@ -372,6 +381,10 @@ class PriemznAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             #t+=' <a href = "/tools/toolsonwarehouse/?q='+str(f.tool.title)+'">'+str(f.title)+'</a> '
         return format_html(t)
     firms.short_description = "Изделия"
+    class Media:
+        js = [
+                'js/list_filter_collapse.js'
+                ]
 
 
 
