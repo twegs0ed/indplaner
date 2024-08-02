@@ -525,20 +525,24 @@
 
   {% for order in orders %}
   <tr>
-  <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
+  <th scope="row" ><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
   <td>{{order.count }}</td>
  <td>{% if order.firm != NONE %}<a href="/order/order/?firm__id__exact={{ order.firm.id }}">{{ order.firm }}</a> {% endif %}</td>
  <td>{% if order.firm != NONE %}<a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm.count }}</a> {% endif %}</td>
  <td>{% if order.exp_date != NONE %}{{ order.exp_date }}{% endif %}</td>
  <td>{{ order.order_date_worker }}</td>
- <td>
+ 
   {% for mykey,myvalue in order.ORDER_CHOICES %}
     {% if mykey == order.status %}
-      {{myvalue}} {{order.log}}
+    <td {% if myvalue == "изготовлено" %} style="background-color: rgba(0, 255, 13, 0.3);" {% endif %}
+    {% if myvalue == "В запуске" %} style="background-color: rgba(255, 0, 0, 0.3);" {% endif %}
+    {% if myvalue == "запущено" %} style="background-color: rgba(191, 255, 0, 0.3);" {% endif %}
+    
+    >{{myvalue}} {{order.log}}</td>
       {% endif %}
     {% endfor %}
   
- </td>
+ 
  <td>{{ order.text }}</td>
  <td> 
   <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
@@ -559,14 +563,21 @@
  <td style="background-color: rgba(252, 240, 17, 0.118);">{% if order.firm != NONE %}<a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm.count }}</a> {% endif %}</td>
  <td style="background-color: rgba(252, 240, 17, 0.118);">{% if order.exp_date != NONE %}{{ order.exp_date }}{% endif %}</td>
  <td style="background-color: rgba(252, 240, 17, 0.118);">{{ order.order_date_worker }}</td>
- <td style="background-color: rgba(252, 240, 17, 0.118);">
+ 
   {% for mykey,myvalue in order.ORDER_CHOICES %}
     {% if mykey == order.status %}
+    <td 
+    {% if myvalue == "изготовлено" %} style="background-color: rgba(0, 255, 13, 0.3);" 
+    {% elif myvalue == "В запуске" %} style="background-color: rgba(255, 0, 0, 0.3);" 
+    {% elif myvalue == "запущено" %} style="background-color: rgba(191, 255, 0, 0.3);"
+    {% else %} style="background-color: rgba(252, 240, 17, 0.118);" {% endif %}
+    >
       {{myvalue}} {{order.log}}
+    </td>
       {% endif %}
     {% endfor %}
   
- </td>
+ 
  <td style="background-color: rgba(252, 240, 17, 0.118);">{{ order.text }}</td>
  <td style="background-color: rgba(252, 240, 17, 0.118);"> 
   <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
