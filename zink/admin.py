@@ -204,7 +204,7 @@ class ToolsznAdmin(ExportActionMixin, admin.ModelAdmin):
     resource_class = ToolsznResource
     list_display = ('tool', 'worker', 'count', 'giveout_date', 'text')
     list_filter = (('giveout_date', DateRangeFilter), 'worker')
-    search_fields = ['tool__title', 'worker__bio']
+    search_fields = ['tool__tool__title', 'worker__bio']
     ordering = ['-giveout_date']
     list_editable = ['text']
     def get_search_results(self, request, queryset, search_term):
