@@ -27,8 +27,11 @@ def info(request):
         tools=Toolsonwarehouse.objects.filter(title__icontains  = result.upper()).order_by('-id')
         toolsv=Tools.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         priems = Priem.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
-        orders = Order.objects.filter(tool__title__icontains  = result.upper(), firm__report = False).order_by('-id')
+        orders = Order.objects.filter(tool__title__icontains  = result.upper(), firm__report = False)
+        orders_similar = Order.objects.none()
+        '''.order_by('-id')'''
         mezhop = Toolsonwarehousezn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
+        similar=[]
         for tool in tools:
             try:
                 tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = tool).count
@@ -36,10 +39,22 @@ def info(request):
                         pass
             for t_c in tool.similar.all():
                 if t_c != tool:
+                    if t_c not in similar:
+                        similar.append(t_c)
                     try:
                         tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = t_c).count
                     except Toolsonwarehousezn.DoesNotExist:
                         pass
+        '''for ord in orders:
+            logs = LogEntry.objects.filter(content_type__app_label='order', object_id = ord.id).order_by('-action_time').first()#or you can filter, etc.
+            if logs: 
+                ord.log=logs.action_time'''
+        for sim in similar:
+            orders_sim = Order.objects.filter(tool= sim, firm__report = False)
+            '''.order_by('-id')'''
+            orders_c = orders_similar.union(orders_sim)
+            orders_similar=orders_c
+        orders.order_by('-id')
 
         
                 
@@ -47,10 +62,7 @@ def info(request):
         mezhoppriem = Priemzn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
 
 
-        for ord in orders:
-            logs = LogEntry.objects.filter(content_type__app_label='order', object_id = ord.id).order_by('-action_time').first()#or you can filter, etc.
-            if logs: 
-                ord.log=logs.action_time
+        
 
         works = Work.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         vars = {
@@ -58,6 +70,7 @@ def info(request):
             'toolsv':toolsv, 
             'priems':priems, 
             'orders':orders, 
+            'orders_similar':orders_similar, 
             'works':works, 
             'form':form, 
             'mezhop':mezhop,

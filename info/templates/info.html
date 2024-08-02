@@ -356,6 +356,70 @@
       </div>
     </div>
   </div>
+
+
+
+
+
+
+
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading6">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse6" aria-expanded="false" aria-controls="flush-collapse6">
+        Детали на межоперационном складе
+      </button>
+    </h2>
+    <div id="flush-collapse6" class="accordion-collapse collapse" aria-labelledby="flush-heading6" >
+      <div class="accordion-body">
+        
+Детали на межоперационном складе <a href="/zink/toolsonwarehousezn/add/" class="button" style = "font-size: 12px;">Добавить</a>
+<table class="table" style="width: 100%;">
+ <thead>
+  
+   <tr>
+     <th scope="col">Деталь</th>
+     <th scope="col">Кол-во на складе</th>
+     <th scope="col">Всего на складе</th>
+     <th scope="col">Место хранения</th>
+     <th scope="col">Похожие</th>
+     
+     <th scope="col">Комментарии</th>
+   </tr>
+ </thead>
+ <tbody>
+
+ {% for tool in mezhop %}
+ <tr>
+ <th scope="row"><a href="/zink/toolsonwarehousezn/{{ tool.id }}/change/">{{ tool.tool.title }}</a></th>
+<td>{{ tool.count }}</td><td>{{ tool.get_mezhop }}</td>
+<td>{{ tool.workplace }}</td>
+<td>
+ {% for t in tool.tool.similar.all %}
+ {{ t.title }}</br>
+{% endfor %}
+ 
+
+</td>
+
+
+<td>{{ tool.text }}</td>
+</tr>
+ {% endfor %}
+</tbody>
+</table>
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  
   <div class="accordion-item">
     <h2 class="accordion-header" id="flush-heading2">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse2" aria-expanded="false" aria-controls="flush-collapse2">
@@ -459,29 +523,57 @@
  </thead>
  <tbody>
 
- {% for order in orders %}
- <tr>
- <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
- <td>{{order.count }}</td>
-<td>{% if order.firm != NONE %}<a href="/order/order/?firm__id__exact={{ order.firm.id }}">{{ order.firm }}</a> {% endif %}</td>
-<td>{% if order.firm != NONE %}<a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm.count }}</a> {% endif %}</td>
-<td>{% if order.exp_date != NONE %}{{ order.exp_date }}{% endif %}</td>
-<td>{{ order.order_date_worker }}</td>
-<td>
- {% for mykey,myvalue in order.ORDER_CHOICES %}
-   {% if mykey == order.status %}
-     {{myvalue}} {{order.log}}</div>
-     {% endif %}
-   {% endfor %}
+  {% for order in orders %}
+  <tr>
+  <th scope="row"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
+  <td>{{order.count }}</td>
+ <td>{% if order.firm != NONE %}<a href="/order/order/?firm__id__exact={{ order.firm.id }}">{{ order.firm }}</a> {% endif %}</td>
+ <td>{% if order.firm != NONE %}<a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm.count }}</a> {% endif %}</td>
+ <td>{% if order.exp_date != NONE %}{{ order.exp_date }}{% endif %}</td>
+ <td>{{ order.order_date_worker }}</td>
+ <td>
+  {% for mykey,myvalue in order.ORDER_CHOICES %}
+    {% if mykey == order.status %}
+      {{myvalue}} {{order.log}}
+      {% endif %}
+    {% endfor %}
+  
+ </td>
+ <td>{{ order.text }}</td>
+ <td> 
+  <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
+ </tr>
  
-</td>
-<td>{{ order.text }}</td>
-<td> 
- <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
-</tr>
+ 
+  {% endfor %}
 
 
- {% endfor %}
+
+
+
+  {% for order in orders_similar %}
+  <tr>
+  <th scope="row" style="background-color: rgba(252, 240, 17, 0.118);"><a href="/order/order/{{ order.id }}/change/">{{ order.tool }}</a></th>
+  <td style="background-color: rgba(252, 240, 17, 0.118);">{{order.count }}</td>
+ <td style="background-color: rgba(252, 240, 17, 0.118);">{% if order.firm != NONE %}<a href="/order/order/?firm__id__exact={{ order.firm.id }}">{{ order.firm }}</a> {% endif %}</td>
+ <td style="background-color: rgba(252, 240, 17, 0.118);">{% if order.firm != NONE %}<a href="/order/firm/{{ order.firm.id }}/change/">{{ order.firm.count }}</a> {% endif %}</td>
+ <td style="background-color: rgba(252, 240, 17, 0.118);">{% if order.exp_date != NONE %}{{ order.exp_date }}{% endif %}</td>
+ <td style="background-color: rgba(252, 240, 17, 0.118);">{{ order.order_date_worker }}</td>
+ <td style="background-color: rgba(252, 240, 17, 0.118);">
+  {% for mykey,myvalue in order.ORDER_CHOICES %}
+    {% if mykey == order.status %}
+      {{myvalue}} {{order.log}}
+      {% endif %}
+    {% endfor %}
+  
+ </td>
+ <td style="background-color: rgba(252, 240, 17, 0.118);">{{ order.text }}</td>
+ <td style="background-color: rgba(252, 240, 17, 0.118);"> 
+  <a href="/order/printmk/{{ order.id }}" class="button">&#128438;</a></td>
+ </tr>
+ 
+ 
+  {% endfor %}
 </tbody>
 </table>
 
@@ -543,56 +635,7 @@
     </div>
   </div>
 
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="flush-heading6">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse6" aria-expanded="false" aria-controls="flush-collapse6">
-        Детали на межоперационном складе
-      </button>
-    </h2>
-    <div id="flush-collapse6" class="accordion-collapse collapse" aria-labelledby="flush-heading6" >
-      <div class="accordion-body">
-        
-Детали на межоперационном складе <a href="/zink/toolsonwarehousezn/add/" class="button" style = "font-size: 12px;">Добавить</a>
-<table class="table" style="width: 100%;">
- <thead>
   
-   <tr>
-     <th scope="col">Деталь</th>
-     <th scope="col">Кол-во на складе</th>
-     <th scope="col">Всего на складе</th>
-     <th scope="col">Место хранения</th>
-     <th scope="col">Похожие</th>
-     
-     <th scope="col">Комментарии</th>
-   </tr>
- </thead>
- <tbody>
-
- {% for tool in mezhop %}
- <tr>
- <th scope="row"><a href="/zink/toolsonwarehousezn/{{ tool.id }}/change/">{{ tool.tool.title }}</a></th>
-<td>{{ tool.count }}</td><td>{{ tool.get_mezhop }}</td>
-<td>{{ tool.workplace }}</td>
-<td>
- {% for t in tool.tool.similar.all %}
- {{ t.title }}</br>
-{% endfor %}
- 
-
-</td>
-
-
-<td>{{ tool.text }}</td>
-</tr>
- {% endfor %}
-</tbody>
-</table>
-
-
-
-      </div>
-    </div>
-  </div>
 </div>
 
 
