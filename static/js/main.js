@@ -1,6 +1,4 @@
 
-var elems= document.querySelectorAll('input[type="submit"]');
-//document.addEventListener('submit', function () {})
 
 elems.forEach(function(btn) {
     // Вешаем событие клик
