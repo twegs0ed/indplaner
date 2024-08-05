@@ -16,6 +16,7 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('', include('chat.urls'))
     
     #path('admin/', admin.site.urls),
    

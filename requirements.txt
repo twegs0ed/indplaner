@@ -22,3 +22,4 @@ django-colorfield
 plotly
 pytelegrambotapi
 django-easy-select2
+Django-Admin-Chat

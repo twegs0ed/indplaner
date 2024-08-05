@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'info',
     'work',
     'colorfield',
-    'zink'
+    'zink',
+    'chat'
 ]
 SITE_ID = 1
 MIDDLEWARE = [
