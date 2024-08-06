@@ -15,6 +15,7 @@ from material.models import Material
 from django.shortcuts import render
 import datetime
 from work.models import Work
+from profiles.models import Profile
 #import copy
 
 
@@ -91,16 +92,7 @@ class ToolsonwarehouseResource(resources.ModelResource):
     
         
 class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    def save_model(self, request, obj, form, change):
-        obj.save()
-        form.save_m2m()
-        obj.similar.add(obj)
-            
-        for t in obj.similar.all():
-            t.similar.set(obj.similar.all())
-
-        #from this point on the tags are accessible
-        #print obj.tags.all()
+    
     formfield_overrides = {models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},}
     exclude=['material']
     resource_class = ToolsonwarehouseResource
@@ -144,9 +136,26 @@ class ToolsonwarehouseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         js = [
                 'js/list_filter_collapse.js'
                 ]
+class ToolsResource(resources.ModelResource):
+    '''formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
+    }'''
+    #tool = Field(attribute='title', column_name='title', widget=CharWidget(),)
+    tool = Field(column_name='tool',attribute='tool',widget=ForeignKeyWidget(model=Toolsonwarehouse, field='title'))
+    worker = Field(column_name='worker',attribute='worker',widget=ForeignKeyWidget(model=Profile, field='bio'))
+    
+    class Meta:
+        model = Tools
+        #skip_unchanged=False
+        fields = ('tool', 'count', 'worker', 'giveout_date')
+        exclude = ('id',)
+        export_order = ('tool', 'count', 'worker',)
+        import_id_fields=['tool', 'giveout_date']
+        #import_id_field = 'title'
+    
 
-
-class ToolsAdmin(ExportActionMixin, admin.ModelAdmin):
+class ToolsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = ToolsResource
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
     }
