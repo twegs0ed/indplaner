@@ -35,8 +35,11 @@ def info(request):
         for tool in tools:
             try:
                 tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = tool).count
-                tool.count_all+=Toolsonwarehouse.objects.get(title = tool.title).count
             except Toolsonwarehousezn.DoesNotExist:
+                        pass
+            try:
+                tool.count_all+=Toolsonwarehouse.objects.get(title = tool.title).count
+            except Toolsonwarehouse.DoesNotExist:
                         pass
             for t_c in tool.similar.all():
                 if t_c != tool:
