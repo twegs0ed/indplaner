@@ -35,6 +35,7 @@ def info(request):
         for tool in tools:
             try:
                 tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = tool).count
+                tool.count_all+=Toolsonwarehouse.objects.get(title = tool.title).count
             except Toolsonwarehousezn.DoesNotExist:
                         pass
             for t_c in tool.similar.all():
@@ -45,7 +46,11 @@ def info(request):
                         tool.count_mezhop+=Toolsonwarehousezn.objects.get(tool = t_c).count
                     except Toolsonwarehousezn.DoesNotExist:
                         pass
-        '''for ord in orders:
+                    try:
+                        tool.count_all+=Toolsonwarehouse.objects.get(title = t_c.title).count
+                    except Toolsonwarehouse.DoesNotExist:
+                        pass
+        '''for ord in orders: 
             logs = LogEntry.objects.filter(content_type__app_label='order', object_id = ord.id).order_by('-action_time').first()#or you can filter, etc.
             if logs: 
                 ord.log=logs.action_time'''

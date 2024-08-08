@@ -1,5 +1,5 @@
 
-
+var elems= document.querySelectorAll('input[type="submit"]');
 elems.forEach(function(btn) {
     // Вешаем событие клик
     
@@ -13,6 +13,7 @@ elems.forEach(function(btn) {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
 
   function copyToClipboard(txt) {
     const textArea = document.createElement("textarea");

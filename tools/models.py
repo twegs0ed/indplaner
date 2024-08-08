@@ -34,6 +34,7 @@ class Toolsonwarehouse(models.Model):
     cover = models.BooleanField(default=False, verbose_name="Покрывается" )
     similar = models.ManyToManyField('self',blank=True, null=True, verbose_name="Похожие" )
     count_mezhop=0
+    count_all=0
 
     
 
