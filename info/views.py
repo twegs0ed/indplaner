@@ -27,7 +27,7 @@ def info(request):
         tools=Toolsonwarehouse.objects.filter(title__icontains  = result.upper()).order_by('-id')
         toolsv=Tools.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
         priems = Priem.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
-        orders = Order.objects.filter(tool__title__icontains  = result.upper(), firm__report = False)
+        orders = Order.objects.filter(tool__title__icontains  = result.upper(), firm__report = False).order_by('firm','-id')
         orders_similar = Order.objects.none()
         '''.order_by('-id')'''
         mezhop = Toolsonwarehousezn.objects.filter(tool__title__icontains  = result.upper()).order_by('-id')
